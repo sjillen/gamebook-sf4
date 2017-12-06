@@ -1,0 +1,15 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+
+<h3>hello index page</h3>
+
+<ul>
+    {% for story in stories %}
+    <a href="{{ path('story', {'id': story.id}) }}"><li>{{ story.title }}</li></a>
+    {% endfor %}
+</ul>
+
+<a href="{{ path('storyForm') }}">add a story</a>
+
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+
+<h3>{{ story.title }}</h3>
+<quote>{{ story.author }}</quote>
+<p>{{ story.saga }}</p>
+
+<h4>list of skills made for this story</h4>
+<ul>
+    {% for skill in story.skills %}
+    <li> {{ skill.name }}</li>
+    {% endfor %}
+</ul>
+
+<h4>list of items made for this story</h4>
+<ul>
+    {% for item in items %}
+    <li> {{ item.name }}</li>
+    {% endfor %}
+</ul>
+
+<h4>Add item or skill</h4>
+<ul>
+    <a href="{{ path('skillForm', {'id': story.id}) }}"><li>Add a skill to the story</li></a>
+    <a href="{{ path('itemForm', {'id': story.id}) }}"><li>Add an item to the story</li></a>
+</ul>
+
+<a href=" {{ path('index') }}">Back to Homepage</a>
+
+{% endblock %}
