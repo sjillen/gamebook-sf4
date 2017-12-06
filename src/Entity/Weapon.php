@@ -18,7 +18,7 @@ class Weapon extends ItemBase
     private $id;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\OneToOne(targetEntity="Skill")
      */
     private $weaponSkill;
 
@@ -34,12 +34,12 @@ class Weapon extends ItemBase
         $this->id = $id;
     }
 
-    public function getWeaponSkill() : string 
+    public function getWeaponSkill() : Skill 
     {
         return $this->weaponSkill;
     }
 
-    public function setWeaponSkill($weaponSkill) : void 
+    public function setWeaponSkill(Skill $weaponSkill) : void 
     {
         $this->weaponSkill = $weaponSkill;
     }
