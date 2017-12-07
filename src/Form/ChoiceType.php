@@ -17,6 +17,9 @@ class ChoiceType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $specialItems = $options["specialItems"];
+        $story = $options["story"];
+        
         $builder->add("description", 
                     TextType::class)
             ->add("targetChapter", 
@@ -39,16 +42,19 @@ class ChoiceType extends AbstractType
                         "choices" => $story->getSkills(),
                         "choice_label" => "name",
                         "expanded" => false,
-                        "multiple" => false
+                        "multiple" => false,
+                        "required" => "None"
                     ])
             ->add("itemRequired",
                     EntityType::class, [
                         "label" => "Item required to unlock the choice",
-                        "class" => Item::class,
-                        "choices" => $story->getItems(),
+                        "class" => SpecialItem::class,
+                        "choices" => $specialItems,
                         "choice_label" => "name",
                         "expanded" => false,
-                        "multiple" => false
+                        "multiple" => false,
+                        "required" => false,
+                        "empty_data" => "None"
                     ])
             ->add("goldRequired",
                     IntegerType::class, [
@@ -63,7 +69,9 @@ class ChoiceType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Choice::class
+            'data_class' => Choice::class,
+            'story' => null,
+            'specialItems' => null
         ]);
     }
 }

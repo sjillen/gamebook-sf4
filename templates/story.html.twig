@@ -13,19 +13,27 @@
     {% endfor %}
 </ul>
 
-<h4>list of items made for this story</h4>
+<h4>list of weapons made for this story</h4>
 <ul>
-    {% for item in items %}
-    <li> {{ item.name }}</li>
+    {% for weapon in weapons %}
+    <li> {{ weapon.name }}</li>
     {% endfor %}
 </ul>
 
-<h4>Add item or skill</h4>
+<h4>list of non playable characters made for this story</h4>
 <ul>
-    <a href="{{ path('skillForm', {'id': story.id}) }}"><li>Add a skill to the story</li></a>
-    <a href="{{ path('itemForm', {'id': story.id}) }}"><li>Add an item to the story</li></a>
+    {% for npc in npcs %}
+    <li> {{ npc.name }}</li>
+    {% endfor %}
 </ul>
 
-<a href=" {{ path('index') }}">Back to Homepage</a>
+<h4>Add something</h4>
+<ul>
+    <a href="{{ path('skillForm', {'id': story.id}) }}"><li>Add a skill to the story</li></a>
+    <a href="{{ path('weaponForm', {'id': story.id}) }}"><li>Add a weapon to the list</li></a>
+    <a href="{{ path('npcForm', {'id': story.id}) }}"><li>Add a character to the list</li></a>
+</ul>
+
+<a href=" {{ path('index') }}"><button class="btn btn-primary">Back to Homepage</button></a>
 
 {% endblock %}

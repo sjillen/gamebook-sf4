@@ -73,55 +73,50 @@ class Choice
      }
 
      /* Setters and Getters */
-     public function getId()
+     public function getId() : int
      {
          return $this->id;
      }
- 
-     public function setId($id)
-     {
-         return $this->id = $id;
-     }
      
      /* Setters and Getters */
-     public function getDescription()
+     public function getDescription() : string
      {
          return $this->description;
      }
 
-     public function setDescription($description)
+     public function setDescription($description) : void
      {
-         return $this->description = $description;
+         $this->description = $description;
      }
 
-     public function getChapter()
+     public function getChapter() : Chapter
      {
          return $this->chapter;
      }
 
-     public function setChapter(Chapter $chapter)
+     public function setChapter(Chapter $chapter) : void
      {
-         return $this->chapter = $chapter;
+         $this->chapter = $chapter;
      }
 
-     public function getTargetChapter()
+     public function getTargetChapter() : Chapter
      {
          return $this->targetChapter;
      }
 
-     public function setTargetChapter(Chapter $targetChapter)
+     public function setTargetChapter(Chapter $targetChapter) : void
      {
-         return $this->targetChapter = $targetChapter;
+         $this->targetChapter = $targetChapter;
      }
 
-     public function getLocked()
+     public function getLocked() : bool
      {
          return $this->locked;
      }
 
-     public function setLocked($locked)
+     public function setLocked($locked) : void
      {
-         return $this->locked = $locked;
+         $this->locked = $locked;
      }
 
      public function getSkillRequired()
@@ -129,9 +124,9 @@ class Choice
          return $this->skillRequired;
      }
 
-     public function setSkillRequired(Skill $skillRequired)
+     public function setSkillRequired(Skill $skillRequired) : void
      {
-         return $this->skillRequired = $skillRequired;
+         $this->skillRequired = $skillRequired;
      }
 
      public function getItemRequired()
@@ -139,9 +134,9 @@ class Choice
          return $this->itemRequired;
      }
 
-     public function setItemRequired(Item $itemRequired)
+     public function setItemRequired(Item $itemRequired) : void
      {
-         return $this->itemRequired = $itemRequired;
+         $this->itemRequired = $itemRequired;
      }
 
      public function getGoldRequired()

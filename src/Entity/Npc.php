@@ -19,6 +19,13 @@ class Npc extends CharacterBase
     private $id;
 
     /**
+     * Short description of the character or monster
+     * 
+     * @ORM\Column(type="string", length=255)
+     */
+    private $description;
+
+    /**
      * skill which affect the NPC
      * 
      * @ORM\ManyToOne(targetEntity="Skill")
@@ -32,13 +39,23 @@ class Npc extends CharacterBase
         return $this->id;
     }
 
-    public function getSkillAffect() : Skill
+    public function getDescription()
     {
-        return $this->skill;
+        return $this->description;
+    }
+
+    public function setDescription($description) : void 
+    {
+        $this->description = $description;
+    }
+
+    public function getSkillAffect()
+    {
+        return $this->skillAffect;
     }
 
     public function setSkillAffect(Skill $skill) : void 
     {
-        $this->skill = $skill;
+        $this->skillAffect = $skill;
     }
 }

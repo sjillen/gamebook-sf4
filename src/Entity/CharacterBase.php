@@ -37,7 +37,7 @@ Abstract class CharacterBase
 
     /* Setters and Getters */
 
-    public function getName() : string
+    public function getName()
     {
         return $this->name;
     }
@@ -47,7 +47,7 @@ Abstract class CharacterBase
         $this->name = $name;
     }
 
-    public function getLife() : int
+    public function getLife()
     {
         return $this->life;
     }
@@ -57,7 +57,7 @@ Abstract class CharacterBase
         $this->life = $life;
     }
 
-    public function getEnergy() : int
+    public function getEnergy()
     {
         return $this->energy;
     }

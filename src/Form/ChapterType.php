@@ -26,14 +26,17 @@ class ChapterType extends AbstractType
                 ->add("textContent",
                     TextareaType::class, [
                         "label" => "Content",
-                        "placeholder" => "Write the content of your chapter here..."
+                        "attr" => [
+                            "placeholder" => "Write the content of your chapter here..."
+                        ]
                     ])
                 ->add("choices",
                     CollectionType::class, [
                         "entry_type" => ChoiceType::class,
                         "entry_options" => [
                             "attr" => ["class" => "choice-box"]
-                        ]
+                        ],
+                        "required" => false
                     ])
                 ->add("save",
                     SubmitType::class);

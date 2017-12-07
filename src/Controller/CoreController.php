@@ -6,11 +6,13 @@ use App\Entity\Story;
 use App\Entity\Chapter;
 use App\Entity\Choice;
 use App\Entity\Skill;
-use App\Entity\Item;
+use App\Entity\Weapon;
+use App\Entity\Npc;
+use App\Form\NpcType;
 use App\Form\StoryType;
 use App\Form\ChapterType;
 use App\Form\SkillType;
-use App\Form\ItemType;
+use App\Form\WeaponType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -42,8 +44,8 @@ class CoreController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $story = $em->getRepository(Story::class)->find($id);
-
-        $items = $em->getRepository(Item::class)->findBy(['story' => $story]);
+        $weapons = $em->getRepository(Weapon::class)->findBy(['story' => $story]);
+        $npcs = $em->getRepository(Npc::class)->findBy(['story' => $story]);
 
         if (!$story) {
             throw $this->createNotFoundException("No story found with the id" . $id);
@@ -51,7 +53,8 @@ class CoreController extends Controller
 
         return $this->render("story.html.twig", [
             "story" => $story,
-            "items" => $items
+            "weapons" => $weapons,
+            "npcs" => $npcs
         ]);
     }
 
@@ -75,13 +78,13 @@ class CoreController extends Controller
             $this->addFlash("success", "The story has been saved successfully");
             return $this->redirectToRoute("index");
         }
-        return $this->render("story-form.html.twig", [
+        return $this->render("form/story-form.html.twig", [
             'form' => $form->createView()
         ]);
     }
 
     /**
-     * @param Request
+     * @param Request, $id
      * 
      * @return Response
      * @Route("/story/{id}/skill-form", name="skillForm")
@@ -105,37 +108,67 @@ class CoreController extends Controller
                             "id" => $story->getId()
                         ]);
         }
-        return $this->render("skill-form.html.twig", [
+        return $this->render("form/skill-form.html.twig", [
             "form" => $form->createView()
         ]);
     }
 
         /**
-     * @param Request
+     * @param Request, $id
      * 
      * @return Response
-     * @Route("/story/{id}/item-form", name="itemForm")
+     * @Route("/story/{id}/weapon-form", name="weaponForm")
      */
-    public function itemFormAction(Request $request, $id) : Response
+    public function weaponFormAction(Request $request, $id) : Response
     {
         $em = $this->getDoctrine()->getManager();
         $story = $em->getRepository(Story::class)->find($id);
-        $item = new Item();
+        $weapon = new Weapon();
+        $weapon->setStory($story);
 
-        $form = $this->createForm(ItemType::class, $item);
+        $form = $this->createForm(WeaponType::class, $weapon, ["story" => $story]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $item->setStory($story);
-            $em->persist($item);
+            $em->persist($weapon);
             $em->flush();
 
-            $this->addFlash("success", "The item has been saved successfully");
+            $this->addFlash("success", "The weapon has been saved successfully");
             return $this->redirectToRoute("story", [
                             "id" => $story->getId()
                         ]);
         }
-        return $this->render("item-form.html.twig", [
+        return $this->render("form/weapon-form.html.twig", [
+            "form" => $form->createView()
+        ]);
+    }
+
+    /**
+     * @param Request, $id
+     * 
+     * @return Response
+     * @Route("/story/{id}/npc-form", name="npcForm")
+     */
+    public function npcFormAction (Request $request, $id) : Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $story = $em->getRepository(Story::class)->find($id);
+        $npc = new Npc();
+        $npc->setStory($story);
+
+        $form = $this->createForm(NpcType::class, $npc, ["story" => $story]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($npc);
+            $em->flush();
+
+            $this->addFLash("success", "The Character has been successully saved");
+            return $this->redirectToRoute("story", [
+                            "id" => $story->getId()
+                        ]);
+        }
+        return $this->render("form/npc-form.html.twig", [
             "form" => $form->createView()
         ]);
     }

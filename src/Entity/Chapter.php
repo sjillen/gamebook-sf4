@@ -48,38 +48,34 @@ class Chapter
     public function __constructor()
     {
         $this->choices = new ArrayCollection();
+        $this->npcs = new ArrayCollection();
     }
 
     /* Setters and Getters */
 
-    public function getId()
+    public function getId() : int
     {
         return $this->id;
     }
 
-    public function setId($id)
-    {
-        return $this->id = $id;
-    }
-
-    public function getStory()
+    public function getStory() : Story
     {
         return $this->story;
     }
 
-    public function setStory($story)
+    public function setStory($story) : void
     {
-        return $this->story = $story;
+        $this->story = $story;
     }
 
-    public function getTitle()
+    public function getTitle() : string
     {
         return $this->title;
     }
 
-    public function setTitle($title)
+    public function setTitle($title) : void
     {
-        return $this->title = $title;
+        $this->title = $title;
     }
 
     public function getTextContent()
@@ -87,9 +83,9 @@ class Chapter
         return $this->textContent;
     }
 
-    public function setTextContent($textContent)
+    public function setTextContent($textContent) : void
     {
-        return $this->textContent = $textContent;
+        $this->textContent = $textContent;
     }
 
     public function getNpcs() : array 
@@ -107,18 +103,18 @@ class Chapter
         $this->npcs->removeElement($npc);
     }
 
-    public function getChoices() 
+    public function getChoices() : array
     {
         return $this->choices;
     }
 
-    public function addChoice(Choice $choice)
+    public function addChoice(Choice $choice) : void
     {
-        return $this->choices[] = $choice;
+        $this->choices[] = $choice;
     }
 
-    public function removeChoice(Choice $choice)
+    public function removeChoice(Choice $choice) : void
     {
-        return $this->choices->removeElement($choice);
+        $this->choices->removeElement($choice);
     }
 }
