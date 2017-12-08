@@ -38,7 +38,7 @@ class SpecialItem extends ItemBase
         $this->id = $id;
     }
 
-    public function getSlot() : string 
+    public function getSlot() : ?string 
     {
         return $this->slot;
     }

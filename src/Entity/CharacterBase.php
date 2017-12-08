@@ -28,16 +28,22 @@ Abstract class CharacterBase
      * 
      * @ORM\Column(type="integer")
      */
-    private $energy;
+    protected $energy;
 
     /**
      * @ORM\ManyToOne(targetEntity="Story")
      */
-    private $story;
+    protected $story;
+
+    /* Constructor */
+    public function __construct()
+    {
+        $this->story = new Story();
+    }
 
     /* Setters and Getters */
 
-    public function getName()
+    public function getName() : ?string
     {
         return $this->name;
     }
@@ -47,7 +53,7 @@ Abstract class CharacterBase
         $this->name = $name;
     }
 
-    public function getLife()
+    public function getLife() : ?int
     {
         return $this->life;
     }
@@ -57,7 +63,7 @@ Abstract class CharacterBase
         $this->life = $life;
     }
 
-    public function getEnergy()
+    public function getEnergy() : ?int
     {
         return $this->energy;
     }
@@ -67,7 +73,7 @@ Abstract class CharacterBase
         $this->energy = $energy;
     }
 
-    public function getStory() : Story
+    public function getStory() : ?Story
     {
         return $this->story;
     }

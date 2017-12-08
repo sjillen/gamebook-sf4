@@ -40,15 +40,16 @@ class Chapter
     private $npcs;
 
     /**
-     * @ORM\OneToMany(targetEntity="Choice", mappedBy="chapter")
+     * @ORM\OneToMany(targetEntity="Choice", mappedBy="chapter", cascade={"persist"})
      */
     private $choices;
 
     /* Constructor */
-    public function __constructor()
+    public function __construct()
     {
         $this->choices = new ArrayCollection();
         $this->npcs = new ArrayCollection();
+        $this->story = new Story();
     }
 
     /* Setters and Getters */
@@ -58,7 +59,7 @@ class Chapter
         return $this->id;
     }
 
-    public function getStory() : Story
+    public function getStory() : ?Story
     {
         return $this->story;
     }
@@ -68,7 +69,7 @@ class Chapter
         $this->story = $story;
     }
 
-    public function getTitle() : string
+    public function getTitle() : ?string
     {
         return $this->title;
     }
@@ -88,7 +89,7 @@ class Chapter
         $this->textContent = $textContent;
     }
 
-    public function getNpcs() : array 
+    public function getNpcs() 
     {
         return $this->npcs;
     }
@@ -103,7 +104,7 @@ class Chapter
         $this->npcs->removeElement($npc);
     }
 
-    public function getChoices() : array
+    public function getChoices()
     {
         return $this->choices;
     }

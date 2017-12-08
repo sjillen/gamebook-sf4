@@ -8,6 +8,7 @@ use App\Entity\Choice;
 use App\Entity\Skill;
 use App\Entity\Weapon;
 use App\Entity\Npc;
+use App\Entity\SpecialItem;
 use App\Form\NpcType;
 use App\Form\StoryType;
 use App\Form\ChapterType;
@@ -163,12 +164,46 @@ class CoreController extends Controller
             $em->persist($npc);
             $em->flush();
 
-            $this->addFLash("success", "The Character has been successully saved");
+            $this->addFlash("success", "The Character has been successully saved");
             return $this->redirectToRoute("story", [
                             "id" => $story->getId()
                         ]);
         }
         return $this->render("form/npc-form.html.twig", [
+            "form" => $form->createView()
+        ]);
+    }
+
+    /**
+     * @param Request, $id
+     * 
+     * @return Response
+     * @Route("/story/{id}/chapter-form", name="chapterForm")
+     */
+    public function chapterFormAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $story = $em->getRepository(Story::class)->find($id);
+        $specialItems = $em->getRepository(SpecialItem::class)->findBy(["story" => $story]);
+        $chapter = new Chapter();
+        $chapter->setStory($story);
+
+        $form = $this->createForm(ChapterType::class, $chapter, [
+                                    "story" => $story, 
+                                    "specialItems" => $specialItems
+                                ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($chapter);
+            $em->flush();
+
+            $this->addFlash("success", "The chapter has been savec successfully");
+            return $this->redirectToRoute('story', [
+                            "id" => $story->getId()
+                        ]);
+        }
+        return $this->render("form/chapter-form.html.twig", [
             "form" => $form->createView()
         ]);
     }

@@ -4,31 +4,34 @@ namespace App\Form;
 
 use App\Entity\Choice;
 use App\Entity\Chapter;
+use App\Entity\Skill;
+use App\Entity\SpecialItem;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class ChoiceType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
-    {
-        $specialItems = $options["specialItems"];
+    {   
         $story = $options["story"];
-        
+        $specialItems = $options["specialItems"];
+
         $builder->add("description", 
                     TextType::class)
             ->add("targetChapter", 
                     EntityType::class, [
-                        "class" => Chapter::class,                        
+                        "class" => Chapter::class,                     
                         "choices" => $story->getChapters(),
                         "choice_label" => "title",
                         "expanded" => false,
-                        "multiple" => false                      
+                        "multiple" => false,                    
                     ])
             ->add("locked",
                     CheckboxType::class, [

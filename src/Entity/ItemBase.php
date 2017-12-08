@@ -25,39 +25,40 @@ Abstract class ItemBase
      */
     protected $story;
 
+    /* Constructor */
+    public function construct()
+    {
+        $this->story = new Story();
+    }
+
     /* Setters and Getters*/
 
-    public function getId()
+    public function getId() : int
     {
         return $this->id;
     }
 
-    public function setId($id)
-    {
-        return $this->id = $id;
-    }
-
-    public function getName()
+    public function getName() : ?string
     {
         return $this->name;
     }
 
-    public function setName($name)
+    public function setName($name) : void
     {
-        return $this->name = $name;
+        $this->name = $name;
     }
 
-    public function getDescription()
+    public function getDescription() : ?string
     {
         return $this->description;
     }
 
-    public function setDescription($description)
+    public function setDescription($description) : void
     {
-        return $this->description = $description;
+        $this->description = $description;
     }
 
-    public function getStory()
+    public function getStory() : Story
     {
         return $this->story;
     }

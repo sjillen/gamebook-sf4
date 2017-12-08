@@ -53,44 +53,39 @@ class Story
 
     /* Getters and Setters */
     
-    public function getId()
+    public function getId() : int
     {
         return $this->id;
     }
 
-    public function setId($id)
-    {
-        return $this->id = $id;
-    }
-
-    public function getTitle()
+    public function getTitle() : ?string
     {
         return $this->title;
     }
 
-    public function setTitle($title)
+    public function setTitle($title) : void
     {
-        return $this->title = $title;
+        $this->title = $title;
     }
 
-    public function getAuthor()
+    public function getAuthor() : ?string
     {
         return $this->author;
     }
 
-    public function setAuthor($author)
+    public function setAuthor($author) : void
     {
-        return $this->author = $author;
+        $this->author = $author;
     }
 
-    public function getSaga()
+    public function getSaga() : ?string
     {
         return $this->saga;
     }
 
-    public function setSaga($saga)
+    public function setSaga($saga) : void
     {
-        return $this->saga = $saga;
+        $this->saga = $saga;
     }
 
     public function getChapters()
@@ -98,14 +93,14 @@ class Story
         return $this->chapters;
     }
 
-    public function addChapters(Chapter $chapter)
+    public function addChapters(Chapter $chapter = null) : void
     {
-        return $this->chapters[] = $chapter;
+        $this->chapters[] = $chapter;
     }
 
-    public function removeChapter(Chapter $chapter)
+    public function removeChapter(Chapter $chapter = null) : void
     {
-        return $this->chapters->removeElement($chapter);
+        $this->chapters->removeElement($chapter);
     }
 
     public function getSkills()
@@ -113,13 +108,13 @@ class Story
         return $this->skills;
     }
 
-    public function addSkill(Skill $skill)
+    public function addSkill(Skill $skill = null) : void
     {
-        return $this->skills[] = $skill;
+        $this->skills[] = $skill;
     }
 
-    public function removeSkill(Skill $skill)
+    public function removeSkill(Skill $skill = null) : void
     {
-        return $this->skills->removeElement($skill);
+        $this->skills->removeElement($skill);
     }
 }

@@ -49,7 +49,7 @@ class ConsumableItem extends ItemBase
         $this->id = $id;
     }
 
-    public function getBonusGiven() : int
+    public function getBonusGiven() : ?int
     {
         return $this->bonusGiven;
     }
@@ -59,7 +59,7 @@ class ConsumableItem extends ItemBase
         $this->bonusGiven = $bonus;
     }
 
-    public function getAttributeTargeted() : string 
+    public function getAttributeTargeted() : ?string 
     {
         return $this->attributeTargeted;
     }

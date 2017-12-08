@@ -70,6 +70,10 @@ class Choice
      public function __construct()
      {
          $this->locked = false;
+         $this->chapter = new Chapter();
+         $this->targetChapter = new Chapter();
+         $this->itemRequired = new SpecialItem();
+         $this->skillRequired = new Skill();
      }
 
      /* Setters and Getters */
@@ -79,7 +83,7 @@ class Choice
      }
      
      /* Setters and Getters */
-     public function getDescription() : string
+     public function getDescription() : ?string
      {
          return $this->description;
      }
@@ -119,7 +123,7 @@ class Choice
          $this->locked = $locked;
      }
 
-     public function getSkillRequired()
+     public function getSkillRequired() : ?Skill
      {
          return $this->skillRequired;
      }
@@ -129,24 +133,24 @@ class Choice
          $this->skillRequired = $skillRequired;
      }
 
-     public function getItemRequired()
+     public function getItemRequired() : ?SpecialItem
      {
          return $this->itemRequired;
      }
 
-     public function setItemRequired(Item $itemRequired) : void
+     public function setItemRequired(SpecialItem $itemRequired) : void
      {
          $this->itemRequired = $itemRequired;
      }
 
-     public function getGoldRequired()
+     public function getGoldRequired() : ?int
      {
          return $this->goldRequired;
      }
 
-     public function setGoldRequired($goldRequired)
+     public function setGoldRequired($goldRequired) : void
      {
-         return $this->goldRequired = $goldRequired;
+         $this->goldRequired = $goldRequired;
      }
 
 

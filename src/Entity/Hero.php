@@ -63,6 +63,8 @@ class Hero extends CharacterBase
         $this->weapons = new ArrayCollection;
         $this->consumableItems = new ArrayCollection;
         $this->specialItems = new ArrayCollection;
+        $this->gold = 0;
+        $this->numberOfMeals = 0;
     }
 
     /* Setters and Getters */
@@ -97,7 +99,7 @@ class Hero extends CharacterBase
         $this->numberOfMeals = $meal;
     }
 
-    public function getSkill() : array
+    public function getSkills()
     {
         return $this->skills;
     }
@@ -112,7 +114,7 @@ class Hero extends CharacterBase
         $this->skills->removeElement($skill);
     }
 
-    public function getWeapons() : array
+    public function getWeapons()
     {
         return $this->weapons;
     }
@@ -127,7 +129,7 @@ class Hero extends CharacterBase
         $this->weapons->removeElement($weapon);
     }
 
-    public function getConsumableItems() : array
+    public function getConsumableItems()
     {
         return $this->consumableItems;
     }
@@ -142,7 +144,7 @@ class Hero extends CharacterBase
         $this->consumableItems->removeElement($consumableItem);
     }
 
-    public function getSpecialItems() : array
+    public function getSpecialItems()
     {
         return $this->specialItems;
     }

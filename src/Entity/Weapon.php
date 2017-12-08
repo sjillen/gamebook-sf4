@@ -34,7 +34,7 @@ class Weapon extends ItemBase
         $this->id = $id;
     }
 
-    public function getWeaponSkill() 
+    public function getWeaponSkill() : ?Skill
     {
         return $this->weaponSkill;
     }

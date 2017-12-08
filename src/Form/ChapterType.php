@@ -6,11 +6,11 @@ use App\Entity\Choice;
 use App\Entity\Chapter;
 use App\Form\ChoiceType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -19,6 +19,9 @@ class ChapterType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $specialItems = $options["specialItems"];
+        $story = $options["story"];
+        
         $builder->add("title",
                     TextType::class, [
                         "label" => "title of the chapter"
@@ -33,10 +36,18 @@ class ChapterType extends AbstractType
                 ->add("choices",
                     CollectionType::class, [
                         "entry_type" => ChoiceType::class,
-                        "entry_options" => [
-                            "attr" => ["class" => "choice-box"]
+                        "data" => [
+                            "story" => $story,
+                            "specialItems" => $specialItems
                         ],
-                        "required" => false
+                        "entry_options" => [
+                            "attr" => ["class" => "choice-box"],
+                        ],
+                        "required" => false,
+                        "label" => false,
+                        "by_reference" => false,
+                        "allow_add" => true,
+                        "allow_delete" => true
                     ])
                 ->add("save",
                     SubmitType::class);
@@ -45,7 +56,9 @@ class ChapterType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            "data_class" => Chapter::class
+            "data_class" => Chapter::class,
+            "story" => null,
+            "specialItems" => null
         ]);
     }
 }

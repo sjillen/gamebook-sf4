@@ -34,43 +34,38 @@ class Skill
 
     /* Getters and Setters */
 
-    public function getId()
+    public function getId() : int
     {
         return $this->id;
     }
-
-    public function setId($id)
-    {
-        return $this->id = $id;
-    }
     
-    public function getName()
+    public function getName() : ?string
     {
         return $this->name;
     }
 
-    public function setName($name)
+    public function setName($name) : void
     {
-        return $this->name = $name;
+        $this->name = $name;
     }
 
-    public function getDescription()
+    public function getDescription() : ?string
     {
         return $this->description;
     }
 
-    public function setDescription($description)
+    public function setDescription($description) : void
     {
-        return $this->description = $description;
+        $this->description = $description;
     }
 
-    public function getStory()
+    public function getStory() : Story
     {
         return $this->story;
     }
 
-    public function setStory($story)
+    public function setStory($story) : void
     {
-        return $this->story = $story;
+        $this->story = $story;
     }
 }
