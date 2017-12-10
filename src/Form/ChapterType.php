@@ -4,7 +4,7 @@ namespace App\Form;
 
 use App\Entity\Choice;
 use App\Entity\Chapter;
-use App\Form\ChoiceType;
+use App\Form\ActionType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -18,10 +18,10 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 class ChapterType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
-    {
+    {   
         $specialItems = $options["specialItems"];
         $story = $options["story"];
-        
+
         $builder->add("title",
                     TextType::class, [
                         "label" => "title of the chapter"
@@ -35,13 +35,11 @@ class ChapterType extends AbstractType
                     ])
                 ->add("choices",
                     CollectionType::class, [
-                        "entry_type" => ChoiceType::class,
-                        "data" => [
-                            "story" => $story,
-                            "specialItems" => $specialItems
-                        ],
+                        "entry_type" => ActionType::class,
                         "entry_options" => [
                             "attr" => ["class" => "choice-box"],
+                            "story" => $story,
+                            "specialItems" => $specialItems
                         ],
                         "required" => false,
                         "label" => false,

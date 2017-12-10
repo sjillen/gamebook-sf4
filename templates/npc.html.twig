@@ -1,0 +1,23 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <div class="well">
+        <h3>{{ npc.name }}</h3>
+
+        <ul>
+            <li>Life : {{ npc.life }} hp</li>
+            <li>Energy: {{ npc.energy }}</li>
+        </ul>
+
+        <strong>Weakness: {{ npc.skillAffect.name }}</strong>
+
+        <p>{{ npc.description }}
+        </p>
+
+        <a href="{{ path('story', {"id": story.id}) }}">
+            <button>back to Story page</button>
+        </a>
+
+    </div>
+
+{% endblock %}

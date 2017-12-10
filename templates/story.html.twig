@@ -6,24 +6,33 @@
 <quote>{{ story.author }}</quote>
 <p>{{ story.saga }}</p>
 
+<h4>List of chapters</h4>
+    <ul>
+        {% for chapter in story.chapters %}
+            <a href="{{ path('chapterEdit', {"id" : story.id, "idChapter": chapter.id}) }}">
+                <li>{{ chapter.title }}</li>
+            </a>
+        {% endfor %}
+    </ul>
+
 <h4>list of skills made for this story</h4>
 <ul>
     {% for skill in story.skills %}
-    <li> {{ skill.name }}</li>
+        <a href="{{ path('skill', {"idStory": story.id, "idSkill": skill.id}) }}"><li> {{ skill.name }}</li></a>
     {% endfor %}
 </ul>
 
 <h4>list of weapons made for this story</h4>
 <ul>
     {% for weapon in weapons %}
-    <li> {{ weapon.name }}</li>
+        <a href="{{ path('weapon', {"idStory": story.id, "idWeapon": weapon.id}) }}"><li>{{ weapon.name }}</li></a>
     {% endfor %}
 </ul>
 
 <h4>list of non playable characters made for this story</h4>
 <ul>
     {% for npc in npcs %}
-    <li> {{ npc.name }}</li>
+        <a href="{{ path('npc', {'idStory': story.id, 'idNpc': npc.id}) }}"><li>{{ npc.name }}</li></a>
     {% endfor %}
 </ul>
 
@@ -36,5 +45,6 @@
 </ul>
 
 <a href=" {{ path('index') }}"><button class="btn btn-primary">Back to Homepage</button></a>
+    <a href="{{ path('chapter', {"idStory": story.id, "idChapter": 1}) }}"><button class="btn btn-secondary">Start the story</button></a>
 
 {% endblock %}

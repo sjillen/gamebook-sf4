@@ -1,0 +1,19 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <div class="well">
+        <h3>{{ weapon.name }}</h3>
+
+
+
+        <p>{{ weapon.description }} <br/>
+        <quote>{{ weapon.weaponSkill.name }}</quote>
+        </p>
+
+        <a href="{{ path('story', {"id": story.id}) }}">
+            <button>back to Story page</button>
+        </a>
+
+    </div>
+
+{% endblock %}

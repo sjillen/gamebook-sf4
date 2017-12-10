@@ -7,16 +7,14 @@ use App\Entity\Chapter;
 use App\Entity\Skill;
 use App\Entity\SpecialItem;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
-class ChoiceType extends AbstractType
+class ActionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {   
@@ -46,7 +44,8 @@ class ChoiceType extends AbstractType
                         "choice_label" => "name",
                         "expanded" => false,
                         "multiple" => false,
-                        "required" => "None"
+                        "required" => false,
+                        "empty_data" => "None"
                     ])
             ->add("itemRequired",
                     EntityType::class, [
@@ -62,19 +61,17 @@ class ChoiceType extends AbstractType
             ->add("goldRequired",
                     IntegerType::class, [
                         "label" => "Amount of gold required to the unlock choice",
-                        "scale" => 0
-                    ])
-            ->add("save", 
-                    SubmitType::class);
-        
+                        "scale" => 0,
+                        "data" => 0
+                    ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => Choice::class,
-            'story' => null,
-            'specialItems' => null
+            "story" => null,
+            "specialItems" => null
         ]);
     }
 }

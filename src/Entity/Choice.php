@@ -48,14 +48,14 @@ class Choice
     /**
      * Skill to unlock to choice
      * 
-     * @ORM\ManyToOne(targetEntity="Skill")
+     * @ORM\ManyToOne(targetEntity="Skill", cascade={"persist"})
      */
     private $skillRequired;
 
     /**
      * Item to unlock choice
      * 
-     * @ORM\ManyToOne(targetEntity="SpecialItem")
+     * @ORM\ManyToOne(targetEntity="SpecialItem", cascade={"persist"})
      */
     private $itemRequired;
 
@@ -72,8 +72,7 @@ class Choice
          $this->locked = false;
          $this->chapter = new Chapter();
          $this->targetChapter = new Chapter();
-         $this->itemRequired = new SpecialItem();
-         $this->skillRequired = new Skill();
+         $this->goldRequired = 0;
      }
 
      /* Setters and Getters */
@@ -100,7 +99,7 @@ class Choice
 
      public function setChapter(Chapter $chapter) : void
      {
-         $this->chapter = $chapter;
+             $this->chapter = $chapter;
      }
 
      public function getTargetChapter() : Chapter

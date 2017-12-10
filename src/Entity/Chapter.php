@@ -20,7 +20,7 @@ class Chapter
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Story", inversedBy="chapters")
+     * @ORM\ManyToOne(targetEntity="Story", inversedBy="chapters", cascade={"persist"})
      */
     private $story;
 
@@ -111,6 +111,7 @@ class Chapter
 
     public function addChoice(Choice $choice) : void
     {
+        $choice->setChapter($this);
         $this->choices[] = $choice;
     }
 

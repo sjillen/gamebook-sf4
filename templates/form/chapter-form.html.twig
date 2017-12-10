@@ -2,19 +2,26 @@
 
 {% block body %}
 
+    <h2>Creation of a Chapter</h2>
+
 {{ form_start(form) }}
     {# render the task's only field: description #}
     {{ form_row(form.title) }}
     {{ form_row(form.textContent) }}
 
-    <h3>Choices</h3>
-    <ul class="choices" data-prototype="{{ form_widget(form.choices.vars.prototype)|e('html_attr') }}">>
-        {# iterate over each existing tag and render its only field: name #}
+    <div class="well">
+    <h4>Choices to be made at the end of te chapter</h4>
+    <ul class="choices" data-prototype="{{ form_widget(form.choices.vars.prototype)|e('html_attr') }}">
+        {# iterate over each existing tag and render it #}
         {% for choice in form.choices %}
-            <li>{{ form_row(choice.name) }}</li>
+            <li>{{ form_row(choice) }}</li>
         {% endfor %}
     </ul>
+
+    </div>
 {{ form_end(form) }}
+
+{% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
@@ -43,7 +50,7 @@
                 // add a new tag form (see next code block)
                 addChoiceForm($collectionHolder, $newLinkLi);
             });
-        }); 
+        });
         function addChoiceForm($collectionHolder, $newLinkLi) {
             // Get the data-prototype explained earlier
             var prototype = $collectionHolder.data('prototype');
@@ -69,7 +76,5 @@
             $newLinkLi.before($newFormLi);
         }
     </script>
-
-{% endblock %}
 
 {% endblock %}
