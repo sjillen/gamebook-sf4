@@ -28,7 +28,7 @@ class Skill
     private $description;
 
     /**
-     * @ORM\ManyToOne(targetEntity="story", inversedBy="skills")
+     * @ORM\ManyToOne(targetEntity="story", inversedBy="skills", cascade={"remove"})
      */
     private $story;
 

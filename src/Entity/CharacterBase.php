@@ -31,7 +31,7 @@ Abstract class CharacterBase
     protected $energy;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Story")
+     * @ORM\ManyToOne(targetEntity="Story", cascade={"remove"})
      */
     protected $story;
 

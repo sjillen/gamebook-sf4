@@ -20,7 +20,7 @@ class Chapter
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Story", inversedBy="chapters", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Story", inversedBy="chapters", cascade={"remove"})
      */
     private $story;
 

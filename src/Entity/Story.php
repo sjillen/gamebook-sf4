@@ -35,12 +35,12 @@ class Story
     private $saga;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chapter", mappedBy="story", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Chapter", mappedBy="story")
      */
     private $chapters;
 
     /**
-     * @ORM\OneToMany(targetEntity="Skill", mappedBy="story", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Skill", mappedBy="story")
      */
     private $skills;
 

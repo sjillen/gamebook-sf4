@@ -43,8 +43,7 @@
     <a href="{{ path('npcForm', {'id': story.id}) }}"><li>Add a character to the list</li></a>
     <a href="{{ path('chapterForm', {'id': story.id}) }}"><li>Add a chapter</li></a>
 </ul>
-
-<a href=" {{ path('index') }}"><button class="btn btn-primary">Back to Homepage</button></a>
+    <a href="{{ path("storyRemove", {"id": story.id}) }}"><button class="btn btn-danger">Delete the story</button></a>
     <a href="{{ path('chapter', {"idStory": story.id, "idChapter": 1}) }}"><button class="btn btn-secondary">Start the story</button></a>
 
 {% endblock %}
