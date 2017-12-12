@@ -32,6 +32,11 @@ class Npc extends CharacterBase
      */
     private $skillAffect;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Story", inversedBy="npcs")
+     */
+    protected $story;
+
     /* Setters and Getters */
 
     public function getId() : int 
@@ -57,5 +62,15 @@ class Npc extends CharacterBase
     public function setSkillAffect(Skill $skill) : void 
     {
         $this->skillAffect = $skill;
+    }
+
+    public function getStory() : ?Story
+    {
+        return $this->story;
+    }
+
+    public function setStory(Story $story) : void
+    {
+        $this->story = $story;
     }
 }

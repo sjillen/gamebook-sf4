@@ -30,11 +30,6 @@ Abstract class CharacterBase
      */
     protected $energy;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Story", cascade={"remove"})
-     */
-    protected $story;
-
     /* Constructor */
     public function __construct()
     {
@@ -71,15 +66,5 @@ Abstract class CharacterBase
     public function setEnergy($energy) : void
     {
         $this->energy = $energy;
-    }
-
-    public function getStory() : ?Story
-    {
-        return $this->story;
-    }
-
-    public function setStory(Story $story) : void
-    {
-        $this->story = $story;
     }
 }

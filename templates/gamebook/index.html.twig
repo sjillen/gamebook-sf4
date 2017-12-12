@@ -6,7 +6,7 @@
 
 <ul>
     {% for story in stories %}
-    <a href="{{ path('story', {'id': story.id}) }}"><li>{{ story.title }}</li></a>
+    <a href="{{ path('story', {'slug': story.slug}) }}"><li>{{ story.title }}</li></a>
     {% endfor %}
 </ul>
 

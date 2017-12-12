@@ -22,6 +22,11 @@ class Weapon extends ItemBase
      */
     private $weaponSkill;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Story", inversedBy="weapons")
+     */
+    protected $story;
+
     /* Setters and Getters */
 
     public function getId() : int 
@@ -39,10 +44,17 @@ class Weapon extends ItemBase
         return $this->weaponSkill;
     }
 
-    public function setWeaponSkill(Skill $weaponSkill) : void 
+    public function setWeaponSkill(Skill $weaponSkill) : void
     {
         $this->weaponSkill = $weaponSkill;
     }
+    public function getStory() : ?Story
+    {
+        return $this->story;
+    }
 
-
+    public function setStory(?Story $story)
+    {
+        return $this->story = $story;
+    }
 }

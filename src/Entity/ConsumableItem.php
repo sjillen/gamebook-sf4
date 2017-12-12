@@ -37,6 +37,11 @@ class ConsumableItem extends ItemBase
      */
     private $removable;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Story", inversedBy="consumableItems")
+     */
+    protected $story;
+
     /* Setters and Getters */
 
     public function getId() : int 
@@ -78,4 +83,15 @@ class ConsumableItem extends ItemBase
     {
         $this->removable = $removable;
     }
+
+    public function getStory(): ?Story
+    {
+        return $this->story;
+    }
+
+    public function setStory(?Story $story) : void
+    {
+        $this->story = $story;
+    }
+
 }

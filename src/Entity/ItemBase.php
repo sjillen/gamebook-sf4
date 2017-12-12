@@ -20,23 +20,7 @@ Abstract class ItemBase
      */
     protected $description;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Story", cascade={"remove"})
-     */
-    protected $story;
-
-    /* Constructor */
-    public function construct()
-    {
-        $this->story = new Story();
-    }
-
-    /* Setters and Getters*/
-
-    public function getId() : int
-    {
-        return $this->id;
-    }
+    /* Setters and Getters */
 
     public function getName() : ?string
     {
@@ -56,15 +40,5 @@ Abstract class ItemBase
     public function setDescription($description) : void
     {
         $this->description = $description;
-    }
-
-    public function getStory() : Story
-    {
-        return $this->story;
-    }
-
-    public function setStory(Story $story)
-    {
-        return $this->story = $story;
     }
 }

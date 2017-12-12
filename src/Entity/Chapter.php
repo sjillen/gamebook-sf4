@@ -40,7 +40,7 @@ class Chapter
     private $npcs;
 
     /**
-     * @ORM\OneToMany(targetEntity="Choice", mappedBy="chapter", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Choice", mappedBy="chapter", cascade={"persist", "remove"})
      */
     private $choices;
 

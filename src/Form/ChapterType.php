@@ -18,8 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 class ChapterType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
-    {   
-        $specialItems = $options["specialItems"];
+    {
         $story = $options["story"];
 
         $builder->add("title",
@@ -38,8 +37,7 @@ class ChapterType extends AbstractType
                         "entry_type" => ActionType::class,
                         "entry_options" => [
                             "attr" => ["class" => "choice-box"],
-                            "story" => $story,
-                            "specialItems" => $specialItems
+                            "story" => $story
                         ],
                         "required" => false,
                         "label" => false,
@@ -56,7 +54,6 @@ class ChapterType extends AbstractType
         $resolver->setDefaults([
             "data_class" => Chapter::class,
             "story" => null,
-            "specialItems" => null
         ]);
     }
 }

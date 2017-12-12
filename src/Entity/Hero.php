@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\CharacterBase;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -49,7 +50,7 @@ class Hero extends CharacterBase
     /**
      * @ORM\ManyToMany(targetEntity="ConsumableItem")
      */
-    private $ConsumableItems;
+    private $consumableItems;
 
     /**
      * @ORM\ManyToMany(targetEntity="SpecialItem")
@@ -99,7 +100,7 @@ class Hero extends CharacterBase
         $this->numberOfMeals = $meal;
     }
 
-    public function getSkills()
+    public function getSkills() : Collection
     {
         return $this->skills;
     }
@@ -114,7 +115,7 @@ class Hero extends CharacterBase
         $this->skills->removeElement($skill);
     }
 
-    public function getWeapons()
+    public function getWeapons() : Collection
     {
         return $this->weapons;
     }
@@ -129,7 +130,7 @@ class Hero extends CharacterBase
         $this->weapons->removeElement($weapon);
     }
 
-    public function getConsumableItems()
+    public function getConsumableItems() : Collection
     {
         return $this->consumableItems;
     }
@@ -144,7 +145,7 @@ class Hero extends CharacterBase
         $this->consumableItems->removeElement($consumableItem);
     }
 
-    public function getSpecialItems()
+    public function getSpecialItems() : Collection
     {
         return $this->specialItems;
     }

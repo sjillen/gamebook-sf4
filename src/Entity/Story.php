@@ -2,10 +2,9 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
-use App\Entity\Chapter;
-use App\Entity\Skill;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\StoryRepository")
@@ -20,35 +19,84 @@ class Story
     private $id;
 
     /**
+     * @var string
+     *
      * @ORM\Column(type="string", length=255, unique=true)
      */
     private $title;
 
     /**
+     * @var string
+     *
      * @ORM\Column(type="string", length=255, nullable=false)
      */
     private $author;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @var Saga
+     *
+     * @ORM\ManyToOne(targetEntity="Saga", inversedBy="stories", cascade={"persist"})
      */
     private $saga;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chapter", mappedBy="story")
+     * @var Chapter[]|ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Chapter", mappedBy="story", cascade={"remove"})
      */
     private $chapters;
 
     /**
-     * @ORM\OneToMany(targetEntity="Skill", mappedBy="story")
+     * @var Skill[]|ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Skill", mappedBy="story", cascade={"remove"})
      */
     private $skills;
+
+    /**
+     * @var Npc[]|ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Npc", mappedBy="story", cascade={"remove"})
+     */
+    private $npcs;
+
+    /**
+     * @var Weapon[]|ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Weapon", mappedBy="story", cascade={"remove"})
+     */
+    private $weapons;
+
+    /**
+     * @var ConsumableItem[]|ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="ConsumableItem", mappedBy="story", cascade={"remove"})
+     */
+    private $consumableItems;
+
+    /**
+     * @var SpecialItem[]|ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="SpecialItem", mappedBy="story", cascade={"remove"})
+     */
+    private $specialItems;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255)
+     */
+    private $slug;
 
     //Constructor
     public function __construct()
     {
         $this->skills = new ArrayCollection();
-        $this->chapters = new arrayCollection();
+        $this->chapters = new ArrayCollection();
+        $this->npcs = new ArrayCollection();
+        $this->weapons = new ArrayCollection();
+        $this->consumableItems = new ArrayCollection();
+        $this->specialItems = new ArrayCollection();
     }
 
     /* Getters and Setters */
@@ -88,7 +136,7 @@ class Story
         $this->saga = $saga;
     }
 
-    public function getChapters()
+    public function getChapters() : Collection
     {
         return $this->chapters;
     }
@@ -103,7 +151,7 @@ class Story
         $this->chapters->removeElement($chapter);
     }
 
-    public function getSkills()
+    public function getSkills() : Collection
     {
         return $this->skills;
     }
@@ -116,5 +164,75 @@ class Story
     public function removeSkill(Skill $skill = null) : void
     {
         $this->skills->removeElement($skill);
+    }
+
+    public function getNpcs() : Collection
+    {
+        return $this->npcs;
+    }
+
+    public function addNpc(Npc $npc = null) : void
+    {
+        $this->npcs[] = $npc;
+    }
+
+    public function removeNpc(Npc $npc = null) : void
+    {
+        $this->npcs->removeElement($npc);
+    }
+
+    public function getWeapons() : Collection
+    {
+        return $this->weapons;
+    }
+
+    public function addWeapon(?Weapon $weapon = null) : void
+    {
+        $this->weapons[] = $weapon;
+    }
+
+    public function removeWeapon(?Weapon $weapon = null) : void
+    {
+        $this->weapons->removeElement($weapon);
+    }
+
+    public function getConsumableItems() : Collection
+    {
+        return $this->consumableItems;
+    }
+
+    public function addConsumableItem(?ConsumableItem $consumableItem = null) : void
+    {
+        $this->consumableItems[] = $consumableItem;
+    }
+
+    public function removeConsumableItem(?ConsumableItem $consumableItem = null) : void
+    {
+        $this->consumableItems->removeElement($consumableItem);
+    }
+
+    public function getSpecialItems() : Collection
+    {
+        return $this->specialItems;
+    }
+
+    public function addSpecialItem(?SpecialItem $specialItem = null) : void
+    {
+        $this->specialItems[] = $specialItem;
+    }
+
+    public function removeSpecialItem(?SpecialItem $specialItem = null) : void
+    {
+        $this->specialItems->removeElement($specialItem);
+    }
+
+    public function getSlug() : ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug($slug) : void
+    {
+        $this->slug = $slug;
     }
 }

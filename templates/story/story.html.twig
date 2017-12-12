@@ -24,14 +24,14 @@
 
 <h4>list of weapons made for this story</h4>
 <ul>
-    {% for weapon in weapons %}
+    {% for weapon in story.weapons %}
         <a href="{{ path('weapon', {"idStory": story.id, "idWeapon": weapon.id}) }}"><li>{{ weapon.name }}</li></a>
     {% endfor %}
 </ul>
 
 <h4>list of non playable characters made for this story</h4>
 <ul>
-    {% for npc in npcs %}
+    {% for npc in story.npcs %}
         <a href="{{ path('npc', {'idStory': story.id, 'idNpc': npc.id}) }}"><li>{{ npc.name }}</li></a>
     {% endfor %}
 </ul>
@@ -43,7 +43,7 @@
     <a href="{{ path('npcForm', {'id': story.id}) }}"><li>Add a character to the list</li></a>
     <a href="{{ path('chapterForm', {'id': story.id}) }}"><li>Add a chapter</li></a>
 </ul>
-    <a href="{{ path("storyRemove", {"id": story.id}) }}"><button class="btn btn-danger">Delete the story</button></a>
-    <a href="{{ path('chapter', {"idStory": story.id, "idChapter": 1}) }}"><button class="btn btn-secondary">Start the story</button></a>
+    <a href="{{ path("storyRemove", {"slug": story.slug}) }}"><button class="btn btn-danger">Delete the story</button></a>
+    <a href="{{ path('chapter', {"slug": story.slug, "id": 1}) }}"><button class="btn btn-secondary">Start the story</button></a>
 
 {% endblock %}

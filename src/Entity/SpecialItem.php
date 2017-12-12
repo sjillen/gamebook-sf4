@@ -26,6 +26,11 @@ class SpecialItem extends ItemBase
      */
     private $slot;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Story", inversedBy="specialItems")
+     */
+    protected $story;
+
     /* Setters and Getters */
 
     public function getId() : int 
@@ -46,5 +51,16 @@ class SpecialItem extends ItemBase
     public function setSlot($slot) : void
     {
         $this->slot = $slot;
+    }
+
+
+    public function getStory(): ?Story
+    {
+        return $this->story;
+    }
+
+    public function setStory(?Story $story) : void
+    {
+        $this->story = $story;
     }
 }

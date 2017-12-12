@@ -19,7 +19,6 @@ class ActionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {   
         $story = $options["story"];
-        $specialItems = $options["specialItems"];
 
         $builder->add("description", 
                     TextType::class)
@@ -51,7 +50,7 @@ class ActionType extends AbstractType
                     EntityType::class, [
                         "label" => "Item required to unlock the choice",
                         "class" => SpecialItem::class,
-                        "choices" => $specialItems,
+                        "choices" => $story->getSpecialItems(),
                         "choice_label" => "name",
                         "expanded" => false,
                         "multiple" => false,
@@ -71,7 +70,6 @@ class ActionType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Choice::class,
             "story" => null,
-            "specialItems" => null
         ]);
     }
 }

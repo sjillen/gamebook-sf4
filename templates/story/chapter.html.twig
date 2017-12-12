@@ -11,13 +11,13 @@
             {{ chapter.textContent }}
 
             {% for choice in chapter.choices %}
-                <a href="{{ path('chapter', {'idStory': chapter.story.id, "idChapter": choice.targetChapter.id}) }}">
+                <a href="{{ path('chapter', {'slug': chapter.story.slug, "id": choice.targetChapter.id}) }}">
                     <button>{{ choice.description }}</button>
                 </a>
             {%  endfor %}
         </div>
 
-                <a href="{{ path('story', {"id": chapter.story.id}) }}"><button class="btn btn-secondary">back to story page</button></a>
+                <a href="{{ path('story', {"slug": chapter.story.slug}) }}"><button class="btn btn-secondary">back to story page</button></a>
 
     </div>
 
