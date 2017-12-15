@@ -13,16 +13,14 @@ class ChapterRepository extends ServiceEntityRepository
         parent::__construct($registry, Chapter::class);
     }
 
-    /*
-    public function findBySomething($value)
+    public function findStarterByStory($story)
     {
-        return $this->createQueryBuilder('t')
-            ->where('t.something = :value')->setParameter('value', $value)
-            ->orderBy('t.id', 'ASC')
-            ->setMaxResults(10)
+        return $this->createQueryBuilder('c')
+            ->where('c.story = :story')->setParameter('story', $story)
+            ->andWhere('c.type = :type')->setParameter('type', "standard")
+            ->setMaxResults(1)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 }

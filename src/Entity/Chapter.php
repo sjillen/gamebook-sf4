@@ -20,7 +20,7 @@ class Chapter
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Story", inversedBy="chapters", cascade={"remove"})
+     * @ORM\ManyToOne(targetEntity="Story", inversedBy="chapters")
      */
     private $story;
 
@@ -28,6 +28,16 @@ class Chapter
      * @ORM\Column(type="string", length=255, nullable=false)
      */
     private $title;
+
+    /**
+     * Type of chapter
+     * Starter : 1
+     * Standard : 0
+     * Death : 2
+     *
+     * @ORM\Column(type="string", length=255, nullable=false)
+     */
+    private $type;
 
     /**
      * @ORM\Column(type="text")
@@ -50,6 +60,7 @@ class Chapter
         $this->choices = new ArrayCollection();
         $this->npcs = new ArrayCollection();
         $this->story = new Story();
+        $this->type = "standard";
     }
 
     /* Setters and Getters */
@@ -77,6 +88,16 @@ class Chapter
     public function setTitle($title) : void
     {
         $this->title = $title;
+    }
+
+    public function getType() : string
+    {
+        return $this->type;
+    }
+
+    public function setType($type) : void
+    {
+        $this->type = $type;
     }
 
     public function getTextContent()

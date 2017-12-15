@@ -21,7 +21,7 @@ class Npc extends CharacterBase
     /**
      * Short description of the character or monster
      * 
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="text")
      */
     private $description;
 

@@ -17,8 +17,6 @@ class StoryType extends AbstractType
                     TextType::class)
             ->add("author", 
                     TextType::class)
-            ->add("saga", 
-                    TextType::class)
             ->add("save", 
                     SubmitType::class);
         

@@ -9,8 +9,8 @@
 </head>
 <body>
 
-    {# flash messages #}
-    <div class="message-flash">
+{# flash messages #}
+<div class="message-flash">
     {% if app.request.hasPreviousSession %}
         {% for type, messages in app.session.flashbag.all() %}
             {% for message in messages %}
@@ -23,15 +23,16 @@
             {% endfor %}
         {% endfor %}
     {% endif %}
-    </div>
-
+</div>
     {% block body %}{% endblock %}
 
     <a href=" {{ path('index') }}"><button class="btn btn-primary">Back to Homepage</button></a>
 
     {% block javascripts %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.13.0/popper.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
     {% endblock %}
 </body>
 </html>

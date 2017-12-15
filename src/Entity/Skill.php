@@ -23,12 +23,12 @@ class Skill
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="text")
      */
     private $description;
 
     /**
-     * @ORM\ManyToOne(targetEntity="story", inversedBy="skills", cascade={"remove"})
+     * @ORM\ManyToOne(targetEntity="story", inversedBy="skills")
      */
     private $story;
 
@@ -67,5 +67,10 @@ class Skill
     public function setStory($story) : void
     {
         $this->story = $story;
+    }
+
+    public function getUniqueName() : string
+    {
+        return sprintf('%s - %s', $this->name, $this->description);
     }
 }

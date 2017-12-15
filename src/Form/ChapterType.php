@@ -7,6 +7,7 @@ use App\Entity\Chapter;
 use App\Form\ActionType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -24,6 +25,19 @@ class ChapterType extends AbstractType
         $builder->add("title",
                     TextType::class, [
                         "label" => "title of the chapter"
+                    ])
+                ->add("type",
+                    ChoiceType::class, [
+                        "label" => "type of chapter",
+                        "required" => true,
+                        "expanded" => false,
+                        "multiple" => false,
+                        "choices" => [
+                            "Standard" => "standard",
+                            "Starter" => "starter",
+                            "Death" => "death"
+                        ],
+                        "empty_data" => "standard"
                     ])
                 ->add("textContent",
                     TextareaType::class, [

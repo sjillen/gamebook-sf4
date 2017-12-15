@@ -100,7 +100,7 @@ class Hero extends CharacterBase
         $this->numberOfMeals = $meal;
     }
 
-    public function getSkills() : Collection
+    public function getSkills()
     {
         return $this->skills;
     }

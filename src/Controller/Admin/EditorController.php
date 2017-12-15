@@ -21,11 +21,24 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 
-class FormController extends Controller
+class EditorController extends Controller
 {
+    /**
+     * @param $id
+     *
+     * @Route("story/{slug}", name="story")
+     */
+    public function storyAction(Story $story) : Response
+    {
+        $starter = $this->getDoctrine()->getManager()->getRepository(Chapter::class)->findOneBy(["story" => $story,"type" => "standard"]);
+
+        return $this->render("story/story.html.twig", ["story" => $story, "starter" => $starter]);
+    }
+
     /**
      * @param REQUEST $request
      *
@@ -56,7 +69,7 @@ class FormController extends Controller
      * @param Request, $id
      *
      * @return Response
-     * @Route("/story-edit/{id}", name="storyEdit")
+     * @Route("/story-edit/{slug}", name="storyEdit")
      */
     public function editStoryAction(Request $request, Story $story)
     {
@@ -77,10 +90,43 @@ class FormController extends Controller
     }
 
     /**
+     * @param $id
+     *
+     * @return RedirectResponse
+     * @Route("/story/{slug}/remove", name="storyRemove")
+     */
+    public function removeStoryAction(Story $story) : RedirectResponse
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($story);
+        $em->flush();
+
+        $this->addFlash("danger", "The story and all its components have been deleted");
+
+        return $this->redirectToRoute("index");
+    }
+
+    /**
+     * @param $id, $slug
+     *
+     * @return Response
+     * @Route("/story/{slug}/skill/{id}", name="skill")
+     * @ParamConverter("story", options={"mapping": {"slug" : "slug"}})
+     * @ParamConverter("skill", options={"mapping": {"id": "id"}})
+     */
+    public function skillAction(Story $story, Skill $skill) : Response
+    {
+        return $this->render("story/skill.html.twig", [
+            "story" => $story,
+            "skill" => $skill
+        ]);
+    }
+
+    /**
      * @param Request, $id
      *
      * @return Response
-     * @Route("/story/{id}/skill-form", name="skillForm")
+     * @Route("/story/{slug}/skill-form", name="skillForm")
      */
     public function skillFormAction(Request $request, Story $story) : Response
     {
@@ -97,7 +143,7 @@ class FormController extends Controller
 
             $this->addFlash("success", "The skill has been saved successfully");
             return $this->redirectToRoute("story", [
-                "id" => $story->getId()
+                "slug" => $story->getSlug()
             ]);
         }
         return $this->render("form/skill-form.html.twig", [
@@ -109,8 +155,8 @@ class FormController extends Controller
      * @param Request, $id
      *
      * @return Response
-     * @Route("/story/{id}/skill-edit/{idSkill}", name="skillEdit")
-     * @ParamConverter("skill", options={"mapping": {"idSkill": "id"}})
+     * @Route("/story/{slug}/skill-edit/{id}", name="skillEdit")
+     * @ParamConverter("skill", options={"mapping": {"id": "id"}})
      */
     public function editSkillAction(Request $request, Story $story, Skill $skill) : Response
     {
@@ -125,7 +171,7 @@ class FormController extends Controller
 
             $this->addFlash("success", "The skill has been modified successfully");
             return $this->redirectToRoute("story", [
-                "id" => $story->getId()
+                "slug" => $story->getSlug()
             ]);
         }
         return $this->render("form/skill-form.html.twig", [
@@ -134,10 +180,43 @@ class FormController extends Controller
     }
 
     /**
-     * @param Request, $id
+     * @return RedirectResponse
+     * @Route("/story/{slug}/skill-remove/{id}", name="skillRemove")
+     * @ParamConverter("skill", options={"mapping": {"id": "id"}})
+     * @ParamConverter("story", options={"mapping": {"slug": "slug"}})
+     */
+    public function removeSkill(Story $story, Skill $skill) : RedirectResponse
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($skill);
+        $em->flush();
+
+        $this->addFlash("success", "The skill has been removed successfully");
+
+        return $this->redirectToRoute("story", ["slug" => $story->getSlug()]);
+    }
+
+    /**
+     * @param $idStory, $idWeapon
      *
      * @return Response
-     * @Route("/story/{id}/weapon-form", name="weaponForm")
+     * @Route("/story/{slug}/weapon/{id}", name="weapon")
+     * @ParamConverter("story", options={"mapping": {"slug" : "slug"}})
+     * @ParamConverter("weapon", options={"mapping": {"id": "id"}})
+     */
+    public function weaponAction(Story $story, Weapon $weapon) : Response
+    {
+        return $this->render("story/weapon.html.twig", [
+            "story" => $story,
+            "weapon" => $weapon
+        ]);
+    }
+
+    /**
+     * @param Request
+     *
+     * @return Response
+     * @Route("/story/{slug}/weapon-form", name="weaponForm")
      */
     public function weaponFormAction(Request $request, Story $story) : Response
     {
@@ -154,7 +233,7 @@ class FormController extends Controller
 
             $this->addFlash("success", "The weapon has been saved successfully");
             return $this->redirectToRoute("story", [
-                "id" => $story->getId()
+                "slug" => $story->getSlug()
             ]);
         }
         return $this->render("form/weapon-form.html.twig", [
@@ -166,8 +245,8 @@ class FormController extends Controller
      * @param Request, $id, $idWeapon
      *
      * @return Response
-     * @Route("/story/{id}/weapon-edit/{idWeapon}", name="weaponEdit")
-     * @ParamConverter("weapon", options={"mapping": {"idWeapon": "id"}})
+     * @Route("/story/{slug}/weapon-edit/{id}", name="weaponEdit")
+     * @ParamConverter("weapon", options={"mapping": {"id": "id"}})
      */
     public function editWeaponAction(Request $request,Story $story, Weapon $weapon) : Response
     {
@@ -181,7 +260,7 @@ class FormController extends Controller
 
             $this->addFlash("success", "The weapon has been modified successfully");
             return $this->redirectToRoute("story", [
-                "id" => $story->getId()
+                "slug" => $story->getSlug()
             ]);
         }
         return $this->render("form/weapon-form.html.twig", [
@@ -190,10 +269,43 @@ class FormController extends Controller
     }
 
     /**
+     * @return RedirectResponse
+     * @Route("/story/{slug}/weapon-remove/{id}", name="weaponRemove")
+     * @ParamConverter("weapon", options={"mapping": {"id": "id"}})
+     * @ParamConverter("story", options={"mapping": {"slug": "slug"}})
+     */
+    public function removeWeapon(Story $story, Weapon $weapon) : RedirectResponse
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($weapon);
+        $em->flush();
+
+        $this->addFlash("success", "The weapon has been removed successfully");
+
+        return $this->redirectToRoute("story", ["slug" => $story->getSlug()]);
+    }
+
+    /**
+     * @param $idStory, $idConsumableItem
+     *
+     * @return Response
+     * @Route("/story/{slug}/npc/{id}", name="consumableItem")
+     * @ParamConverter("story", options={"mapping": {"slug" : "slug"}})
+     * @ParamConverter("consumableItem", options={"mapping": {"id": "id"}})
+     */
+    public function consumableItemAction(Story $story, ConsumableItem $consumableItem) : Response
+    {
+        return $this->render("story/consumableItem.html.twig", [
+            "story" => $story,
+            "consumableItem" => $consumableItem
+        ]);
+    }
+
+    /**
      * @param Request, $id
      *
      * @return Response
-     * @Route("/story/{id}/consumable-form", name="consumableForm")
+     * @Route("/story/{slug}/consumable-form", name="consumableForm")
      */
     public function consumableFormAction(Request $request, Story $story) : Response
     {
@@ -210,7 +322,7 @@ class FormController extends Controller
 
             $this->addFlash("success", "The consumable has been saved successfully");
             return $this->redirectToRoute("story", [
-                "id" => $story->getId()
+                "slug" => $story->getSlug()
             ]);
         }
         return $this->render("form/consumableItem-form.html.twig", [
@@ -222,8 +334,8 @@ class FormController extends Controller
      * @param Request, $id, $idConsumable
      *
      * @return Response
-     * @Route("/story/{id}/consumable-edit/{idConsumable}", name="consumableEdit")
-     * @ParamConverter("consumableItem", options={"mapping": {"idConsumable": "id"}})
+     * @Route("/story/{slug}/consumable-edit/{id}", name="consumableEdit")
+     * @ParamConverter("consumableItem", options={"mapping": {"id": "id"}})
      */
     public function editConsumableAction(Request $request, Story $story, ConsumableItem $consumable) : Response
     {
@@ -237,7 +349,7 @@ class FormController extends Controller
 
             $this->addFlash("success", "The consumable has been modified successfully");
             return $this->redirectToRoute("story", [
-                "id" => $story->getId()
+                "slug" => $story->getSlug()
             ]);
         }
         return $this->render("form/consumableItem-form.html.twig", [
@@ -246,10 +358,43 @@ class FormController extends Controller
     }
 
     /**
-     * @param Request, $id
+     * @return RedirectResponse
+     * @Route("/story/{slug}/consumableItem-remove/{id}", name="consumableItemRemove")
+     * @ParamConverter("consumableItem", options={"mapping": {"id": "id"}})
+     * @ParamConverter("story", options={"mapping": {"slug": "slug"}})
+     */
+    public function removeConsumableItem(Story $story, ConsumableItem $consumableItem) : RedirectResponse
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($consumableItem);
+        $em->flush();
+
+        $this->addFlash("success", "The consumable item has been removed successfully");
+
+        return $this->redirectToRoute("story", ["slug" => $story->getSlug()]);
+    }
+
+    /**
+     * @param $idStory, $idSpecialItem
      *
      * @return Response
-     * @Route("/story/{id}/specialItem-form", name="specialItemForm")
+     * @Route("/story/{slug}/npc/{id}", name="specialItem")
+     * @ParamConverter("story", options={"mapping": {"slug" : "slug"}})
+     * @ParamConverter("specialItem", options={"mapping": {"id": "id"}})
+     */
+    public function specialItemAction(Story $story, SpecialItem $specialItem) : Response
+    {
+        return $this->render("story/specialItem.html.twig", [
+            "story" => $story,
+            "specialItem" => $specialItem
+        ]);
+    }
+
+    /**
+     * @param Request, $slug
+     *
+     * @return Response
+     * @Route("/story/{slug}/specialItem-form", name="specialItemForm")
      */
     public function specialItemFormAction(Request $request, Story $story) : Response
     {
@@ -266,7 +411,7 @@ class FormController extends Controller
 
             $this->addFlash("success", "The Special Item has been saved successfully");
             return $this->redirectToRoute("story", [
-                "id" => $story->getId()
+                "slug" => $story->getSlug()
             ]);
         }
         return $this->render("form/specialItem-form.html.twig", [
@@ -275,11 +420,11 @@ class FormController extends Controller
     }
 
     /**
-     * @param Request, $id, $idSpecialItem
+     * @param Request, $id, $slug
      *
      * @return Response
-     * @Route("/story/{id}/specialItem-edit/{idSpecialItem}", name="specialItemEdit")
-     * @ParamConverter("specialItem", options={"mapping": {"idSpecialItem": "id"}})
+     * @Route("/story/{slug}/specialItem-edit/{id}", name="specialItemEdit")
+     * @ParamConverter("specialItem", options={"mapping": {"id": "id"}})
      */
     public function editSpecialItemAction(Request $request, Story $story, SpecialItem $specialItem) : Response
     {
@@ -293,7 +438,7 @@ class FormController extends Controller
 
             $this->addFlash("success", "The Special Item has been modified successfully");
             return $this->redirectToRoute("story", [
-                "id" => $story->getId()
+                "slug" => $story->getSlug()
             ]);
         }
         return $this->render("form/specialItem-form.html.twig", [
@@ -302,10 +447,43 @@ class FormController extends Controller
     }
 
     /**
-     * @param Request, $id
+     * @return RedirectResponse
+     * @Route("/story/{slug}/specialItem-remove/{id}", name="specialItemRemove")
+     * @ParamConverter("specialItem", options={"mapping": {"id": "id"}})
+     * @ParamConverter("story", options={"mapping": {"slug": "slug"}})
+     */
+    public function removeSpecialItem(Story $story, SpecialItem $specialItem) : RedirectResponse
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($specialItem);
+        $em->flush();
+
+        $this->addFlash("success", "The special item has been removed successfully");
+
+        return $this->redirectToRoute("story", ["slug" => $story->getSlug()]);
+    }
+
+    /**
+     * @param $id, $slug
      *
      * @return Response
-     * @Route("/story/{id}/npc-form", name="npcForm")
+     * @Route("/story/{slug}/npc/{id}", name="npc")
+     * @ParamConverter("story", options={"mapping": {"slug" : "slug"}})
+     * @ParamConverter("npc", options={"mapping": {"id": "id"}})
+     */
+    public function npcAction(Story $story, Npc $npc) : Response
+    {
+        return $this->render("story/npc.html.twig", [
+            "story" => $story,
+            "npc" => $npc
+        ]);
+    }
+
+    /**
+     * @param Request, $slug
+     *
+     * @return Response
+     * @Route("/story/{slug}/npc-form", name="npcForm")
      */
     public function npcFormAction (Request $request, Story $story) : Response
     {
@@ -322,7 +500,7 @@ class FormController extends Controller
 
             $this->addFlash("success", "The Character has been successully saved");
             return $this->redirectToRoute("story", [
-                "id" => $story->getId()
+                "slug" => $story->getSlug()
             ]);
         }
         return $this->render("form/npc-form.html.twig", [
@@ -331,11 +509,12 @@ class FormController extends Controller
     }
 
     /**
-     * @param Request, $id, $idNpc
+     * @param Request, $id, $slug
      *
      * @return Response
-     * @Route("/story/{id}/npc-edit/{idNpc}", name="npcEdit")
-     * @ParamConverter("npc", options={"mapping": {"idNpc": "id"}})
+     * @Route("/story/{slug}/npc-edit/{id}", name="npcEdit")
+     * @ParamConverter("npc", options={"mapping": {"id": "id"}})
+     * @ParamConverter("story", options={"mapping": {"slug": "slug"}})
      */
     public function editNpcAction (Request $request, Story $story, Npc $npc) : Response
     {
@@ -349,7 +528,7 @@ class FormController extends Controller
 
             $this->addFlash("success", "The Character has been successully modified");
             return $this->redirectToRoute("story", [
-                "id" => $story->getId()
+                "slug" => $story->getSlug()
             ]);
         }
         return $this->render("form/npc-form.html.twig", [
@@ -358,10 +537,27 @@ class FormController extends Controller
     }
 
     /**
-     * @param Request, $id
+     * @return RedirectResponse
+     * @Route("/story/{slug}/npc-remove/{id}", name="npcRemove")
+     * @ParamConverter("npc", options={"mapping": {"id": "id"}})
+     * @ParamConverter("story", options={"mapping": {"slug": "slug"}})
+     */
+    public function removeNpc(Story $story, Npc $npc) : RedirectResponse
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($npc);
+        $em->flush();
+
+        $this->addFlash("success", "The character has been removed successfully");
+
+        return $this->redirectToRoute("story", ["slug" => $story->getSlug()]);
+    }
+
+    /**
+     * @param Request, $slug
      *
      * @return Response
-     * @Route("/story/{id}/chapter-form", name="chapterForm")
+     * @Route("/story/{slug}/chapter-form", name="chapterForm")
      */
     public function chapterFormAction(Request $request, Story $story)
     {
@@ -372,18 +568,26 @@ class FormController extends Controller
             'story' => $story,
         ]);
         $form->handleRequest($request);
+        $em = $this->getDoctrine()->getManager();
+        $starters = $em->getRepository(Chapter::class)->findStarterByStory($story);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if($starters && $starters[0]->getTitle() !== $chapter->getTitle()) {
+                if($chapter->getType() == "starter") {
+                    $this->addFlash("warning", "A Starter chapter already exists : " . $starters[0]->getTitle());
+                    return $this->redirectToRoute("chapterEdit", ["slug" => $story->getSlug(), "id" => $chapter->getId()]);
+                }
+            }
             foreach($chapter->getChoices() as $choice) {
                 $choice->setChapter($chapter);
             }
-            $em = $this->getDoctrine()->getManager();
+
             $em->persist($chapter);
             $em->flush();
 
             $this->addFlash("success", "The chapter has been saved successfully");
             return $this->redirectToRoute('story', [
-                "id" => $story->getId()
+                "slug" => $story->getSlug()
             ]);
         }
         return $this->render("form/chapter-form.html.twig", [
@@ -392,11 +596,12 @@ class FormController extends Controller
     }
 
     /**
-     * @param Request, $id
+     * @param Request, $id, $slug
      *
      * @return Response
-     * @Route("/story/{id}/chapter-form/{idChapter}", name="chapterEdit")
-     * @ParamConverter("chapter", options={"mapping": {"idChapter": "id"}})
+     * @Route("/story/{slug}/chapter-form/{id}", name="chapterEdit")
+     * @ParamConverter("story", options={"mapping": {"slug": "slug"}})
+     * @ParamConverter("chapter", options={"mapping": {"id": "id"}})
      */
     public function editChapterAction(Request $request, Story $story, Chapter $chapter)
     {
@@ -404,22 +609,48 @@ class FormController extends Controller
             'story' => $story
         ]);
         $form->handleRequest($request);
+        $em = $this->getDoctrine()->getManager();
+        $starters = $em->getRepository(Chapter::class)->findStarterByStory($story);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if($starters[0] && $starters[0]->getTitle() !== $chapter->getTitle()) {
+                if($chapter->getType() == "starter") {
+                    $this->addFlash("warning", "A Starter chapter already exists : " . $starters[0]->getTitle());
+                    return $this->redirectToRoute("chapterEdit", ["slug" => $story->getSlug(), "id" => $chapter->getId()]);
+                }
+            }
             foreach($chapter->getChoices() as $choice) {
                 $choice->setChapter($chapter);
             }
-            $em = $this->getDoctrine()->getManager();
+
             $em->persist($chapter);
             $em->flush();
 
             $this->addFlash("success", "The chapter has been modified successfully");
             return $this->redirectToRoute('story', [
-                "id" => $story->getId()
+                "slug" => $story->getSlug()
             ]);
         }
         return $this->render("form/chapter-form.html.twig", [
             "form" => $form->createView()
         ]);
+    }
+
+    /**
+     * @param Story $story
+     * @param Chapter $chapter
+     * @return RedirectResponse
+     * @Route("/story/{slug}/chapter-remove/{id}", name="chapterRemove")
+     * @ParamConverter("story", options={"mapping": {"slug": "slug"}})
+     * @ParamConverter("chapter", options={"mapping": {"id": "id"}})
+     */
+    public function removeChapter(Story $story, Chapter $chapter): RedirectResponse
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($chapter);
+        $em->flush();
+        $this->addFlash("success", "The chapter has been removed successfully");
+
+        return $this->redirectToRoute("story", ["slug" => $story->getSlug()]);
     }
 }

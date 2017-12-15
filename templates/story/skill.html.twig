@@ -9,6 +9,7 @@
         <p>{{ skill.description }}
         </p>
 
+        <a href="{{ path('skillRemove', {'slug': story.slug, 'id': skill.id}) }}"><button class="btn btn-warning">Delete this skill</button></a>
         <a href="{{ path('story', {"slug": story.slug}) }}">
             <button>back to Story page</button>
         </a>
