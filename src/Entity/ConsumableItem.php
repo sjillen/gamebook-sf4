@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Entity\ItemBase;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\BackPackItemRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\ConsumableItemRepository")
  */
 class ConsumableItem extends ItemBase
 {
@@ -74,7 +74,7 @@ class ConsumableItem extends ItemBase
         $this->attributeTargeted = $attributeTargeted;
     }
 
-    public function getRemovable() : bool
+    public function getRemovable() : ?bool
     {
         return $this->removable;
     }

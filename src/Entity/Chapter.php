@@ -31,9 +31,9 @@ class Chapter
 
     /**
      * Type of chapter
-     * Starter : 1
-     * Standard : 0
-     * Death : 2
+     * Starter
+     * Standard
+     * Death
      *
      * @ORM\Column(type="string", length=255, nullable=false)
      */

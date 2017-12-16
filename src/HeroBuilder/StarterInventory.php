@@ -3,58 +3,65 @@
  * Created by PhpStorm.
  * User: Thomas
  * Date: 16/12/2017
- * Time: 00:23
+ * Time: 18:16
  */
 
 namespace App\HeroBuilder;
 
+use App\Entity\ConsumableItem;
 use App\Entity\Hero;
+use App\Entity\SpecialItem;
 use App\Entity\Story;
 use App\Entity\Weapon;
-use App\Entity\ConsumableItem;
-use App\Entity\SpecialItem;
-use Doctrine\ORM\EntityManager;
+use App\Dice\Dice;
+use Doctrine\ORM\EntityManagerInterface;
+
+
 
 class StarterInventory
 {
 
-    private $weaponStarter;
-    private $specialItemStarter;
-    private $consumableItemStarter;
-    private $gold;
     private $em;
 
-
-    public function __construct(EntityManager $entityManager)
+    public function __construct(EntityManagerInterface $em)
     {
-        $this->em = $entityManager;
-        $this->weaponStarter = new Weapon();
-        $this->specialItemStarter = new SpecialItem();
-        $this->consumableItemStarter = new ConsumableItem();
+        $this->em = $em;
     }
 
-    public static function setStarterItem(Story $story, Hero $hero, EntityManager $em)
+    public function setStarterInventory(Story $story, Hero $hero)
     {
-        $diceResult = mt_rand(1, 1);
+        $this->starterWeapon($story, $hero);
+        $this->starterItem($story, $hero);
+    }
 
-        switch ($diceResult) {
-            case 1:
-                $hero->addWeapon($em->getRepository(Weapon::class)->findOneBy(["story" => $story,"name" => "Sword"]));
-                break;
-            case 2:
-                $hero->addSpecialItem($em->getRepository(SpecialItem::class)->findOneBy(["story" => $story,"name" => "Helmet"]));
-                break;
-            case 3:
-                $hero->addConsumableItem($em->getRepository(ConsumableItem::class)->findOneBy(["story" => $story,"name" => "Meal"]));
-                break;
-            case 4:
-                $hero->addSpecialItem($em->getRepository(SpecialItem::class)->findOneBy(["story" => $story, "name" => "Chainmail Waistcoast"]));
-                break;
-            case 5:
-                $hero->addWeapon($em->getRepository(Weapon::class)->findOneBy(["story" => $story,"name" => "Mace"]));
-                break;
+    public function starterWeapon(Story $story, Hero $hero)
+    {
+        $weapons = $this->em->getRepository(Weapon::class)->findBy(["story" => $story,"starter" => true]);
+        $diceType = count($weapons);
+        $weaponChosen = Dice::DiceRoller($diceType) - 1;
+
+        $hero->addWeapon($weapons[$weaponChosen]);
+    }
+
+    public function starterItem(Story $story, Hero $hero)
+    {
+        $consumables = $this->em->getRepository(ConsumableItem::class)->findBy(["story" => $story, "starter" => true]);
+        $specialItems = $this->em->getRepository(SpecialItem::class)->findBy(["story" => $story, "starter" => true]);
+
+        $lengthConsumables = count($consumables);
+        $lengthSpecials = count($specialItems);
+        $diceType = $lengthSpecials + $lengthConsumables;
+        $diceScore = Dice::DiceRoller($diceType);
+
+        if($diceScore > $lengthConsumables) {
+            $itemChosen = Dice::DiceRoller($lengthSpecials) - 1;
+
+            $hero->addSpecialItem($specialItems[$itemChosen]);
+        }else {
+            $itemChosen = Dice::DiceRoller($lengthConsumables) - 1;
+
+            $hero->addConsumableItem($consumables[$itemChosen]);
         }
-
-        return $hero;
     }
+
 }

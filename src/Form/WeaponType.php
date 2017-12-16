@@ -7,6 +7,7 @@ use App\Entity\Story;
 use App\Entity\Skill;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -39,6 +40,11 @@ class WeaponType extends AbstractType
                         "required" => false,
                         "empty_data" => "None"                  
                     ])
+                ->add("starter",
+                    CheckboxType::class, [
+                        "label" => "Is your item part of th starter inventory ?",
+                        "required" => false
+                ])
                 ->add("save", 
                     SubmitType::class);
     }

@@ -7,10 +7,12 @@
 
 
         <p>{{ weapon.description }} <br/>
-        <quote>{{ weapon.weaponSkill.name }}</quote>
+            {% if weapon.weaponSkill %}
+        <em>{{ weapon.weaponSkill.name }}</em>
+            {% endif %}
         </p>
 
-        <a href="{{ path('story', {"id": story.id}) }}">
+        <a href="{{ path('story', {"slug": story.slug}) }}">
             <button>back to Story page</button>
         </a>
 

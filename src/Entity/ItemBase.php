@@ -20,6 +20,11 @@ Abstract class ItemBase
      */
     protected $description;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $starter;
+
     /* Setters and Getters */
 
     public function getName() : ?string
@@ -40,5 +45,15 @@ Abstract class ItemBase
     public function setDescription($description) : void
     {
         $this->description = $description;
+    }
+
+    public function getStarter() : ?bool
+    {
+        return $this->starter;
+    }
+
+    public function setStarter($starter) : void
+    {
+        $this->starter = $starter;
     }
 }

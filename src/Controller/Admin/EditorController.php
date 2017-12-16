@@ -16,6 +16,7 @@ use App\Form\StoryType;
 use App\Form\ChapterType;
 use App\Form\SkillType;
 use App\Form\WeaponType;
+use App\StoryBuilder\UniqueStarter;
 use App\Utils\Slugger;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -246,6 +247,7 @@ class EditorController extends Controller
      *
      * @return Response
      * @Route("/story/{slug}/weapon-edit/{id}", name="weaponEdit")
+     * @ParamConverter("story", options={"mapping": {"slug": "slug"}})
      * @ParamConverter("weapon", options={"mapping": {"id": "id"}})
      */
     public function editWeaponAction(Request $request,Story $story, Weapon $weapon) : Response
@@ -289,7 +291,7 @@ class EditorController extends Controller
      * @param $idStory, $idConsumableItem
      *
      * @return Response
-     * @Route("/story/{slug}/npc/{id}", name="consumableItem")
+     * @Route("/story/{slug}/consumableItem/{id}", name="consumableItem")
      * @ParamConverter("story", options={"mapping": {"slug" : "slug"}})
      * @ParamConverter("consumableItem", options={"mapping": {"id": "id"}})
      */
@@ -335,6 +337,7 @@ class EditorController extends Controller
      *
      * @return Response
      * @Route("/story/{slug}/consumable-edit/{id}", name="consumableEdit")
+     * @ParamConverter("story", options={"mapping": {"slug": "slug"}})
      * @ParamConverter("consumableItem", options={"mapping": {"id": "id"}})
      */
     public function editConsumableAction(Request $request, Story $story, ConsumableItem $consumable) : Response
@@ -378,7 +381,7 @@ class EditorController extends Controller
      * @param $idStory, $idSpecialItem
      *
      * @return Response
-     * @Route("/story/{slug}/npc/{id}", name="specialItem")
+     * @Route("/story/{slug}/specialItem/{id}", name="specialItem")
      * @ParamConverter("story", options={"mapping": {"slug" : "slug"}})
      * @ParamConverter("specialItem", options={"mapping": {"id": "id"}})
      */
@@ -424,6 +427,7 @@ class EditorController extends Controller
      *
      * @return Response
      * @Route("/story/{slug}/specialItem-edit/{id}", name="specialItemEdit")
+     * @ParamConverter("story", options={"mapping": {"slug": "slug"}})
      * @ParamConverter("specialItem", options={"mapping": {"id": "id"}})
      */
     public function editSpecialItemAction(Request $request, Story $story, SpecialItem $specialItem) : Response
@@ -559,7 +563,7 @@ class EditorController extends Controller
      * @return Response
      * @Route("/story/{slug}/chapter-form", name="chapterForm")
      */
-    public function chapterFormAction(Request $request, Story $story)
+    public function chapterFormAction(Request $request, Story $story, UniqueStarter $uniqueStarter)
     {
         $chapter = new Chapter();
         $chapter->setStory($story);
@@ -568,20 +572,18 @@ class EditorController extends Controller
             'story' => $story,
         ]);
         $form->handleRequest($request);
-        $em = $this->getDoctrine()->getManager();
-        $starters = $em->getRepository(Chapter::class)->findStarterByStory($story);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if($starters && $starters[0]->getTitle() !== $chapter->getTitle()) {
-                if($chapter->getType() == "starter") {
-                    $this->addFlash("warning", "A Starter chapter already exists : " . $starters[0]->getTitle());
-                    return $this->redirectToRoute("chapterEdit", ["slug" => $story->getSlug(), "id" => $chapter->getId()]);
-                }
+            //Call UniqueStarter service to check if chapter is a starter, and a starter already exists
+            $starter = $uniqueStarter->CheckUniqueStarter($story, $chapter);
+            if($starter) {
+                $this->addFlash("warning", "A Starter chapter already exists : " . $starter->getTitle());
+                return $this->redirectToRoute("chapterEdit", ["slug" => $story->getSlug(), "id" => $chapter->getId()]);
             }
             foreach($chapter->getChoices() as $choice) {
                 $choice->setChapter($chapter);
             }
-
+            $em = $this->getDoctrine()->getManager();
             $em->persist($chapter);
             $em->flush();
 
@@ -603,26 +605,24 @@ class EditorController extends Controller
      * @ParamConverter("story", options={"mapping": {"slug": "slug"}})
      * @ParamConverter("chapter", options={"mapping": {"id": "id"}})
      */
-    public function editChapterAction(Request $request, Story $story, Chapter $chapter)
+    public function editChapterAction(Request $request, Story $story, Chapter $chapter, UniqueStarter $uniqueStarter)
     {
         $form = $this->createForm(ChapterType::class, $chapter, [
             'story' => $story
         ]);
         $form->handleRequest($request);
-        $em = $this->getDoctrine()->getManager();
-        $starters = $em->getRepository(Chapter::class)->findStarterByStory($story);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if($starters[0] && $starters[0]->getTitle() !== $chapter->getTitle()) {
-                if($chapter->getType() == "starter") {
-                    $this->addFlash("warning", "A Starter chapter already exists : " . $starters[0]->getTitle());
-                    return $this->redirectToRoute("chapterEdit", ["slug" => $story->getSlug(), "id" => $chapter->getId()]);
-                }
+
+            $starter = $uniqueStarter->CheckUniqueStarter($story, $chapter);
+            if($starter) {
+                $this->addFlash("warning", "A Starter chapter already exists : " . $starter->getTitle());
+                return $this->redirectToRoute("chapterEdit", ["slug" => $story->getSlug(), "id" => $chapter->getId()]);
             }
             foreach($chapter->getChoices() as $choice) {
                 $choice->setChapter($chapter);
             }
-
+            $em = $this->getDoctrine()->getManager();
             $em->persist($chapter);
             $em->flush();
 

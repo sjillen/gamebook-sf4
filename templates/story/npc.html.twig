@@ -9,7 +9,7 @@
             <li>Energy: {{ npc.energy }}</li>
         </ul>
 
-        <strong>Weakness: {{ npc.skillAffect.name }}</strong>
+        <strong>Weakness: {% if npc.skillAffect %}{{ npc.skillAffect.name }} {% endif %}</strong>
 
         <p>{{ npc.description }}
         </p>

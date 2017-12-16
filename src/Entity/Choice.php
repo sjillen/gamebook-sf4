@@ -27,7 +27,7 @@ class Choice
     /**
      * proprietary chapter
      * 
-     * @ORM\ManyToOne(targetEntity="Chapter", inversedBy="choices", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="Chapter", inversedBy="choices", cascade={"persist"})
      */
     private $chapter;
 
@@ -48,14 +48,14 @@ class Choice
     /**
      * Skill to unlock to choice
      * 
-     * @ORM\ManyToOne(targetEntity="Skill", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="Skill")
      */
     private $skillRequired;
 
     /**
      * Item to unlock choice
      * 
-     * @ORM\ManyToOne(targetEntity="SpecialItem", cascade={"remove", "persist"})
+     * @ORM\ManyToOne(targetEntity="SpecialItem")
      */
     private $itemRequired;
 

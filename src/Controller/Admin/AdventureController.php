@@ -2,9 +2,6 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Weapon;
-use App\HeroBuilder\StarterInventory;
-use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,6 +11,9 @@ use App\Entity\Hero;
 use App\Form\HeroType;
 use App\Entity\Story;
 use App\Entity\Chapter;
+use App\HeroBuilder\HeroBuilder;
+use App\HeroBuilder\StarterInventory;
+
 
 
 class AdventureController extends AbstractController
@@ -25,7 +25,7 @@ class AdventureController extends AbstractController
      * @Route("/story/{slug}/create-hero", name="newHero")
      * @ParamConverter("story", options={"mapping": {"slug": "slug"}})
      */
-    public function newHero(Request $request, Story $story) : Response
+    public function newHero(Request $request, Story $story, HeroBuilder $heroBuilder, StarterInventory $starterInventory) : Response
     {
         $hero = new Hero();
         $form = $this->createForm(HeroType::class, $hero, ["story" => $story]);
@@ -33,15 +33,10 @@ class AdventureController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $energy = mt_rand(10,19);
-            $life = mt_rand(20, 29);
-            $gold = mt_rand(0, 9);
-            $hero->setGold($gold);
-            $hero->setLife($life);
-            $hero->setEnergy($energy);
 
-            $hero->addWeapon($em->getRepository(Weapon::class)->findOneBy(["name" => "Axe"]));
-            $hero = StarterInventory::setStarterItem($story, $hero, $em);
+            $hero = $heroBuilder->buildHero($hero);
+            $starterInventory->setStarterInventory($story, $hero);
+
             dump($hero);
             die();
             $em->persist($hero);

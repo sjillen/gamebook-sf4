@@ -6,6 +6,7 @@ use App\Entity\SpecialItem;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -26,6 +27,11 @@ class SpecialItemType extends AbstractType
             ->add("description",
                 TextareaType::class, [
                     "label" => "description of the item"
+                ])
+            ->add("starter",
+                CheckboxType::class, [
+                    "label" => "Is your item part of th starter inventory ?",
+                    "required" => false
                 ])
             ->add("save", SubmitType::class)
         ;
