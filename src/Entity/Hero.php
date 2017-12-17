@@ -2,13 +2,9 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\CharacterBase;
 use Doctrine\Common\Collections\ArrayCollection;
-use App\Entity\Skill;
-use App\Entity\SpecialItem;
-use App\Entity\ConsumableItem;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\HeroRepository")
@@ -58,12 +54,12 @@ class Hero extends CharacterBase
     private $specialItems;
 
     /* Constructor */
-    public function __constructor()
+    public function __construct()
     {
-        $this->skills = new ArrayCollection;
-        $this->weapons = new ArrayCollection;
-        $this->consumableItems = new ArrayCollection;
-        $this->specialItems = new ArrayCollection;
+        $this->skills = new ArrayCollection();
+        $this->weapons = new ArrayCollection();
+        $this->consumableItems = new ArrayCollection();
+        $this->specialItems = new ArrayCollection();
         $this->gold = 0;
         $this->numberOfMeals = 0;
     }
@@ -100,9 +96,14 @@ class Hero extends CharacterBase
         $this->numberOfMeals = $meal;
     }
 
-    public function getSkills()
+    public function getSkills() : ?ArrayCollection
     {
         return $this->skills;
+    }
+
+    public function hasSkill(Skill $skill) : ?bool
+    {
+           return $this->skills->contains($skill);
     }
 
     public function addSkill(Skill $skill) : void
@@ -115,7 +116,7 @@ class Hero extends CharacterBase
         $this->skills->removeElement($skill);
     }
 
-    public function getWeapons() : Collection
+    public function getWeapons() : ?ArrayCollection
     {
         return $this->weapons;
     }
@@ -130,7 +131,7 @@ class Hero extends CharacterBase
         $this->weapons->removeElement($weapon);
     }
 
-    public function getConsumableItems() : Collection
+    public function getConsumableItems() : ?ArrayCollection
     {
         return $this->consumableItems;
     }
@@ -145,7 +146,7 @@ class Hero extends CharacterBase
         $this->consumableItems->removeElement($consumableItem);
     }
 
-    public function getSpecialItems() : Collection
+    public function getSpecialItems() : ?ArrayCollection
     {
         return $this->specialItems;
     }

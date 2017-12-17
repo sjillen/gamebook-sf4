@@ -1,0 +1,50 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+<div class="container-fluid">
+    <h2>Your hero</h2>
+    <div class="well">
+        <strong>Name: </strong>{{ hero.name }} <br/>
+        <strong>Life: </strong> {{ hero.life }} <br/>
+        <strong>Ability: </strong> {{ hero.energy }}<br/>
+        <strong>Gold: </strong> {{ hero.gold }}
+    </div>
+
+    <div class="jumbotron">
+        <div class="row items-align-center">
+            <div class="col-sm-6">
+                <h4>Your Weapons</h4>
+                {% for weapon in hero.weapons %}
+                <strong>Weapon: </strong>{{ weapon.name }}
+                {% endfor %}
+            </div>
+            <div class="col-sm-6">
+                <h4>Your Skills</h4>
+                {% for skill in hero.skills %}
+                    <strong>{{ skill.name }}</strong>
+                    {% if skill.weapon %}
+                    <em>You are mastering the {{ skill.weapon.name }}</em>
+                        {% endif %}
+                    <br/>
+                {% endfor %}
+            </div>
+            <div class="col-sm-6">
+                <h4>Your Special Items</h4>
+                {% for armor in hero.specialItems %}
+                    <strong>{{ armor.name }}</strong> <br/>
+                {% endfor %}
+            </div>
+            <div class="col-sm-6">
+                <h4>Your backpack</h4>
+                {% for consumable in hero.consumableItems %}
+                    <strong>{{ consumable.name }}</strong> <br/>
+                    {% endfor %}
+            </div>
+        </div>
+    </div>
+    <a href="{{ path('story', {"slug": slug}) }}"><button class="btn btn-primary">Back to story</button></a>
+</div>
+
+
+
+{% endblock %}

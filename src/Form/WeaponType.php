@@ -29,20 +29,9 @@ class WeaponType extends AbstractType
                     TextareaType::class, [
                         "label" => "description of the weapon"
                     ])
-                ->add("weaponSkill", 
-                    EntityType::class, [
-                        "label" => "Skill improving the weapon mastery",
-                        "class" => Skill::class,
-                        "choices" => $story->getSkills(),
-                        "choice_label" => "name",
-                        "expanded" => false,
-                        "multiple" => false,
-                        "required" => false,
-                        "empty_data" => "None"                  
-                    ])
                 ->add("starter",
                     CheckboxType::class, [
-                        "label" => "Is your item part of th starter inventory ?",
+                        "label" => "Is your item part of the starter inventory ?",
                         "required" => false
                 ])
                 ->add("save", 

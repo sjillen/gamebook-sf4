@@ -30,12 +30,6 @@ Abstract class CharacterBase
      */
     protected $energy;
 
-    /* Constructor */
-    public function __construct()
-    {
-        $this->story = new Story();
-    }
-
     /* Setters and Getters */
 
     public function getName() : ?string

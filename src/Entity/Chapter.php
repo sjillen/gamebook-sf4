@@ -4,8 +4,6 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
-use App\Entity\Choice;
-use App\Entity\Story;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ChapterRepository")
@@ -30,7 +28,7 @@ class Chapter
     private $title;
 
     /**
-     * Type of chapter
+     * Type of chapter:
      * Starter
      * Standard
      * Death

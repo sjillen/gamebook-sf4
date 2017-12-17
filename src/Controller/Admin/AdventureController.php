@@ -13,7 +13,7 @@ use App\Entity\Story;
 use App\Entity\Chapter;
 use App\HeroBuilder\HeroBuilder;
 use App\HeroBuilder\StarterInventory;
-
+use App\HeroBuilder\WeaponSkill;
 
 
 class AdventureController extends AbstractController
@@ -25,7 +25,7 @@ class AdventureController extends AbstractController
      * @Route("/story/{slug}/create-hero", name="newHero")
      * @ParamConverter("story", options={"mapping": {"slug": "slug"}})
      */
-    public function newHero(Request $request, Story $story, HeroBuilder $heroBuilder, StarterInventory $starterInventory) : Response
+    public function newHero(Request $request, Story $story, HeroBuilder $heroBuilder, StarterInventory $starterInventory, WeaponSkill $weaponSkill) : Response
     {
         $hero = new Hero();
         $form = $this->createForm(HeroType::class, $hero, ["story" => $story]);
@@ -36,20 +36,31 @@ class AdventureController extends AbstractController
 
             $hero = $heroBuilder->buildHero($hero);
             $starterInventory->setStarterInventory($story, $hero);
+            $weaponSkill->weaponSelection($story, $hero);
 
-            dump($hero);
-            die();
-            $em->persist($hero);
-            $em->flush();
+            $session = $request->getSession();
+            $session->set("hero", $hero);
 
             $this->addFlash("success", "The creation of your hero is finished");
-            return $this->redirectToRoute("story", [
+            return $this->redirectToRoute("heroResume", [
                 "slug" => $story->getSlug()
             ]);
         }
         return $this->render("form/hero-form.html.twig", [
             "form" => $form->createView()
         ]);
+    }
+
+    /**
+     * @param Request
+     * @return Response
+     *
+     * @Route("/story/{slug}/hero-resume", name="heroResume")
+     */
+    public function heroResume(Request $request, Story $story) : Response
+    {
+        $hero = $request->getSession()->get("hero");
+        return $this->render("story/heroResume.html.twig", ["slug" => $story->getSlug(), "hero" => $hero]);
     }
 
     /**
