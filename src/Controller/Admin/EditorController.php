@@ -133,7 +133,7 @@ class EditorController extends Controller
     {
         $skill = new Skill();
 
-        $form = $this->createForm(SkillType::class, $skill);
+        $form = $this->createForm(SkillType::class, $skill, ["story" => $story]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -157,12 +157,13 @@ class EditorController extends Controller
      *
      * @return Response
      * @Route("/story/{slug}/skill-edit/{id}", name="skillEdit")
+     * @ParamConverter("story", options={"mapping": {"slug": "slug"}})
      * @ParamConverter("skill", options={"mapping": {"id": "id"}})
      */
     public function editSkillAction(Request $request, Story $story, Skill $skill) : Response
     {
 
-        $form = $this->createForm(SkillType::class, $skill);
+        $form = $this->createForm(SkillType::class, $skill, ["story" => $story]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

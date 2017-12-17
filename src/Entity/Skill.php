@@ -28,48 +28,63 @@ class Skill
     private $description;
 
     /**
+     * @ORM\OneToOne(targetEntity="Weapon")
+     */
+    private $weapon;
+
+    /**
      * @ORM\ManyToOne(targetEntity="story", inversedBy="skills")
      */
     private $story;
 
     /* Getters and Setters */
 
-    public function getId() : int
+    public function getId(): int
     {
         return $this->id;
     }
-    
-    public function getName() : ?string
+
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    public function setName($name) : void
+    public function setName($name): void
     {
         $this->name = $name;
     }
 
-    public function getDescription() : ?string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    public function setDescription($description) : void
+    public function setDescription($description): void
     {
         $this->description = $description;
     }
 
-    public function getStory() : Story
+    public function getStory(): Story
     {
         return $this->story;
     }
 
-    public function setStory($story) : void
+    public function setStory($story): void
     {
         $this->story = $story;
     }
 
-    public function getUniqueName() : string
+    public function getWeapon(): ?Weapon
+    {
+        return $this->weapon;
+    }
+
+    public function setWeapon(?Weapon $weapon): void
+    {
+        $this->weapon = $weapon;
+    }
+
+    public function getUniqueName(): string
     {
         return sprintf('%s - %s', $this->name, $this->description);
     }
