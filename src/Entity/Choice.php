@@ -102,12 +102,12 @@ class Choice
              $this->chapter = $chapter;
      }
 
-     public function getTargetChapter() : Chapter
+     public function getTargetChapter() : ?Chapter
      {
          return $this->targetChapter;
      }
 
-     public function setTargetChapter(Chapter $targetChapter) : void
+     public function setTargetChapter(?Chapter $targetChapter) : void
      {
          $this->targetChapter = $targetChapter;
      }

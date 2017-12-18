@@ -1,0 +1,22 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+
+    <div class="container-fluid">
+        <div class="well">
+            <div class="row">
+                <h3 class="align-center">Set of rules for the story {{ ruleset.story.title }}</h3>
+                <div class="col-sm-6">
+                    <strong>Base Life:  {{ ruleset.heroBaseLife }}</strong> <br/>
+                    <strong>Base Resources:  {{ ruleset.heroBaseResource }}</strong> <br/>
+                    <strong>Base Gold:  {{ ruleset.heroBaseGold }}</strong> <br/>
+                    <strong>Max skills:  {{ ruleset.maxSkill }}</strong> <br/>
+                    <strong>Dice Type:  D{{ ruleset.diceType }}</strong> <br/>
+                </div>
+            </div>
+            <a href="{{ path('rulesetEdit', {"slug": ruleset.story.slug, "id" : ruleset.id}) }}"><button class="btn btn-warning">Modify the rules</button></a>
+            <a href="{{ path('rulesetRemove', { "slug": ruleset.story.slug, "id": ruleset.id}) }}"><button class="btn btn-danger">Delete this ruleset</button></a>
+        </div>
+    </div>
+
+{% endblock %}

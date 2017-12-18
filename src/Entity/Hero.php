@@ -39,6 +39,11 @@ class Hero extends CharacterBase
     private $skills;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Weaponskill", cascade={"persist", "remove"})
+     */
+    private $weaponskill;
+
+    /**
      * @ORM\ManyToMany(targetEntity="Weapon")
      */
     private $weapons;
@@ -60,6 +65,7 @@ class Hero extends CharacterBase
         $this->weapons = new ArrayCollection();
         $this->consumableItems = new ArrayCollection();
         $this->specialItems = new ArrayCollection();
+        $this->level = 1;
         $this->gold = 0;
         $this->numberOfMeals = 0;
     }
@@ -74,6 +80,16 @@ class Hero extends CharacterBase
     public function setId($id) : void
     {
         $this->id = $id;
+    }
+
+    public function getLevel() : int
+    {
+        return $this->level;
+    }
+
+    public function setLevel(int $level) : void
+    {
+        $this->level = $level;
     }
 
     public function getGold() : int
@@ -96,27 +112,37 @@ class Hero extends CharacterBase
         $this->numberOfMeals = $meal;
     }
 
-    public function getSkills() : ?ArrayCollection
+    public function getSkills()
     {
         return $this->skills;
     }
 
-    public function hasSkill(Skill $skill) : ?bool
+    public function hasSkill(?Skill $skill) : ?bool
     {
            return $this->skills->contains($skill);
     }
 
-    public function addSkill(Skill $skill) : void
+    public function addSkill(?Skill $skill) : void
     {
         $this->skills[] = $skill;
     }
 
-    public function removeSkill(Skill $skill) : void
+    public function removeSkill(?Skill $skill) : void
     {
         $this->skills->removeElement($skill);
     }
 
-    public function getWeapons() : ?ArrayCollection
+    public function getWeaponskill() : ?Weaponskill
+    {
+        return $this->weaponskill;
+    }
+
+    public function setWeaponskill(?Weaponskill $weaponskill) : void
+    {
+        $this->weaponskill = $weaponskill;
+    }
+
+    public function getWeapons()
     {
         return $this->weapons;
     }
@@ -131,7 +157,7 @@ class Hero extends CharacterBase
         $this->weapons->removeElement($weapon);
     }
 
-    public function getConsumableItems() : ?ArrayCollection
+    public function getConsumableItems()
     {
         return $this->consumableItems;
     }
@@ -146,7 +172,7 @@ class Hero extends CharacterBase
         $this->consumableItems->removeElement($consumableItem);
     }
 
-    public function getSpecialItems() : ?ArrayCollection
+    public function getSpecialItems()
     {
         return $this->specialItems;
     }

@@ -7,6 +7,9 @@ use App\Entity\Story;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\SkillRepository")
+ * @ORM\InheritanceType("SINGLE_TABLE")
+ * @ORM\DiscriminatorColumn(name="weapon", type="string")
+ * @ORM\DiscriminatorMap({"skill" = "Skill", "weaponskill" = "Weaponskill"})
  */
 class Skill
 {
@@ -26,11 +29,6 @@ class Skill
      * @ORM\Column(type="text")
      */
     private $description;
-
-    /**
-     * @ORM\OneToOne(targetEntity="Weapon")
-     */
-    private $weapon;
 
     /**
      * @ORM\ManyToOne(targetEntity="story", inversedBy="skills")
@@ -72,16 +70,6 @@ class Skill
     public function setStory($story): void
     {
         $this->story = $story;
-    }
-
-    public function getWeapon(): ?Weapon
-    {
-        return $this->weapon;
-    }
-
-    public function setWeapon(?Weapon $weapon): void
-    {
-        $this->weapon = $weapon;
     }
 
     public function getUniqueName(): string

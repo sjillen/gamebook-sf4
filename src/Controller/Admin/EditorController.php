@@ -2,7 +2,10 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Choice;
 use App\Entity\ConsumableItem;
+use App\Entity\Hero;
+use App\Entity\Ruleset;
 use App\Entity\Story;
 use App\Entity\Chapter;
 use App\Entity\Skill;
@@ -16,6 +19,7 @@ use App\Form\StoryType;
 use App\Form\ChapterType;
 use App\Form\SkillType;
 use App\Form\WeaponType;
+use App\Form\RulesetType;
 use App\StoryBuilder\UniqueStarter;
 use App\Utils\Slugger;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -29,15 +33,16 @@ use Symfony\Component\Routing\Annotation\Route;
 class EditorController extends Controller
 {
     /**
-     * @param $id
+     * @param $slug
      *
      * @Route("story/{slug}", name="story")
      */
     public function storyAction(Story $story) : Response
     {
-        $starter = $this->getDoctrine()->getManager()->getRepository(Chapter::class)->findOneBy(["story" => $story,"type" => "standard"]);
+        $starter = $this->getDoctrine()->getManager()->getRepository(Chapter::class)->findOneBy(["story" => $story,"type" => "starter"]);
+        $heroes = $this->getDoctrine()->getManager()->getRepository(Hero::class)->findAll();
 
-        return $this->render("story/story.html.twig", ["story" => $story, "starter" => $starter]);
+        return $this->render("story/story.html.twig", ["story" => $story, "heroes" => $heroes, "starter" => $starter]);
     }
 
     /**
@@ -67,7 +72,7 @@ class EditorController extends Controller
     }
 
     /**
-     * @param Request, $id
+     * @param Request, $slug
      *
      * @return Response
      * @Route("/story-edit/{slug}", name="storyEdit")
@@ -91,7 +96,7 @@ class EditorController extends Controller
     }
 
     /**
-     * @param $id
+     * @param $slug
      *
      * @return RedirectResponse
      * @Route("/story/{slug}/remove", name="storyRemove")
@@ -105,6 +110,90 @@ class EditorController extends Controller
         $this->addFlash("danger", "The story and all its components have been deleted");
 
         return $this->redirectToRoute("index");
+    }
+
+    /**
+     * @param $slug, $id
+     *
+     * @return Response
+     * @Route("/story/{slug}/ruleset/{id}", name="rulesetDisplay")
+     * @ParamConverter("story", options={"mapping": {"slug": "slug"}})
+     * @ParamConverter("ruleset", options={"mapping": {"id": "id"}})
+     */
+    public function rulesetDisplay(Story $story, Ruleset $ruleset) : Response
+    {
+        return $this->render("story/ruleset.html.twig", ["slug" => $story->getSlug(), "ruleset" => $ruleset]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Story $story
+     * @return Response
+     * @Route("/story/{slug}/new-ruleset", name="rulesetCreate")
+     * @ParamConverter("story", options={"mapping": {"slug": "slug"}})
+     */
+    public function newRuleset(Request $request, Story $story) : Response
+    {
+        if($story->getRuleset()) {
+            $this->addFlash("danger", "A Set of Rules already exists for this story");
+            return $this->redirectToRoute("story", ["slug" => $story->getSlug()]);
+        }
+        $ruleset = new Ruleset();
+        $ruleset->setStory($story);
+        $form = $this->createForm(RulesetType::class, $ruleset);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($ruleset);
+            $em->flush();
+
+            $this->addFlash("success", "Your set of rules for this story has been successfully created");
+            return $this->redirectToRoute("rulesetDisplay", ["slug" => $story->getSlug(), "id" => $ruleset->getId()]);
+        }
+
+        return $this->render("form/ruleset-form.html.twig", ["form" => $form->createView()]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Story $story
+     * @param Ruleset $ruleset
+     * @return Response
+     * @Route("/story/{slug}/ruleset-edit/{id}", name="rulesetEdit")
+     * @ParamConverter("story", options={"mapping": {"slug": "slug"}})
+     * @ParamConverter("ruleset", options={"mapping": {"id": "id"}})
+     */
+    public function editRuleset(Request $request, Story $story, Ruleset $ruleset) : Response
+    {
+        $form = $this->createForm(RulesetType::class, $ruleset);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($ruleset);
+            $em->flush();
+
+            $this->addFlash("success", "Your set of rules for this story has been successfully modified");
+            return $this->redirectToRoute("ruleSetDisplay", ["slug" => $story->getSlug(), "id" => $ruleset->getId()]);
+        }
+
+        return $this->render("form/ruleset-form.html.twig", ["form" => $form->createView()]);
+    }
+
+    /**
+     * @param Story $story
+     * @param Ruleset $ruleset
+     * @return RedirectResponse
+     * @Route("/story/{slug}/ruleset-remove/{id}", name="rulesetRemove")
+     * @ParamConverter("story", options={"mapping": {"slug": "slug"}})
+     * @ParamConverter("ruleset", options={"mapping": {"id": "id"}})
+     */
+    public function removeRuleset(Story $story, Ruleset $ruleset) : RedirectResponse
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($ruleset);
+        $em->flush();
+        return $this->redirectToRoute("story", ["slug" => $story->getSlug()]);
     }
 
     /**
@@ -616,7 +705,7 @@ class EditorController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
 
             $starter = $uniqueStarter->CheckUniqueStarter($story, $chapter);
-            if($starter) {
+            if($starter && $starter !== $chapter) {
                 $this->addFlash("warning", "A Starter chapter already exists : " . $starter->getTitle());
                 return $this->redirectToRoute("chapterEdit", ["slug" => $story->getSlug(), "id" => $chapter->getId()]);
             }
@@ -648,6 +737,10 @@ class EditorController extends Controller
     public function removeChapter(Story $story, Chapter $chapter): RedirectResponse
     {
         $em = $this->getDoctrine()->getManager();
+        $targetingChoices = $em->getRepository(Choice::class)->findBy(["targetChapter" => $chapter]);
+        foreach ($targetingChoices as $choice) {
+            $em->remove($choice);
+        }
         $em->remove($chapter);
         $em->flush();
         $this->addFlash("success", "The chapter has been removed successfully");

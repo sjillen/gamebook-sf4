@@ -40,6 +40,11 @@ class Story
     private $saga;
 
     /**
+     * @ORM\OneToOne(targetEntity="Ruleset", mappedBy="story", cascade={"remove"})
+     */
+    private $ruleset;
+
+    /**
      * @var Chapter[]|ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Chapter", mappedBy="story", cascade={"remove"})
@@ -135,6 +140,24 @@ class Story
     {
         $this->saga = $saga;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getRuleset()
+    {
+        return $this->ruleset;
+    }
+
+    /**
+     * @param mixed $ruleset
+     */
+    public function setRuleset($ruleset)
+    {
+        $this->ruleset = $ruleset;
+    }
+
+
 
     public function getChapters() : Collection
     {

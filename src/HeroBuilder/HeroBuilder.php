@@ -10,45 +10,36 @@ namespace App\HeroBuilder;
 
 use App\Entity\Hero;
 use App\Dice\Dice;
+use App\Entity\Ruleset;
+use App\Repository\RulesetRepository;
 
 
 class HeroBuilder
 {
-    private $baseLife;
-    private $baseEnergy;
-    private $diceType;
-
-    public function __construct()
+    public function buildHero(Hero $hero, Ruleset $rules) : Hero
     {
-        $this->baseLife = 20;
-        $this->baseEnergy = 10;
-        $this->diceType = 10;
-    }
-
-    public function buildHero(Hero $hero) : Hero
-    {
-        $hero->setGold($this->goldStarter());
-        $hero->setLife($this->setHpStarter());
-        $hero->setEnergy($this->setEnergyStarter());
+        $hero->setGold(self::goldStarter($rules));
+        $hero->setLife(self::setHpStarter($rules));
+        $hero->setEnergy(self::setEnergyStarter($rules));
 
         return $hero;
     }
 
-    public function goldStarter() : int
+    public static function goldStarter(Ruleset $rules) : int
     {
-        $gold = Dice::DiceRoller($this->diceType) - 1 ;
+        $gold = Dice::DiceRoller($rules->getDiceType()) + $rules->getHeroBaseGold();
         return $gold;
     }
 
-    public function setHpStarter() : int
+    public static function setHpStarter(Ruleset $rules) : int
     {
-        $hp = Dice::DiceRoller($this->diceType) + 19;
+        $hp = Dice::DiceRoller($rules->getDiceType()) + $rules->getHeroBaseLife();
         return $hp;
     }
 
-    public function setEnergyStarter() : int
+    public function setEnergyStarter(Ruleset $rules) : int
     {
-        $energy = Dice::DiceRoller($this->diceType) + 9;
+        $energy = Dice::DiceRoller($rules->getDiceType()) + $rules->getHeroBaseResource();
         return $energy;
     }
 }

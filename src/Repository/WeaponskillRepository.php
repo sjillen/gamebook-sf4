@@ -2,15 +2,15 @@
 
 namespace App\Repository;
 
-use App\Entity\WeaponSkill;
+use App\Entity\Weaponskill;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
-class WeaponSkillRepository extends ServiceEntityRepository
+class WeaponskillRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, WeaponSkill::class);
+        parent::__construct($registry, Weaponskill::class);
     }
 
     /*

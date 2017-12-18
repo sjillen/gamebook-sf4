@@ -6,6 +6,15 @@
 <quote>{{ story.author }}</quote>
 <p>{{ story.saga }}</p>
 
+    {% if story.ruleset %}
+    <a href="{{ path('rulesetDisplay', {"slug": story.slug, "id": story.ruleset.id}) }}"><button class="btn btn-primary">View Rules</button></a>
+    <a href="{{ path('rulesetRemove', {"slug": story.slug, "id": story.ruleset.id}) }}"><button class="btn btn-primary">Delete Rules</button></a>
+    {% endif %}
+    {% if not story.ruleset %}
+        <a href="{{ path('rulesetCreate', {"slug": story.slug}) }}"><button class="btn btn-success">Create rules</button></a>
+    {% endif %}
+
+
 <h4>List of chapters</h4>
     <ul>
         {% for chapter in story.chapters %}
@@ -16,7 +25,12 @@
         {% endfor %}
     </ul>
     <a href="{{ path('chapterForm', {'slug': story.slug}) }}"><button class="btn btn-warning">Add a chapter</button></a>
-
+<h4>Your heroes</h4>
+    <ul>
+        {% for hero in heroes %}
+            <a href="{{ path('heroResume', {"slug": story.slug, "id": hero.id}) }}"><button class="btn btn-success">Hero details</button></a>
+        {% endfor %}
+    </ul>
 <h4>list of skills made for this story</h4>
 <ul>
     {% for skill in story.skills %}
