@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\SpecialItem;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -16,10 +17,6 @@ class SpecialItemType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('slot',
-                TextType::class, [
-                    "label" => "Slot where the item is carried by the character"
-                ])
             ->add("name",
                 TextType::class, [
                     "label" => "Name of the item"
@@ -27,6 +24,21 @@ class SpecialItemType extends AbstractType
             ->add("description",
                 TextareaType::class, [
                     "label" => "description of the item"
+                ])
+            ->add('slot',
+                ChoiceType::class, [
+                    "label" => "Slot where the item is carried by the hero (The hero can only carry one item per slot)",
+                    "choices" => [
+                        "head" => "Head",
+                        "chest" => "Chest",
+                        "hands" => "Hands",
+                        "legs" => "Legs",
+                        "feet" => "Feet",
+                    ],
+                    "multiple" => false,
+                    "expanded" => false,
+                    "required" => false,
+                    "empty_data" => "None"
                 ])
             ->add("starter",
                 CheckboxType::class, [

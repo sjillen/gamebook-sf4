@@ -5,7 +5,7 @@
  * Date: 16/12/2017
  * Time: 18:17
  */
-namespace App\Encounter;
+namespace App\Adventure;
 
 
 class Encounter

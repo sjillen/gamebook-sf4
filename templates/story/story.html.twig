@@ -73,9 +73,7 @@
 
 <footer>
     <a href="{{ path("storyRemove", {"slug": story.slug}) }}"><button class="btn btn-danger">Delete the story</button></a>
-    {% if starter %}
-    <a href="{{ path('chapter', {"slug": story.slug, "id": starter.id}) }}"><button class="btn btn-secondary">Start the story</button></a>
-    {% endif %}
+
     <a href="{{ path('newHero', {"slug": story.slug}) }}"><button class="btn btn-success">Create your hero</button></a>
 </footer>
 

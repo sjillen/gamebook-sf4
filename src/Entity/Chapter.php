@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -108,7 +109,7 @@ class Chapter
         $this->textContent = $textContent;
     }
 
-    public function getNpcs() 
+    public function getNpcs() : ?Collection
     {
         return $this->npcs;
     }
@@ -123,7 +124,7 @@ class Chapter
         $this->npcs->removeElement($npc);
     }
 
-    public function getChoices()
+    public function getChoices() : ?Collection
     {
         return $this->choices;
     }

@@ -8,7 +8,7 @@ use App\Entity\Story;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\SkillRepository")
  * @ORM\InheritanceType("SINGLE_TABLE")
- * @ORM\DiscriminatorColumn(name="weapon", type="string")
+ * @ORM\DiscriminatorColumn(name="type", type="string")
  * @ORM\DiscriminatorMap({"skill" = "Skill", "weaponskill" = "Weaponskill"})
  */
 class Skill

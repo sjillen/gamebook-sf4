@@ -13,6 +13,18 @@ class SkillRepository extends ServiceEntityRepository
         parent::__construct($registry, Skill::class);
     }
 
+    public function findSkillsByStory($story)
+    {
+        return $qb = $this->createQueryBuilder("s")
+            ->where("s.story = :story")
+            ->setParameter("story", $story)
+            ->andWhere("s INSTANCE OF App\Entity\Skill")
+            ->getQuery()
+            ->getResult()
+            ;
+
+
+    }
     /*
     public function findBySomething($value)
     {

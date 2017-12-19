@@ -61,7 +61,7 @@ class ActionType extends AbstractType
                     IntegerType::class, [
                         "label" => "Amount of gold required to the unlock choice",
                         "scale" => 0,
-                        "data" => 0
+                        "empty_data" => 0
                     ]);
     }
 

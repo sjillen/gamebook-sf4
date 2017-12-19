@@ -25,19 +25,19 @@ class HeroBuilder
         return $hero;
     }
 
-    public static function goldStarter(Ruleset $rules) : int
+    private static function goldStarter(Ruleset $rules) : int
     {
         $gold = Dice::DiceRoller($rules->getDiceType()) + $rules->getHeroBaseGold();
         return $gold;
     }
 
-    public static function setHpStarter(Ruleset $rules) : int
+    private static function setHpStarter(Ruleset $rules) : int
     {
         $hp = Dice::DiceRoller($rules->getDiceType()) + $rules->getHeroBaseLife();
         return $hp;
     }
 
-    public function setEnergyStarter(Ruleset $rules) : int
+    private static function setEnergyStarter(Ruleset $rules) : int
     {
         $energy = Dice::DiceRoller($rules->getDiceType()) + $rules->getHeroBaseResource();
         return $energy;

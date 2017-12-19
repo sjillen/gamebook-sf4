@@ -15,7 +15,7 @@ class HeroType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $story = $options['story'];
+        $skills = $options['skills'];
 
         $builder
             ->add('name', TextType::class, [
@@ -23,7 +23,7 @@ class HeroType extends AbstractType
             ])
             ->add('skills', EntityType::class, [
                 "class" => Skill::class,
-                "choices" => $story->getSkills(),
+                "choices" => $skills,
                 "choice_label" => "uniqueName",
                 "expanded" => true,
                 "multiple" => true,
@@ -36,7 +36,7 @@ class HeroType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Hero::class,
-            'story' => null
+            'skills' => null
         ]);
     }
 }

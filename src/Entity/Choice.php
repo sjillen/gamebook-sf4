@@ -112,7 +112,7 @@ class Choice
          $this->targetChapter = $targetChapter;
      }
 
-     public function getLocked() : bool
+     public function isLocked() : bool
      {
          return $this->locked;
      }

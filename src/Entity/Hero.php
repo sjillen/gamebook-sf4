@@ -19,6 +19,11 @@ class Hero extends CharacterBase
     private $id;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Story")
+     */
+    private $story;
+
+    /**
      * @ORM\Column(type="integer")
      */
     private $gold;
@@ -80,6 +85,16 @@ class Hero extends CharacterBase
     public function setId($id) : void
     {
         $this->id = $id;
+    }
+
+    public function getStory() : ?Story
+    {
+        return $this->story;
+    }
+
+    public function setStory(?Story $story) : void
+    {
+        $this->story = $story;
     }
 
     public function getLevel() : int
@@ -175,6 +190,11 @@ class Hero extends CharacterBase
     public function getSpecialItems()
     {
         return $this->specialItems;
+    }
+
+    public function hasItem(?SpecialItem $item) : bool
+    {
+        return $this->specialItems->contains($item);
     }
 
     public function addSpecialItem(SpecialItem $specialItem) : void 

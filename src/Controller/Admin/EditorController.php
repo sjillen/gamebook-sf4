@@ -40,7 +40,7 @@ class EditorController extends Controller
     public function storyAction(Story $story) : Response
     {
         $starter = $this->getDoctrine()->getManager()->getRepository(Chapter::class)->findOneBy(["story" => $story,"type" => "starter"]);
-        $heroes = $this->getDoctrine()->getManager()->getRepository(Hero::class)->findAll();
+        $heroes = $this->getDoctrine()->getManager()->getRepository(Hero::class)->findBy(["story" => $story]);
 
         return $this->render("story/story.html.twig", ["story" => $story, "heroes" => $heroes, "starter" => $starter]);
     }

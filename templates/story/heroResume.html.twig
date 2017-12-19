@@ -41,6 +41,7 @@
             </div>
         </div>
     </div>
+    <a href="{{ path('adventure', {"slug": slug, "idHero": hero.id, "id": starter.id}) }}"><button class="btn btn-success">Start Adventure</button></a>
     <a href="{{ path('heroRemove', {"slug": slug, "id": hero.id}) }}"><button class="btn btn-danger">Delete this hero</button></a>
     <a href="{{ path('story', {"slug": slug}) }}"><button class="btn btn-primary">Back to story</button></a>
 </div>

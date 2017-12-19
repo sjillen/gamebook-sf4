@@ -2,7 +2,9 @@
 
 namespace App\Controller\Admin;
 
+use App\Adventure\ChoiceDisplay;
 use App\Entity\Ruleset;
+use App\Entity\Skill;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,19 +32,24 @@ class AdventureController extends AbstractController
     public function newHero(Request $request, Story $story, HeroBuilder $heroBuilder, StarterInventory $starterInventory, HeroSkills $heroSkills) : Response
     {
         $hero = new Hero();
-        $form = $this->createForm(HeroType::class, $hero, ["story" => $story]);
+        $hero->setStory($story);
+        $em = $this->getDoctrine()->getManager();
+        $skills = $em->getRepository(Skill::class)->findSkillsByStory($story);
+        $form = $this->createForm(HeroType::class, $hero, ["skills" => $skills]);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $ruleSet = $em->getRepository(Ruleset::class)->findOneBy(["story" => $story]);
-            $hero = $heroBuilder->buildHero($hero, $ruleSet);
+            //Apply the set of rules from the corresponding story to complete the creation of the hero
+            $ruleset = $em->getRepository(Ruleset::class)->findOneBy(["story" => $story]);
+            $hero = $heroBuilder->buildHero($hero, $ruleset);
             $starterInventory->setStarterInventory($story, $hero);
-            $heroSkills->weaponSkillSelection($story, $hero);
-            if (HeroSkills::maxSkillAllowed($story, $hero)) {
+            //Check if the number of skills chosen complies with the rules
+            if (HeroSkills::maxSkillAllowed($ruleset, $hero)) {
                 $this->addFlash("warning", "You need to choose 6 skills !");
                 return $this->redirectToRoute("newHero", ["slug" => $story->getSlug()]);
             }
+            //Choose a weapon for Weaponskill
+            $heroSkills->weaponSkillSelection($story, $hero);
             $em->persist($hero);
             $em->flush();
 
@@ -67,7 +74,8 @@ class AdventureController extends AbstractController
      */
     public function heroResume(Request $request, Story $story, Hero $hero) : Response
     {
-        return $this->render("story/heroResume.html.twig", ["slug" => $story->getSlug(), "hero" => $hero]);
+        $starter = $this->getDoctrine()->getManager()->getRepository(Chapter::class)->findOneBy(["type" => "starter"]);
+        return $this->render("story/heroResume.html.twig", ["slug" => $story->getSlug(), "hero" => $hero, "starter" => $starter]);
     }
 
     /**
@@ -89,15 +97,27 @@ class AdventureController extends AbstractController
      * @param $idStory, $idChapter
      *
      * @return Response
-     * @Route("/story/{slug}/chapter/{id}", name="chapter")
+     * @Route("/story/{slug}/{idHero}/chapter/{id}", name="adventure")
      * @ParamConverter("story", options={"mapping": {"slug": "slug"}})
+     * @ParamConverter("hero", options={"mapping": {"idHero": "id"}})
      * @ParamConverter("chapter", options={"mapping": {"id": "id"}})
      */
-    public function chapterAction(Story $story, Chapter $chapter) : Response
+    public function adventureAction(Story $story, Chapter $chapter, Hero $hero) : Response
     {
-        return $this->render("story/chapter.html.twig", [
+        $choices = $chapter->getChoices();
+        $unlockChoices = [];
+        foreach($choices as $choice) {
+            //for each choice, check if hero meets requirements and unlock accordingly
+            $choice = ChoiceDisplay::unlockChoices($hero, $choice);
+            if(!$choice->isLocked()) {
+                $unlockChoices[] = $choice;
+            }
+        }
+        return $this->render("adventure.html.twig", [
             "story" => $story,
-            "chapter" => $chapter
+            "hero" => $hero,
+            "chapter" => $chapter,
+            "choices" => $unlockChoices
         ]);
     }
 }

@@ -11,6 +11,7 @@ namespace App\HeroBuilder;
 
 /* This service will check if Hero has Skill Weaponskill and set a Weapon for it */
 use App\Dice\Dice;
+use App\Entity\Ruleset;
 use App\Entity\Story;
 use App\Entity\Hero;
 use App\Entity\Weaponskill;
@@ -44,13 +45,14 @@ class HeroSkills
             $weaponskill->setDescription("Mastery of the following weapon: " . $weapon->getName());
             $weaponskill->setWeaponMastered($weapon);
             $weaponskill->setStory($story);
+            $hero->removeSkill($skill);
             $hero->setWeaponskill($weaponskill);
         }
     }
 
-    public static function maxSkillAllowed(Story $story, Hero $hero)
+    public static function maxSkillAllowed(Ruleset $ruleset, Hero $hero)
     {
-        return count($hero->getSkills()) != 6;
+        return count($hero->getSkills()) != $ruleset->getMaxSkill();
 
     }
 }
