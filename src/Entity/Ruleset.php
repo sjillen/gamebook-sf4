@@ -47,9 +47,19 @@ class Ruleset
     private $diceType;
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    private $maxWeaponCarried;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $bagpackCapacity;
+
+    /**
      * @return mixed
      */
-    public function getId()
+    public function getId() : int
     {
         return $this->id;
     }
@@ -57,7 +67,7 @@ class Ruleset
     /**
      * @param mixed $id
      */
-    public function setId($id)
+    public function setId($id) : void
     {
         $this->id = $id;
     }
@@ -65,7 +75,7 @@ class Ruleset
     /**
      * @return mixed
      */
-    public function getStory()
+    public function getStory() : Story
     {
         return $this->story;
     }
@@ -73,7 +83,7 @@ class Ruleset
     /**
      * @param mixed $story
      */
-    public function setStory($story)
+    public function setStory(?Story $story) : void
     {
         $this->story = $story;
     }
@@ -81,7 +91,7 @@ class Ruleset
     /**
      * @return mixed
      */
-    public function getMaxSkill()
+    public function getMaxSkill() : ?int
     {
         return $this->maxSkill;
     }
@@ -89,7 +99,7 @@ class Ruleset
     /**
      * @param mixed $maxSkill
      */
-    public function setMaxSkill($maxSkill)
+    public function setMaxSkill(?int $maxSkill) : void
     {
         $this->maxSkill = $maxSkill;
     }
@@ -97,7 +107,7 @@ class Ruleset
     /**
      * @return mixed
      */
-    public function getHeroBaseLife()
+    public function getHeroBaseLife() : ?int
     {
         return $this->heroBaseLife;
     }
@@ -105,7 +115,7 @@ class Ruleset
     /**
      * @param mixed $heroBaseLife
      */
-    public function setHeroBaseLife($heroBaseLife)
+    public function setHeroBaseLife(?int $heroBaseLife) : void
     {
         $this->heroBaseLife = $heroBaseLife;
     }
@@ -113,7 +123,7 @@ class Ruleset
     /**
      * @return mixed
      */
-    public function getHeroBaseResource()
+    public function getHeroBaseResource() : ?int
     {
         return $this->heroBaseResource;
     }
@@ -121,7 +131,7 @@ class Ruleset
     /**
      * @param mixed $heroBaseResource
      */
-    public function setHeroBaseResource($heroBaseResource)
+    public function setHeroBaseResource(?int $heroBaseResource) : void
     {
         $this->heroBaseResource = $heroBaseResource;
     }
@@ -129,7 +139,7 @@ class Ruleset
     /**
      * @return mixed
      */
-    public function getHeroBaseGold()
+    public function getHeroBaseGold() : ?int
     {
         return $this->heroBaseGold;
     }
@@ -137,7 +147,7 @@ class Ruleset
     /**
      * @param mixed $heroBaseGold
      */
-    public function setHeroBaseGold($heroBaseGold)
+    public function setHeroBaseGold(?int $heroBaseGold) : void
     {
         $this->heroBaseGold = $heroBaseGold;
     }
@@ -145,7 +155,7 @@ class Ruleset
     /**
      * @return mixed
      */
-    public function getDiceType()
+    public function getDiceType() : ?int
     {
         return $this->diceType;
     }
@@ -153,10 +163,40 @@ class Ruleset
     /**
      * @param mixed $diceType
      */
-    public function setDiceType($diceType)
+    public function setDiceType(?int $diceType) : void
     {
         $this->diceType = $diceType;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getMaxWeaponCarried() : ?int
+    {
+        return $this->maxWeaponCarried;
+    }
 
+    /**
+     * @param mixed $maxWeaponCarried
+     */
+    public function setMaxWeaponCarried(?int $maxWeaponCarried) : void
+    {
+        $this->maxWeaponCarried = $maxWeaponCarried;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBagpackCapacity() : ?int
+    {
+        return $this->bagpackCapacity;
+    }
+
+    /**
+     * @param mixed $bagpackCapacity
+     */
+    public function setBagpackCapacity(?int $bagpackCapacity) : void
+    {
+        $this->bagpackCapacity = $bagpackCapacity;
+    }
 }

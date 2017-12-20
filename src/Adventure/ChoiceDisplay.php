@@ -18,7 +18,7 @@ use App\Entity\Hero;
 class ChoiceDisplay
 {
 
-    public static function unlockChoices(Hero $hero, Choice $choice)
+    public static function unlockChoices(Hero $hero, Choice $choice) : Choice
     {
         self::goldUnlock($hero, $choice);
         self::skillUnlock($hero, $choice);
@@ -27,7 +27,7 @@ class ChoiceDisplay
         return $choice;
     }
 
-    private static function goldUnlock(Hero $hero, Choice $choice)
+    private static function goldUnlock(Hero $hero, Choice $choice) : void
     {
         $goldRequired = $choice->getGoldRequired();
         $goldHero = $hero->getGold();
@@ -39,7 +39,7 @@ class ChoiceDisplay
 
     }
 
-    private static function skillUnlock(Hero $hero, Choice $choice)
+    private static function skillUnlock(Hero $hero, Choice $choice) : void
     {
         $skillRequired = $choice->getSkillRequired();
         if(isset($skillRequired)) {
@@ -50,7 +50,7 @@ class ChoiceDisplay
 
     }
 
-    private static function itemUnlock(Hero $hero, Choice $choice)
+    private static function itemUnlock(Hero $hero, Choice $choice) : void
     {
         $itemRequired = $choice->getItemRequired();
         if(isset($itemRequired)) {

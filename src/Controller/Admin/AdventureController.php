@@ -3,8 +3,12 @@
 namespace App\Controller\Admin;
 
 use App\Adventure\ChoiceDisplay;
+use App\Adventure\ChoiceInteraction;
+use App\Adventure\ItemPicker;
+use App\Entity\Choice;
 use App\Entity\Ruleset;
 use App\Entity\Skill;
+use App\Entity\SpecialItem;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,11 +47,13 @@ class AdventureController extends AbstractController
             $ruleset = $em->getRepository(Ruleset::class)->findOneBy(["story" => $story]);
             $hero = $heroBuilder->buildHero($hero, $ruleset);
             $starterInventory->setStarterInventory($story, $hero);
+
             //Check if the number of skills chosen complies with the rules
             if (HeroSkills::maxSkillAllowed($ruleset, $hero)) {
                 $this->addFlash("warning", "You need to choose 6 skills !");
                 return $this->redirectToRoute("newHero", ["slug" => $story->getSlug()]);
             }
+
             //Choose a weapon for Weaponskill
             $heroSkills->weaponSkillSelection($story, $hero);
             $em->persist($hero);
@@ -113,11 +119,56 @@ class AdventureController extends AbstractController
                 $unlockChoices[] = $choice;
             }
         }
+
         return $this->render("adventure.html.twig", [
             "story" => $story,
             "hero" => $hero,
             "chapter" => $chapter,
             "choices" => $unlockChoices
+        ]);
+    }
+
+    /**
+     * @param Story $story
+     * @param Choice $choice
+     * @param Hero $hero
+     * @param ChoiceInteraction $interaction
+     * @return RedirectResponse
+     * @Route("/story/{slug}/hero-{idHero}/trade{idChoice}", name="tradeGoldOrItem")
+     * @ParamConverter("story", options={"mapping": {"slug": "slug"}})
+     * @ParamConverter("hero", options={"mapping": {"idHero": "id"}})
+     * @ParamConverter("choice", options={"mapping": {"idChoice": "id"}})
+     *
+     */
+    public function tradeGoldOrItem(Story $story, Choice $choice, Hero $hero, ChoiceInteraction $interaction) : RedirectResponse
+    {
+        //Check whether requirement is Gold or Item, and remove the corresponding amount or object from inventory
+        $interaction->trade($hero, $choice);
+        return $this->redirectToRoute("adventure", [
+            "slug" => $story->getSlug(),
+            "idHero" => $hero->getId(),
+            "id" => $choice->getTargetChapter()->getId()
+        ]);
+    }
+
+    /**
+     * @param Story $story
+     * @param Chapter $chapter
+     * @param Hero $hero
+     * @return RedirectResponse
+     * @Route("/story/{slug}/hero-{idHero}/{idChapter}pickup{idItem}", name="pickupItem")
+     * @ParamConverter("story", options={"mapping": {"slug": "slug"}})
+     * @ParamConverter("hero", options={"mapping": {"idHero": "id"}})
+     * @ParamConverter("chapter", options={"mapping": {"idChapter": "id"}})
+     * @ParamConverter(("SpecialItem", options={"mapping": {"idItem": "id"}})
+     */
+    public function pickUpSpecialItem(Story $story, Hero $hero, Chapter $chapter, SpecialItem $item, ItemPicker $itemPicker) : RedirectResponse
+    {
+        $itemPicker->pickUpSpecialItem($hero, $item);
+        return $this->redirectToRoute("adventure", [
+            "slug" => $story->getSlug(),
+            "idHero" => $hero->getId(),
+            "id" => $chapter->getId()
         ]);
     }
 }

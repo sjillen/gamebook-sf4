@@ -72,6 +72,7 @@ class Choice
          $this->locked = false;
          $this->chapter = new Chapter();
          $this->targetChapter = new Chapter();
+         $this->itemRequired = new SpecialItem();
          $this->goldRequired = 0;
      }
 
@@ -137,7 +138,7 @@ class Choice
          return $this->itemRequired;
      }
 
-     public function setItemRequired(SpecialItem $itemRequired) : void
+     public function setItemRequired(?SpecialItem $itemRequired) : void
      {
          $this->itemRequired = $itemRequired;
      }

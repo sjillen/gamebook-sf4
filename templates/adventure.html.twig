@@ -12,7 +12,11 @@
             </div>
             <div class="align-items-bottom">
                  {% for choice in choices %}
+                     {% if choice.goldRequired > 0 or choice.itemRequired %}
+                      <a href="{{ path('tradeGoldOrItem', {"slug": story.slug, "idHero": hero.id, "idChoice": choice.id}) }}"><button class="btn btn-primary">{{ choice.description }}</button></a>
+                      {% else %}
                  <a href="{{ path('adventure', {"slug": story.slug, "idHero": hero.id, "id": choice.targetChapter.id}) }}"><button class="btn btn-primary">{{ choice.description }}</button></a>
+                 {% endif %}
                  {% endfor %}
             </div>
         </div>
