@@ -6,6 +6,7 @@ use App\Adventure\ChoiceDisplay;
 use App\Adventure\ChoiceInteraction;
 use App\Adventure\ItemPicker;
 use App\Entity\Choice;
+use App\Entity\ConsumableItem;
 use App\Entity\Ruleset;
 use App\Entity\Skill;
 use App\Entity\SpecialItem;
@@ -13,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use App\Entity\Hero;
@@ -115,15 +117,16 @@ class AdventureController extends AbstractController
         foreach($choices as $choice) {
             //for each choice, check if hero meets requirements and unlock accordingly
             $choice = ChoiceDisplay::unlockChoices($hero, $choice);
-            if(!$choice->isLocked()) {
+            if (!$choice->isLocked()) {
                 $unlockChoices[] = $choice;
             }
         }
-
         return $this->render("adventure.html.twig", [
             "story" => $story,
             "hero" => $hero,
             "chapter" => $chapter,
+            "specialItems" => $chapter->getSpecialItems(),
+            "consumableItems" => $chapter->getConsumableItems(),
             "choices" => $unlockChoices
         ]);
     }
@@ -155,16 +158,47 @@ class AdventureController extends AbstractController
      * @param Story $story
      * @param Chapter $chapter
      * @param Hero $hero
+     * @param SpecialItem $specialItem
      * @return RedirectResponse
-     * @Route("/story/{slug}/hero-{idHero}/{idChapter}pickup{idItem}", name="pickupItem")
+     * @Route("/story/{slug}/hero-{idHero}/{idChapter}/pickup-si/{idItem}", name="pickupSpecialItem")
      * @ParamConverter("story", options={"mapping": {"slug": "slug"}})
      * @ParamConverter("hero", options={"mapping": {"idHero": "id"}})
      * @ParamConverter("chapter", options={"mapping": {"idChapter": "id"}})
-     * @ParamConverter(("SpecialItem", options={"mapping": {"idItem": "id"}})
+     *
      */
-    public function pickUpSpecialItem(Story $story, Hero $hero, Chapter $chapter, SpecialItem $item, ItemPicker $itemPicker) : RedirectResponse
+    public function pickUpSpecialItem(Story $story, Hero $hero, Chapter $chapter, $idItem, ItemPicker $itemPicker) : RedirectResponse
     {
-        $itemPicker->pickUpSpecialItem($hero, $item);
+        $em = $this->getDoctrine()->getManager();
+        $specialItem = $em->getRepository(SpecialItem::class)->find($idItem);
+        if($specialItem === null) {
+            throw new NotFoundHttpException("The special item with id " . $idItem . " does not exists !");
+        }
+        $itemPicker->pickUpSpecialItem($hero, $specialItem);
+        return $this->redirectToRoute("adventure", [
+            "slug" => $story->getSlug(),
+            "idHero" => $hero->getId(),
+            "id" => $chapter->getId()
+        ]);
+    }
+
+    /**
+     * @param Story $story
+     * @param Chapter $chapter
+     * @param Hero $hero
+     * @param ConsumableItem $consumableItem
+     * @return RedirectResponse
+     * @Route("/story/{slug}/hero-{idHero}/{idChapter}pickup-ci/{idItem}", name="pickupConsumableItem")
+     * @ParamConverter("story", options={"mapping": {"slug": "slug"}})
+     * @ParamConverter("hero", options={"mapping": {"idHero": "id"}})
+     * @ParamConverter("chapter", options={"mapping": {"idChapter": "id"}})
+     *
+     */
+    public function pickUpConsumableItem(Story $story, Hero $hero, Chapter $chapter, $idItem, ItemPicker $itemPicker) : RedirectResponse
+    {
+        $em = $this->getDoctrine()->getManager();
+        $consumableItem = $em->getRepository(ConsumableItem::class)->find($idItem);
+        $itemPicked = $itemPicker->pickUpConsumableItem($hero, $consumableItem);
+        $itemPicked ? $this->addFlash("success", "you picked " . $consumableItem->getName()) : $this->addFlash("warning", "Your bagpack is full!");
         return $this->redirectToRoute("adventure", [
             "slug" => $story->getSlug(),
             "idHero" => $hero->getId(),

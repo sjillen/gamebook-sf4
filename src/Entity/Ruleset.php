@@ -54,7 +54,7 @@ class Ruleset
     /**
      * @ORM\Column(type="integer")
      */
-    private $bagpackCapacity;
+    private $backpackCapacity;
 
     /**
      * @return mixed
@@ -187,16 +187,16 @@ class Ruleset
     /**
      * @return mixed
      */
-    public function getBagpackCapacity() : ?int
+    public function getBackpackCapacity() : ?int
     {
-        return $this->bagpackCapacity;
+        return $this->backpackCapacity;
     }
 
     /**
-     * @param mixed $bagpackCapacity
+     * @param mixed $backpackCapacity
      */
-    public function setBagpackCapacity(?int $bagpackCapacity) : void
+    public function setBackpackCapacity(?int $backpackCapacity) : void
     {
-        $this->bagpackCapacity = $bagpackCapacity;
+        $this->backpackCapacity = $backpackCapacity;
     }
 }

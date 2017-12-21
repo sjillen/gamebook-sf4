@@ -41,7 +41,12 @@ class Chapter
     /**
      * @ORM\Column(type="text")
      */
-    private $textContent;
+    private $textContent1;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $textContent2;
 
     /**
      * @ORM\ManyToMany(targetEntity="Npc")
@@ -53,6 +58,16 @@ class Chapter
      */
     private $choices;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="SpecialItem")
+     */
+    private $specialItems;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="ConsumableItem")
+     */
+    private $consumableItems;
+
     /* Constructor */
     public function __construct()
     {
@@ -60,6 +75,8 @@ class Chapter
         $this->npcs = new ArrayCollection();
         $this->story = new Story();
         $this->type = "standard";
+        $this->specialItems = new ArrayCollection();
+        $this->consumableItems = new ArrayCollection();
     }
 
     /* Setters and Getters */
@@ -99,14 +116,24 @@ class Chapter
         $this->type = $type;
     }
 
-    public function getTextContent()
+    public function getTextContent1()
     {
-        return $this->textContent;
+        return $this->textContent1;
     }
 
-    public function setTextContent($textContent) : void
+    public function setTextContent1($textContent) : void
     {
-        $this->textContent = $textContent;
+        $this->textContent1 = $textContent;
+    }
+
+    public function getTextContent2()
+    {
+        return $this->textContent2;
+    }
+
+    public function setTextContent2($textContent) : void
+    {
+        $this->textContent2 = $textContent;
     }
 
     public function getNpcs() : ?Collection
@@ -138,5 +165,35 @@ class Chapter
     public function removeChoice(Choice $choice) : void
     {
         $this->choices->removeElement($choice);
+    }
+
+    public function getSpecialItems() : ?Collection
+    {
+        return $this->specialItems;
+    }
+
+    public function addSpecialItem(?SpecialItem $item) : void
+    {
+        $this->specialItems[] = $item;
+    }
+
+    public function removeSpecialItem(?SpecialItem $item) : void
+    {
+        $this->specialItems->removeElement($item);
+    }
+
+    public function getConsumableItems() : ?Collection
+    {
+        return $this->consumableItems;
+    }
+
+    public function addConsumableItem(?ConsumableItem $item) : void
+    {
+        $this->consumableItems[] = $item;
+    }
+
+    public function removeConsumableItems(?ConsumableItem $item) : void
+    {
+        $this->consumableItems->removeElement($item);
     }
 }

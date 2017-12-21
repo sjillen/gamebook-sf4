@@ -8,6 +8,7 @@
 
 namespace App\HeroBuilder;
 
+use App\Entity\BackpackItem;
 use App\Entity\ConsumableItem;
 use App\Entity\Hero;
 use App\Entity\SpecialItem;
@@ -59,9 +60,9 @@ class StarterInventory
             $hero->addSpecialItem($specialItems[$itemChosen]);
         }else {
             $itemChosen = Dice::DiceRoller($lengthConsumables) - 1;
-
-            $hero->addConsumableItem($consumables[$itemChosen]);
+            $backpackItem = new BackpackItem($hero, $consumables[$itemChosen]);
+            $this->em->persist($backpackItem);
+            $this->em->flush();
         }
     }
-
 }

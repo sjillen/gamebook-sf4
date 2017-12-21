@@ -38,9 +38,19 @@ class ConsumableItem extends ItemBase
     private $removable;
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    private $quantity;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Story", inversedBy="consumableItems")
      */
     protected $story;
+
+    public function __construct()
+    {
+        $this->quantity = 1;
+    }
 
     /* Setters and Getters */
 
@@ -82,6 +92,16 @@ class ConsumableItem extends ItemBase
     public function setRemovable($removable) : void 
     {
         $this->removable = $removable;
+    }
+
+    public function getQuantity() : ?int
+    {
+        return $this->quantity;
+    }
+
+    public function setQuantity(?int $quantity) : void
+    {
+        $this->quantity = $quantity;
     }
 
     public function getStory(): ?Story

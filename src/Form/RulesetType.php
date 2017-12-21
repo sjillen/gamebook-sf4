@@ -47,6 +47,22 @@ class RulesetType extends AbstractType
                         "min" => 1
                     ]
                 ])
+            ->add("maxWeaponCarried",
+                IntegerType::class, [
+                    "label" => "Maximum number of weapons that can be carried at same time by the hero",
+                    "scale" => 0,
+                    "attr" => [
+                        "min" => 1
+                    ]
+                ])
+            ->add("bagpackCapacity",
+                IntegerType::class, [
+                    "label" => "Maximum number of item that can be carried in the bagpack of the hero",
+                    "scale" => 0,
+                    "attr" => [
+                        "min" => 1
+                    ]
+                ])
             ->add("diceType",
                 ChoiceType::class, [
                     "label" => "Type of dice you want to use for random operations",

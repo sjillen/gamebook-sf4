@@ -54,7 +54,7 @@ class ChoiceDisplay
     {
         $itemRequired = $choice->getItemRequired();
         if(isset($itemRequired)) {
-            $hero->hasItem($itemRequired)
+            $hero->hasSpecialItem($itemRequired)
                 ? $choice->setLocked(false)
                 : $choice->setLocked(true);
         }

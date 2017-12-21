@@ -35,8 +35,8 @@
             </div>
             <div class="col-sm-6">
                 <h4>Your backpack</h4>
-                {% for consumable in hero.consumableItems %}
-                    <strong>{{ consumable.name }}</strong> <br/>
+                {% for consumable in hero.backpackItems %}
+                    <strong>{{ consumable.item.name }} x{{ consumable.stock }}</strong> <br/>
                     {% endfor %}
             </div>
         </div>

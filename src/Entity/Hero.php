@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -54,9 +55,9 @@ class Hero extends CharacterBase
     private $weapons;
 
     /**
-     * @ORM\ManyToMany(targetEntity="ConsumableItem")
+     * @ORM\OneToMany(targetEntity="BackpackItem", mappedBy="hero", cascade={"remove"})
      */
-    private $consumableItems;
+    private $backpackItems;
 
     /**
      * @ORM\ManyToMany(targetEntity="SpecialItem")
@@ -68,7 +69,7 @@ class Hero extends CharacterBase
     {
         $this->skills = new ArrayCollection();
         $this->weapons = new ArrayCollection();
-        $this->consumableItems = new ArrayCollection();
+        $this->backpackItems = new ArrayCollection();
         $this->specialItems = new ArrayCollection();
         $this->level = 1;
         $this->gold = 0;
@@ -102,7 +103,7 @@ class Hero extends CharacterBase
         return $this->level;
     }
 
-    public function setLevel(int $level) : void
+    public function setLevel(?int $level) : void
     {
         $this->level = $level;
     }
@@ -112,7 +113,7 @@ class Hero extends CharacterBase
         return $this->gold;
     }
 
-    public function setGold($gold) : void
+    public function setGold(?int $gold) : void
     {
         $this->gold = $gold;
     }
@@ -134,7 +135,7 @@ class Hero extends CharacterBase
 
     public function hasSkill(?Skill $skill) : ?bool
     {
-           return $this->skills->contains($skill);
+        return $this->skills->contains($skill);
     }
 
     public function addSkill(?Skill $skill) : void
@@ -157,52 +158,62 @@ class Hero extends CharacterBase
         $this->weaponskill = $weaponskill;
     }
 
-    public function getWeapons()
+    public function getWeapons() : ?Collection
     {
         return $this->weapons;
     }
 
-    public function addWeapon(Weapon $weapon) : void
+    public function addWeapon(?Weapon $weapon) : void
     {
         $this->weapons[] = $weapon;
     }
 
-    public function removeWeapon(Weapon $weapon) : void 
+    public function removeWeapon(?Weapon $weapon) : void
     {
         $this->weapons->removeElement($weapon);
     }
 
-    public function getConsumableItems()
+    public function hasWeapon(?Weapon $weapon) : bool
     {
-        return $this->consumableItems;
+        return $this->weapons->contains($weapon);
     }
 
-    public function addConsumableItem(ConsumableItem $consumableItem) : void 
+    public function getBackpackItems() : ?Collection
     {
-        $this->consumableItems[] = $consumableItem;
+        return $this->backpackItems;
     }
 
-    public function removeConsumableItem(ConsumableItem $consumableItem) : void 
+    public function hasBackpackItem(?BackpackItem $backpackItem) : ?bool
     {
-        $this->consumableItems->removeElement($consumableItem);
+        return $this->backpackItems->contains($backpackItem);
     }
 
-    public function getSpecialItems()
+    public function addBackpackItem(?BackpackItem $backpackItem) : void
+    {
+        $this->backpackItems[] = $backpackItem;
+    }
+
+    public function removeBackpackItem(?BackpackItem $backpackItem) : void
+    {
+        $this->backpackItems->removeElement($backpackItem);
+    }
+
+    public function getSpecialItems() : ?Collection
     {
         return $this->specialItems;
     }
 
-    public function hasItem(?SpecialItem $item) : bool
+    public function hasSpecialItem(?SpecialItem $item) : bool
     {
         return $this->specialItems->contains($item);
     }
 
-    public function addSpecialItem(SpecialItem $specialItem) : void 
+    public function addSpecialItem(?SpecialItem $specialItem) : void
     {
         $this->specialItems[] = $specialItem;
     }
 
-    public function removeSpecialItem(SpecialItem $specialItem) : void 
+    public function removeSpecialItem(?SpecialItem $specialItem) : void
     {
         $this->specialItems->removeElement($specialItem);
     }
