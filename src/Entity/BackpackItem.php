@@ -32,7 +32,7 @@ class BackpackItem
     private $stock;
 
     /**
-     * Bagpack constructor.
+     * Backpack constructor.
      */
     public function __construct(Hero $hero, ConsumableItem $item, int $stock)
     {
@@ -79,5 +79,10 @@ class BackpackItem
     public function addStock(?int $stock) : void
     {
         $this->stock += $stock;
+    }
+
+    public function removeStock(?int $stock) : void
+    {
+        $this->stock -= $stock;
     }
 }

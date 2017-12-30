@@ -5,11 +5,13 @@ namespace App\Controller\Admin;
 use App\Adventure\ChoiceDisplay;
 use App\Adventure\ChoiceInteraction;
 use App\Adventure\ItemPicker;
+use App\Entity\BackpackItem;
 use App\Entity\Choice;
 use App\Entity\ConsumableItem;
 use App\Entity\Ruleset;
 use App\Entity\Skill;
 use App\Entity\SpecialItem;
+use App\Entity\Weapon;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,6 +26,7 @@ use App\Entity\Chapter;
 use App\HeroBuilder\HeroBuilder;
 use App\HeroBuilder\StarterInventory;
 use App\HeroBuilder\HeroSkills;
+
 
 
 class AdventureController extends AbstractController
@@ -112,22 +115,15 @@ class AdventureController extends AbstractController
      */
     public function adventureAction(Story $story, Chapter $chapter, Hero $hero) : Response
     {
-        $choices = $chapter->getChoices();
-        $unlockChoices = [];
-        foreach($choices as $choice) {
-            //for each choice, check if hero meets requirements and unlock accordingly
-            $choice = ChoiceDisplay::unlockChoices($hero, $choice);
-            if (!$choice->isLocked()) {
-                $unlockChoices[] = $choice;
-            }
-        }
-        return $this->render("adventure.html.twig", [
+        $unlockChoices = ChoiceDisplay::unlockChoices($hero, $chapter->getChoices());
+        return $this->render("adventure/adventure.html.twig", [
             "story" => $story,
             "hero" => $hero,
             "chapter" => $chapter,
             "specialItems" => $chapter->getSpecialItems(),
             "consumableItems" => $chapter->getConsumableItems(),
-            "choices" => $unlockChoices
+            "choices" => $unlockChoices,
+
         ]);
     }
 
@@ -159,25 +155,36 @@ class AdventureController extends AbstractController
      * @param Chapter $chapter
      * @param Hero $hero
      * @param SpecialItem $specialItem
-     * @return RedirectResponse
+     * @return Response
      * @Route("/story/{slug}/hero-{idHero}/{idChapter}/pickup-si/{idItem}", name="pickupSpecialItem")
      * @ParamConverter("story", options={"mapping": {"slug": "slug"}})
      * @ParamConverter("hero", options={"mapping": {"idHero": "id"}})
      * @ParamConverter("chapter", options={"mapping": {"idChapter": "id"}})
      *
      */
-    public function pickUpSpecialItem(Story $story, Hero $hero, Chapter $chapter, $idItem, ItemPicker $itemPicker) : RedirectResponse
+    public function pickUpSpecialItem(Story $story, Hero $hero, Chapter $chapter, $idItem, ItemPicker $itemPicker) : Response
     {
         $em = $this->getDoctrine()->getManager();
+        //find the item to be picked
         $specialItem = $em->getRepository(SpecialItem::class)->find($idItem);
         if($specialItem === null) {
-            throw new NotFoundHttpException("The special item with id " . $idItem . " does not exists !");
+            throw new NotFoundHttpException("The special item with id " . $idItem . " does not exist!");
         }
+        //add item to hero
         $itemPicker->pickUpSpecialItem($hero, $specialItem);
-        return $this->redirectToRoute("adventure", [
-            "slug" => $story->getSlug(),
-            "idHero" => $hero->getId(),
-            "id" => $chapter->getId()
+        //remove item from chapter
+        $specialItems = $chapter->getSpecialItems();
+        $specialItems->removeElement($specialItem);
+        //get the corresponding choices of the chapter
+        $unlockChoices = ChoiceDisplay::unlockChoices($hero, $chapter->getChoices());
+        return $this->render("adventure.html.twig", [
+            "story" => $story,
+            "hero" => $hero,
+            "chapter" => $chapter,
+            "specialItems" => $specialItems,
+            "consumableItems" => $chapter->getConsumableItems(),
+            "choices" => $unlockChoices
+
         ]);
     }
 
@@ -198,11 +205,69 @@ class AdventureController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $consumableItem = $em->getRepository(ConsumableItem::class)->find($idItem);
         $itemPicked = $itemPicker->pickUpConsumableItem($hero, $consumableItem);
+
         $itemPicked ? $this->addFlash("success", "you picked " . $consumableItem->getName()) : $this->addFlash("warning", "Your bagpack is full!");
         return $this->redirectToRoute("adventure", [
             "slug" => $story->getSlug(),
             "idHero" => $hero->getId(),
             "id" => $chapter->getId()
         ]);
+    }
+
+    /**
+     * @param Hero $hero
+     * @param Chapter $chapter
+     * @param BackpackItem $item
+     * @return RedirectResponse
+     * @Route("hero/{idHero}/{idChapter}/bpi-remove{idItem}", name="removeFromBackpack")
+     * @ParamConverter("hero", options={"mapping": {"idHero": "id"}})
+     * @ParamConverter("chapter", options={"mapping": {"idChapter": "id"}})
+     * @ParamConverter("backpackItem", options={"mapping": {"idItem": "id"}})
+     */
+    public function removeBackpackItem(Hero $hero, Chapter $chapter, BackpackItem $backpackItem) : RedirectResponse
+    {
+        $backpackItem->removeStock(1);
+        $em = $this->getDoctrine()->getManager();
+        if ($backpackItem->getStock() === 0) {
+            $em->remove($backpackItem);
+        } else {
+            $em->persist($backpackItem);
+        }
+        $em->flush();
+
+        return $this->redirectToRoute("adventure", [
+            "slug" => $hero->getStory()->getSlug(),
+            "idHero" => $hero->getId(),
+            "id" => $chapter->getId()
+        ]);
+    }
+
+    /**
+     * @param Story $story
+     * @param Hero $hero
+     * @param Chapter $chapter
+     * @param $idWeapon
+     * @param ItemPicker $itemPicker
+     * @return RedirectResponse
+     * @Route("/story/{slug}/{idHero}/{idChapter}/{idWeapon}", name="pickupWeapon")
+     * @ParamConverter("Story", options={"mapping": {"slug": "slug"}})
+     * @ParamConverter("Chapter", options={"mapping": {"idChapter": "id"}})
+     */
+    public function pickUpWeapon(Story $story, $idHero, Chapter $chapter, $idWeapon, ItemPicker $itemPicker) : RedirectResponse
+    {
+        $hero = $this->getDoctrine()->getManager()->getRepository(Hero::class)->find($idHero);
+        $message = $itemPicker->pickUpWeapon($hero, $idWeapon);
+        if(isset($message)) {
+            $this->addFlash("warning", $message);
+        } else {
+            $this->addFlash("success", "the weapon has been successfully equipped!");
+        }
+
+        return $this->redirectToRoute("adventure", [
+            "slug" => $story->getSlug(),
+            "idHero" => $hero->getId(),
+            "id" => $chapter->getId()
+        ]);
+
     }
 }

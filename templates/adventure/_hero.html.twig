@@ -1,0 +1,36 @@
+
+    <ul class="hero-header list-group">
+        <li class="list-group-item">
+            <strong>{{ hero.name }}</strong>
+        </li>
+        <li class="list-group-item list-group-item-danger">
+            Life: <span class="hero-life">{{ hero.life }}</span>hp
+        </li>
+        <li class="list-group-item list-group-item-primary">
+            Ability: <span class="hero-energy">{{ hero.energy }}</span>AP
+        </li>
+        <li class="list-group-item list-group-item-warning">
+            {{ hero.gold }} Gold
+        </li>
+    </ul>
+    <ul class="hero-weapons list-group">
+        {% for weapon in hero.weapons %}
+            <li class="list-group-item list-group-item-dark">
+                {{ weapon.name }}
+            </li>
+        {% endfor %}
+    </ul>
+    <ul class="hero-inventory list-group">
+        {% for item in hero.specialItems %}
+            <li class="list-group-item list-group-item-success">
+                {{ item.name }}
+            </li>
+        {% endfor %}
+    </ul>
+    <ul class="hero-backpack list-group">
+        {% for item in hero.backpackItems %}
+            <a href="{{ path('removeFromBackpack', {"idHero" : hero.id, "idChapter" : chapter.id, "idItem": item.id}) }}" class="list-group-item list-group-item-info d-flex justify-content-between align-items-center">
+                {{ item.item.name }} <span class="badge badge-dark badge-pill">{{ item.stock }}</span>
+            </a>
+        {% endfor %}
+    </ul>

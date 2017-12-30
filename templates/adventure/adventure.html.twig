@@ -1,0 +1,60 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <div class="trans-filter"></div>
+
+    <div class="hero-container">
+        {% include "adventure/_hero.html.twig" %}
+    </div>
+    <div class="col-md-10 offset-md-1 container-fluid text-center adventure">
+        <h2>{{ story.title }}</h2>
+        <div class="row" >
+            <div class="col-md-12">
+                <h4>{{ chapter.title }}</h4>
+                <div class="text-content">
+                    {{ chapter.textContent1 }}
+                </div>
+
+                <div>
+
+                    {% for weapon in chapter.weapons %}
+                        <a href="{{ path('pickupWeapon', {"slug": story.slug, "idHero": hero.id, "idChapter": chapter.id, "idWeapon": weapon.id}) }}">
+                            <button class="btn btn-primary">{{ weapon.name }}</button>
+                        </a>
+                    {% endfor %}
+                </div>
+
+                {#{% if chapter.specialItems %}#}
+                <div>
+                    {% for item in specialItems %}
+                        <a href="{{ path('pickupSpecialItem', {"slug": story.slug, "idHero": hero.id, "idChapter": chapter.id, "idItem": item.id}) }}">
+                            <button class="btn btn-primary">{{ item.name }}</button>
+                        </a>
+                    {% endfor %}
+                </div>
+                {#{% endif %}#}
+                {#{% if chapter.consumableItems %}#}
+                <div>
+                    {% for item in consumableItems %}
+                        <a href="{{ path('pickupConsumableItem', {"slug": story.slug, "idHero": hero.id, "idChapter": chapter.id, "idItem": item.id}) }}">
+                            <button class="btn btn-primary">{{ item.name }}</button>
+                        </a>
+                    {% endfor %}
+                </div>
+                {#{% endif %}#}
+                <div class="align-items-bottom">
+                    {% for choice in choices %}
+                        {% if choice.goldRequired > 0 or choice.itemRequired %}
+                            <a href="{{ path('tradeGoldOrItem', {"slug": story.slug, "idHero": hero.id, "idChoice": choice.id}) }}"><button class="btn btn-primary">{{ choice.description }}</button></a>
+                        {% else %}
+                            <a href="{{ path('adventure', {"slug": story.slug, "idHero": hero.id, "id": choice.targetChapter.id}) }}"><button class="btn btn-primary">{{ choice.description }}</button></a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+{% endblock %}

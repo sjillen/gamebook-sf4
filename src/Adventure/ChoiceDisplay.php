@@ -14,11 +14,25 @@ namespace App\Adventure;
 
 use App\Entity\Choice;
 use App\Entity\Hero;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 class ChoiceDisplay
 {
 
-    public static function unlockChoices(Hero $hero, Choice $choice) : Choice
+    public static function unlockChoices(Hero $hero, Collection $choices) : Collection
+    {
+       $unlocked = new ArrayCollection();
+        foreach ($choices as $choice) {
+            self::unlockChoice($hero, $choice);
+            if (!$choice->isLocked()) {
+                $unlocked[] = $choice;
+            }
+        }
+        return $unlocked;
+    }
+
+    private static function unlockChoice(Hero $hero, Choice $choice) : Choice
     {
         self::goldUnlock($hero, $choice);
         self::skillUnlock($hero, $choice);

@@ -73,18 +73,18 @@ class Story
     private $weapons;
 
     /**
-     * @var ConsumableItem[]|ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="ConsumableItem", mappedBy="story", cascade={"remove"})
-     */
-    private $consumableItems;
-
-    /**
      * @var SpecialItem[]|ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="SpecialItem", mappedBy="story", cascade={"remove"})
      */
     private $specialItems;
+
+    /**
+     * @var ConsumableItem[]|ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="ConsumableItem", mappedBy="story", cascade={"remove"})
+     */
+    private $consumableItems;
 
     /**
      * @var string

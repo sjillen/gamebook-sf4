@@ -18,8 +18,33 @@
         </ul>
     </div>
 
-    {{ form_row(form.specialItems) }}
-    {{ form_row(form.consumableItems) }}
+    <div class="well">
+        <h5>Weapons to be picked in chapter</h5>
+        <ul class="weapons" data-prototype="{{ form_widget(form.weapons.vars.prototype)|e('html_attr') }}">
+            {% for weapon in form.weapons %}
+                <li>{{ form_row(weapon) }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="well">
+        <h5>Special items to be picked in chapter</h5>
+        <ul class="specialItems" data-prototype="{{ form_widget(form.specialItems.vars.prototype)|e('html_attr') }}">
+            {% for specialItem in form.specialItems %}
+                <li>{{ form_row(specialItem) }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="well">
+        <h5>Consumable Items to be picked in chapter</h5>
+        <ul class="consumableItems" data-prototype="{{ form_widget(form.consumableItems.vars.prototype)|e('html_attr') }}">
+            {% for consumableItem in form.consumableItems %}
+                <li>{{ form_row(consumableItem) }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
     {{ form_row(form.textContent2) }}
 
     <div class="well">
@@ -38,33 +63,99 @@
 
 {% block javascripts %}
     {{ parent() }}
+
     <script>
-        var $collectionHolder;
+        var $choicesHolder;
+        var $npcsHolder;
+        var $weaponsHolder;
+        var $specialItemsHolder;
+        var $consumableItemsHolder;
 
         // setup an "add a choice" link
-        var $addChoiceLink = $('<a href="#" class="add_choice_link">Add a choice</a>');
-        var $newLinkLi = $('<li></li>').append($addChoiceLink);
+        var $addChoiceLink = $('<a href="#" class="add_choice_link"><button class="btn btn-primary">Add a choice</button></a>');
+        var $newChoiceLinkLi = $('<li></li>').append($addChoiceLink);
+
+        var $addNpcLink = $('<a href="#" class="add_npc_link"><button class="btn btn-warning">Add a npc</button></a>');
+        var $newNpcLinkLi = $('<li></li>').append($addNpcLink);
+
+        var $addWeaponLink = $('<a href="#" class="add_weapon_link"><button class="btn btn-success">Add a weapon</button></a>');
+        var $newWeaponLinkLi = $("<li></li>").append($addWeaponLink);
+
+        var $addSpecialItemLink = $('<a href="#" class="add_specialItem_link"><button class="btn btn-success">Add a special item</button></a>');
+        var $newSpecialItemLinkLi = $("<li></li>").append($addSpecialItemLink);
+
+        var $addConsumableItemLink = $('<a href="#" class="add_consumableItem_link"><button class="btn btn-success">Add a consumable item</button></a>');
+        var $newConsumableItemLinkLi = $("<li></li>").append($addConsumableItemLink);
 
         jQuery(document).ready(function() {
             // Get the ul that holds the collection of choices
-            $collectionHolder = $('ul.choices');
+            $choicesHolder = $('ul.choices');
+            $npcsHolder = $('ul.npcs');
+            $weaponsHolder = $('ul.weapons');
+            $specialItemsHolder = $('ul.specialItems');
+            $consumableItemsHolder = $('ul.consumableItems');
+
+            // add a delete link to all of the existing tag form li elements
+            $choicesHolder.find('li').each(function() {
+                addTagFormDeleteLink($(this));
+            });
+            $npcsHolder.find('li').each(function() {
+                addTagFormDeleteLink($(this));
+            });
+            $weaponsHolder.find('li').each(function() {
+                addTagFormDeleteLink($(this));
+            });
+            $specialItemsHolder.find('li').each(function() {
+                addTagFormDeleteLink($(this));
+            });
+            $consumableItemsHolder.find('li').each(function() {
+                addTagFormDeleteLink($(this));
+            });
 
             // add the "add a choice" anchor and li to the choices ul
-            $collectionHolder.append($newLinkLi);
+            $choicesHolder.append($newChoiceLinkLi);
+            $npcsHolder.append($newNpcLinkLi);
+            $weaponsHolder.append($newWeaponLinkLi);
+            $specialItemsHolder.append($newSpecialItemLinkLi);
+            $consumableItemsHolder.append($newConsumableItemLinkLi);
 
             // count the current form inputs we have (e.g. 2), use that as the new
             // index when inserting a new item (e.g. 2)
-            $collectionHolder.data('index', $collectionHolder.find(':input').length);
+            $choicesHolder.data('index', $choicesHolder.find(':input').length);
+            $npcsHolder.data('index', $npcsHolder.find(':input').length);
+            $weaponsHolder.data('index', $weaponsHolder.find(':input').length);
+            $specialItemsHolder.data('index', $specialItemsHolder.find(':input').length);
+            $consumableItemsHolder.data('index', $consumableItemsHolder.find(':input').length);
 
             $addChoiceLink.on('click', function(e) {
                 // prevent the link from creating a "#" on the URL
                 e.preventDefault();
 
                 // add a new tag form (see next code block)
-                addChoiceForm($collectionHolder, $newLinkLi);
+                addChildForm($choicesHolder, $newChoiceLinkLi);
+            });
+
+            $addNpcLink.on('click', function(e) {
+                e.preventDefault();
+                addChildForm($npcsHolder, $newNpcLinkLi);
+            });
+
+            $addWeaponLink.on('click', function(e) {
+                e.preventDefault();
+                addChildForm($weaponsHolder, $newWeaponLinkLi);
+            });
+
+            $addSpecialItemLink.on('click', function(e) {
+                e.preventDefault();
+                addChildForm($specialItemsHolder, $newSpecialItemLinkLi);
+            });
+
+            $addConsumableItemLink.on('click', function(e) {
+                e.preventDefault();
+                addChildForm($consumableItemsHolder, $newConsumableItemLinkLi);
             });
         });
-        function addChoiceForm($collectionHolder, $newLinkLi) {
+        function addChildForm($collectionHolder, $newLinkLi) {
             // Get the data-prototype explained earlier
             var prototype = $collectionHolder.data('prototype');
 
@@ -87,57 +178,21 @@
             // Display the form in the page in an li, before the "Add a tag" link li
             var $newFormLi = $('<li></li>').append(newForm);
             $newLinkLi.before($newFormLi);
+
+            addTagFormDeleteLink($newFormLi);
         }
-    </script>
-    <script>
-        var $collecHolder;
 
-        // setup an "add a choice" link
-        var $addNpcLink = $('<a href="#" class="add_npc_link"><button class="btn btn-primary">Add a npc</button></a>');
-        var $newNpcLinkLi = $('<li></li>').append($addNpcLink);
+        function addTagFormDeleteLink($tagFormLi) {
+            var $removeFormA = $('<a href="#"><button class="btn btn-small btn-danger">-</button></a>');
+            $tagFormLi.append($removeFormA);
 
-        jQuery(document).ready(function() {
-            // Get the ul that holds the collection of choices
-            $collecHolder = $('ul.npcs');
-
-            // add the "add a choice" anchor and li to the choices ul
-            $collecHolder.append($newNpcLinkLi);
-
-            // count the current form inputs we have (e.g. 2), use that as the new
-            // index when inserting a new item (e.g. 2)
-            $collecHolder.data('index', $collecHolder.find(':input').length);
-
-            $addNpcLink.on('click', function(e) {
+            $removeFormA.on('click', function(e) {
                 // prevent the link from creating a "#" on the URL
                 e.preventDefault();
 
-                // add a new tag form (see next code block)
-                addNpcForm($collecHolder, $newNpcLinkLi);
+                // remove the li for the tag form
+                $tagFormLi.remove();
             });
-        });
-        function addNpcForm($collecHolder, $newNpcLinkLi) {
-            // Get the data-prototype explained earlier
-            var prototype = $collecHolder.data('prototype');
-
-            // get the new index
-            var index = $collecHolder.data('index');
-
-            var newForm = prototype;
-            // You need this only if you didn't set 'label' => false in your tags field in TaskType
-            // Replace '__name__label__' in the prototype's HTML to
-            // instead be a number based on how many items we have
-            // newForm = newForm.replace(/__name__label__/g, index);
-
-            // Replace '__name__' in the prototype's HTML to
-            // instead be a number based on how many items we have
-            newForm = newForm.replace(/__name__/g, index);
-
-            // increase the index with one for the next item
-            $collecHolder.data('index', index + 1);
-
-            // Display the form in the page in an li, before the "Add a tag" link li
-            var $newFormLi = $('<li></li>').append(newForm);
-            $newNpcLinkLi.before($newFormLi);
         }
     </script>
 

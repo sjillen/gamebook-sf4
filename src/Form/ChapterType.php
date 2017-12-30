@@ -6,6 +6,8 @@ use App\Entity\Chapter;
 use App\Entity\ConsumableItem;
 use App\Entity\Npc;
 use App\Entity\SpecialItem;
+use App\Entity\Weapon;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\Entity;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -64,27 +66,56 @@ class ChapterType extends AbstractType
                         "allow_add" => true,
                         "allow_delete" => true
                     ])
-                ->add("specialItems",
-                    EntityType::class, [
-                        "class" => SpecialItem::class,
-                        "label" => "Special Items you want to include in the chapter: ",
-                        "choices" => $story->getSpecialItems(),
-                        "choice_label" => "name",
-                        "expanded" => true,
-                        "multiple" => true,
+                ->add("weapons",
+                    CollectionType::class, [
+                        "entry_type" => EntityType::class,
+                        "entry_options" => [
+                            "attr" => ["class" => "weapon-box"],
+                            "class" => Weapon::class,
+                            "choices" => $story->getWeapons(),
+                            "choice_label" => "name",
+                            "expanded" => false,
+                            "multiple" => false,
+                        ],
                         "required" => false,
-                        "empty_data" => "None"
+                        "by_reference" => false,
+                        "label" => false,
+                        "allow_add" => true,
+                        "allow_delete" => true
                     ])
-                ->add('consumableItems',
-                    EntityType::class, [
-                        "class" => ConsumableItem::class,
-                        "label" => "Consumable Items you want to include in the chapter: ",
-                        "choices" => $story->getConsumableItems(),
-                        "choice_label" => "name",
-                        "expanded" => true,
-                        "multiple" => true,
+                ->add("specialItems",
+                    CollectionType::class, [
+                        "entry_type" => EntityType::class,
+                        "entry_options" => [
+                            "attr" => ["class" => "specialItem-box"],
+                            "class" => SpecialItem::class,
+                            "choices" => $story->getSpecialItems(),
+                            "choice_label" => "name",
+                            "expanded" => false,
+                            "multiple" => false,
+                        ],
                         "required" => false,
-                        "empty_data" => "None"
+                        "by_reference" => false,
+                        "label" => false,
+                        "allow_add" => true,
+                        "allow_delete" => true
+                    ])
+                ->add("consumableItems",
+                    CollectionType::class, [
+                        "entry_type" => EntityType::class,
+                        "entry_options" => [
+                            "attr" => ["class" => "consumableItem-box"],
+                            "class" => ConsumableItem::class,
+                            "choices" => $story->getConsumableItems(),
+                            "choice_label" => "name",
+                            "expanded" => false,
+                            "multiple" => false,
+                        ],
+                        "required" => false,
+                        "by_reference" => false,
+                        "label" => false,
+                        "allow_add" => true,
+                        "allow_delete" => true
                     ])
                 ->add('textContent2',
                     TextareaType::class, [

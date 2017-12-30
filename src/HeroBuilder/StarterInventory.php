@@ -60,7 +60,7 @@ class StarterInventory
             $hero->addSpecialItem($specialItems[$itemChosen]);
         }else {
             $itemChosen = Dice::DiceRoller($lengthConsumables) - 1;
-            $backpackItem = new BackpackItem($hero, $consumables[$itemChosen]);
+            $backpackItem = new BackpackItem($hero, $consumables[$itemChosen], 1);
             $this->em->persist($backpackItem);
             $this->em->flush();
         }

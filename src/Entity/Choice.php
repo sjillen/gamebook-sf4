@@ -70,9 +70,6 @@ class Choice
      public function __construct()
      {
          $this->locked = false;
-         $this->chapter = new Chapter();
-         $this->targetChapter = new Chapter();
-         $this->itemRequired = new SpecialItem();
          $this->goldRequired = 0;
      }
 
@@ -93,12 +90,12 @@ class Choice
          $this->description = $description;
      }
 
-     public function getChapter() : Chapter
+     public function getChapter() : ?Chapter
      {
          return $this->chapter;
      }
 
-     public function setChapter(Chapter $chapter) : void
+     public function setChapter(?Chapter $chapter) : void
      {
              $this->chapter = $chapter;
      }

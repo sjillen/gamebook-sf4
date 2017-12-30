@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
+
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ChapterRepository")
  */
@@ -20,6 +21,7 @@ class Chapter
 
     /**
      * @ORM\ManyToOne(targetEntity="Story", inversedBy="chapters")
+     *
      */
     private $story;
 
@@ -44,27 +46,37 @@ class Chapter
     private $textContent1;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private $textContent2;
 
     /**
      * @ORM\ManyToMany(targetEntity="Npc")
+     *
      */
     private $npcs;
 
     /**
      * @ORM\OneToMany(targetEntity="Choice", mappedBy="chapter", cascade={"persist", "remove"})
+     *
      */
     private $choices;
 
     /**
+     * @ORM\ManyToMany(targetEntity="Weapon")
+     *
+     */
+    private $weapons;
+
+    /**
      * @ORM\ManyToMany(targetEntity="SpecialItem")
+     *
      */
     private $specialItems;
 
     /**
      * @ORM\ManyToMany(targetEntity="ConsumableItem")
+     *
      */
     private $consumableItems;
 
@@ -77,6 +89,7 @@ class Chapter
         $this->type = "standard";
         $this->specialItems = new ArrayCollection();
         $this->consumableItems = new ArrayCollection();
+        $this->weapons = new ArrayCollection();
     }
 
     /* Setters and Getters */
@@ -187,6 +200,11 @@ class Chapter
         return $this->consumableItems;
     }
 
+    public function setConsumableItems(?Collection $consumableItems) : void
+    {
+        $this->consumableItems = $consumableItems;
+    }
+
     public function addConsumableItem(?ConsumableItem $item) : void
     {
         $this->consumableItems[] = $item;
@@ -195,5 +213,25 @@ class Chapter
     public function removeConsumableItems(?ConsumableItem $item) : void
     {
         $this->consumableItems->removeElement($item);
+    }
+
+    public function getWeapons() : ?Collection
+    {
+        return $this->weapons;
+    }
+
+    public function addWeapon(?Weapon $weapon) : void
+    {
+        $this->weapons[] = $weapon;
+    }
+
+    public function removeWeapon(?Weapon $weapon) : void
+    {
+        $this->weapons->removeElement($weapon);
+    }
+
+    public function hasWeapon(Weapon $weapon): ?bool
+    {
+        return $this->weapons->contains($weapon);
     }
 }

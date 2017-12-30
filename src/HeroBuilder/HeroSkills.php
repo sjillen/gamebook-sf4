@@ -50,7 +50,7 @@ class HeroSkills
         }
     }
 
-    public static function maxSkillAllowed(Ruleset $ruleset, Hero $hero)
+    public static function maxSkillAllowed(Ruleset $ruleset, Hero $hero) : ? int
     {
         return count($hero->getSkills()) != $ruleset->getMaxSkill();
 

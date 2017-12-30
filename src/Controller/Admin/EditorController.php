@@ -22,6 +22,7 @@ use App\Form\WeaponType;
 use App\Form\RulesetType;
 use App\StoryBuilder\UniqueStarter;
 use App\Utils\Slugger;
+use Doctrine\Common\Collections\ArrayCollection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -695,15 +696,29 @@ class EditorController extends Controller
      * @ParamConverter("story", options={"mapping": {"slug": "slug"}})
      * @ParamConverter("chapter", options={"mapping": {"id": "id"}})
      */
-    public function editChapterAction(Request $request, Story $story, Chapter $chapter, UniqueStarter $uniqueStarter)
+    public function editChapterAction(Request $request, Story $story, $id, UniqueStarter $uniqueStarter)
     {
-        $form = $this->createForm(ChapterType::class, $chapter, [
-            'story' => $story
-        ]);
+        $em = $this->getDoctrine()->getManager();
+        $chapter = $em->getRepository(Chapter::class)->find($id);
+        $choices = $em->getRepository(Choice::class)->findBy(["chapter" => $chapter]);
+
+        $form = $this->createForm(ChapterType::class, $chapter, ['story' => $story]);
         $form->handleRequest($request);
+
+        $originalChoices = new ArrayCollection();
+        foreach ($choices as $choice) {
+            $originalChoices->add($choice);
+        }
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            foreach ($originalChoices as $choice) {
+                if (false === $chapter->getChoices()->contains($choice)) {
+                    $chapter->removeChoice($choice);
+                    $choice->setChapter(null);
+                    $em->remove($choice);
+                }
+            }
             $starter = $uniqueStarter->CheckUniqueStarter($story, $chapter);
             if($starter && $starter !== $chapter) {
                 $this->addFlash("warning", "A Starter chapter already exists : " . $starter->getTitle());

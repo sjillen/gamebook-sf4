@@ -14,6 +14,7 @@ use App\Entity\ConsumableItem;
 use App\Entity\Hero;
 use App\Entity\Ruleset;
 use App\Entity\SpecialItem;
+use App\Entity\Weapon;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -24,11 +25,32 @@ class ItemPicker
         $this->em = $em;
     }
 
+
+    public function pickUpWeapon(Hero $hero, $idWeapon) : ?string
+    {
+        $weapons = $hero->getWeapons();
+        $weaponPickable = $this->em->getRepository(Weapon::class)->find($idWeapon);
+        if(false === $weapons->contains($weaponPickable)) {
+            if(count($weapons) < $hero->getStory()->getRuleset()->getMaxWeaponCarried()) {
+                $hero->addWeapon($weaponPickable);
+                $this->em->persist($hero);
+                $this->em->flush();
+                return null;
+            }else {
+                return "No space available, please remove an equipped weapon first";
+            }
+        } else {
+            return "Weapon already equipped!";
+        }
+    }
+
     public function pickUpConsumableItem(Hero $hero, ConsumableItem $item) : bool
     {
         $backpack = $hero->getBackpackItems();
+        //Check how much space is available in the backpack
         $quantityAvailable = $this->checkStock($hero, $backpack, $item);
         if(isset($quantityAvailable)) {
+            //if there is space, add the quantity of item
             $itemAdded = $this->checkBackpack($hero, $backpack, $item, $quantityAvailable);
             $this->em->persist($itemAdded);
             $this->em->flush();
@@ -39,23 +61,44 @@ class ItemPicker
 
     }
 
+    /**
+     * @param Hero $hero
+     * @param Collection $backpack
+     * @param ConsumableItem $item
+     * @param $quantity
+     * @return BackpackItem|null
+     *
+     * insert item in backpack
+     */
     public function checkBackpack(Hero $hero, Collection $backpack, ConsumableItem $item, $quantity) : ?BackpackItem
     {
         //check which items are in the backpack
         $isItem = false;
         foreach ($backpack as $bpItem) {
+            //If corresponding item already inside backpack
             if ($bpItem->getItem() == $item) {
+                //update stock
                 $bpItem->addStock($quantity);
                 $isItem = true;
                 return $bpItem;
             }
         }
+        //If item not inside the backapck
         if (!$isItem) {
+            //Insert it
             $newItem = new BackpackItem($hero, $item, $quantity);
             return $newItem;
         }
     }
 
+    /**
+     * @param Hero|null $hero
+     * @param Collection $backpack
+     * @param ConsumableItem $item
+     * @return int|null
+     *
+     * set the item quantity to insert into backpack according to available space
+     */
     public function checkStock(?Hero $hero, Collection $backpack, ConsumableItem $item) : ?int
     {
         $maxCapacity = $hero->getStory()->getRuleset()->getBackPackCapacity();

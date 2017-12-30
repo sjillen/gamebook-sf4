@@ -10,5 +10,8 @@ namespace App\Adventure;
 
 class Encounter
 {
+    public function getOpponents($opponents)
+    {
 
+    }
 }
