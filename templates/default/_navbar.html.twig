@@ -1,0 +1,30 @@
+{% set currentPath = app.request.attributes.get('_route') %}
+
+<div class="navbar">
+    <nav class="transparent">
+        <div class="nav-wrapper">
+            <a href="#!" class="brand-logo center"><i class="material-icons">cloud</i>Gamebook</a>
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            <ul class="right hide-on-med-and-down">
+                <li><a href="{{ path('index') }}">Home</a></li>
+                <li><a href="{{ path('about') }}">About</a></li>
+                {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                <li><a href="{{ path('stories') }}">My Adventures</a></li>
+                <li><a href="{{ path('admin') }}">My account</a></li>
+                <li><a href="{{ path('security_logout') }}">Logout</a></li>
+                {% else %}
+                <li><a href="{{ path('security_login') }}">Login</a></li>
+                {% endif %}
+
+            </ul>
+
+            <ul class="sidenav blue-grey-transparent text-white" id="mobile-demo">
+
+                <li><a href="{{ path('index') }}">Home</a></li>
+                <li><a href="{{ path('about') }}">About</a></li>
+                <li><a href="{{ path('security_login') }}">Login</a></li>
+
+            </ul>
+        </div>
+    </nav>
+</div>

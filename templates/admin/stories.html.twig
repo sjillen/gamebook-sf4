@@ -1,0 +1,30 @@
+{% extends "base.html.twig" %}
+
+{% block main %}
+    <div class="container">
+        <div class="row">
+            <div class="col m10 offset-m1">
+                {% for story in stories %}
+                    <div class="row">
+                        <div class="col s12 m6">
+                            <div class="card hoverable">
+                                <div class="card-image">
+                                    <img src="{{ asset('build/images/bg-home.4a71623f.jpg') }}">
+                                    <span class="card-title">{{ story.title }}</span>
+                                    <a href="{{ path('story', {'slug': story.slug}) }}" class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">add</i></a>
+                                </div>
+                                <div class="card-content">
+                                    <p>{{ story.summary|truncate(50, true) }}</p>
+                                </div>
+                                <div class="card-action">
+                                    {{ story.author }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

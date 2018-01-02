@@ -1,0 +1,20 @@
+{% extends "base.html.twig" %}
+
+{% block main %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col m4 offset-m4 blue-grey center-align">
+                {{ form_start(form) }}
+                {{ form_row(form.username) }}
+                {{ form_row(form.email) }}
+                {{ form_row(form.plainPassword.first) }}
+                {{ form_row(form.plainPassword.second) }}
+
+                <button class="waves-effect waves-light btn" type="submit">Register!</button>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

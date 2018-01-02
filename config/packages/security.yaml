@@ -1,0 +1,39 @@
+security:
+
+    encoders:
+        App\Entity\User:
+            algorithm: bcrypt
+    # https://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
+    providers:
+        our_db_provider:
+           entity:
+               class: App\Entity\User
+               property: username
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            anonymous: true
+            pattern:    ^/
+            provider: our_db_provider
+
+            # activate different ways to authenticate
+
+            # http_basic: ~
+            # https://symfony.com/doc/current/book/security.html#a-configuring-how-your-users-will-authenticate
+
+            form_login:
+                login_path: security_login
+                check_path: security_login
+                csrf_token_generator: security.csrf.token_manager
+                default_target_path: index
+
+            logout:
+                path: security_logout
+                target: index
+
+    role_hierarchy:
+        ROLE_ADMIN: [ROLE_USER, ROLE_ALLOWED_TO_SWITCH]
+
+    access_control:

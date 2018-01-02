@@ -1,15 +1,34 @@
-{# flash messages #}
-<div class="message-flash">
-    {% if app.request.hasPreviousSession %}
-        {% for type, messages in app.session.flashbag.all() %}
-            {% for message in messages %}
-                <div class="alert alert-{{ type }} alert-dismissible fade show" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <p>{{ message }}</p>
-                </div>
+{# Use of Materialize Toast for flash messages #}
+        {% if app.request.hasPreviousSession %}
+            {% for type, messages in app.session.flashbag.all() %}
+                {% for message in messages %}
+
+                    <script>
+                        let color = "";
+                        switch("{{ type }}") {
+                            case "danger":
+                                color = "red lighten-1";
+                                break;
+                            case "warning":
+                                color = "orange lighten-1";
+                                break;
+                            case "success":
+                                color = "light-green lighten-1";
+                                break;
+                            default:
+                                color = "";
+                                break;
+                        }
+                        let toastHTML = '<span>{{ message }}</span><button class="btn-flat toast-action">&times</button>';
+                        M.toast({html:toastHTML, classes: color }, 4000 );
+                        const toastElement = document.querySelector('.toast');
+                        const toastInstance = M.Toast.getInstance(toastElement);
+                        const toastAction = document.querySelector('.toast-action');
+                        toastAction.onclick = function () {
+                            toastInstance.dismiss();
+                        }
+
+                    </script>
+                {% endfor %}
             {% endfor %}
-        {% endfor %}
-    {% endif %}
-</div>
+        {% endif %}

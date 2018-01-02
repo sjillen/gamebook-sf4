@@ -3,37 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Welcome!{% endblock %}</title>
+
     {% block stylesheets %}
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('build/css/app.css') }}" />
     {% endblock %}
 </head>
 <body>
-<header class="masthead clearfix">
-    <div class="inner">
-        <h3 class="masthead-brand">Cover</h3>
-        <nav class="nav nav-masthead">
-            <a class="nav-link active" href="#">Home</a>
-            <a class="nav-link" href="#">Features</a>
-            <a class="nav-link" href="#">Contact</a>
-        </nav>
-    </div>
-</header>
 
+    {% include "/default/_navbar.html.twig" %}
 
-    <div class="container-fluid" id="main-container">
-        <div class="row">
-            {# flash messages #}
-            {% include "/default/_flash_messages.html.twig" %}
-            {% block body %}{% endblock %}
-        </div>
-    </div>
-
-
-    <a href=" {{ path('index') }}"><button class="btn btn-primary">Back to Homepage</button></a>
+    {% block main %}{% endblock %}
 
     {% block javascripts %}
 
     <script src="{{ asset('build/js/app.js') }}"></script>
+
+    <script>const elem = document.querySelector('.sidenav');
+        const instance = new M.Sidenav(elem);</script>
+
+    {% include "/default/_flash_messages.html.twig" %}
+
     {% endblock %}
 </body>
 </html>

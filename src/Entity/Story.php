@@ -33,6 +33,12 @@ class Story
     private $author;
 
     /**
+     *
+     * @ORM\Column(type="text")
+     */
+    private $summary;
+
+    /**
      * @var Saga
      *
      * @ORM\ManyToOne(targetEntity="Saga", inversedBy="stories", cascade={"persist"})
@@ -129,6 +135,16 @@ class Story
     public function setAuthor($author) : void
     {
         $this->author = $author;
+    }
+
+    public function getSummary()
+    {
+        return $this->summary;
+    }
+
+    public function setSummary($summary) : void
+    {
+        $this->summary = $summary;
     }
 
     public function getSaga() : ?string
