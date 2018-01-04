@@ -137,9 +137,12 @@ class ChapterType extends AbstractType
                         "by_reference" => false,
                         "allow_add" => true,
                         "allow_delete" => true
-                    ])
-                ->add("save",
-                    SubmitType::class);
+                    ]);
+                /*->add("save",
+                    SubmitType::class, [
+                        "attr" => ["class" => "waves-effect waves-light btn"],
+                        "label" => "Save this chapter"
+                    ]);*/
     }
 
     public function configureOptions(OptionsResolver $resolver)

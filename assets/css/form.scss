@@ -1,0 +1,33 @@
+.chapter-form-container{
+  textarea {
+    height: 10rem;
+  }
+  .items-container {
+    .npcs {
+      display: inline-flex;
+      li {
+        margin-right: 15px;
+      }
+    }
+    .pickable-items{
+      border-top: 1px solid #009688;
+      border-bottom: 1px solid #009688;
+    }
+    .consumableItems {
+      display: inline-flex;
+      li {
+        margin-right: 15px;
+      }
+    }
+    li {
+      display: inline-flex;
+      width: 100%;
+      .select-wrapper {
+        margin-right: 20px;
+      }
+      label {
+        display: none;
+      }
+    }
+  }
+}

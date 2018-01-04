@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class SecurityController extends AbstractController
 {
@@ -71,10 +72,11 @@ class SecurityController extends AbstractController
                 ->setBody("<p>This is the body of the message</p>", 'text/html');
             $mailer->send($message);
 
-            $this->addFlash("success", "You have been successfully registered!");
-            $error = $authUtils->getLastAuthenticationError();
-            $lastUsername = $authUtils->getLastUsername();
-            return $this->redirectToRoute("security_login", ["last_username" => $lastUsername, "error" => $error]);
+            $this->addFlash("success", "You have been successfully registered! Welcome to Gamebook " . $user->getUsername() . " !");
+            $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
+            $this->get('security.token_storage')->setToken($token);
+            $this->get('session')->set('_security_main', serialize($token));
+            return $this->redirectToRoute("index");
         }
 
         return $this->render("security/registration.html.twig", ["form" => $form->createView()]);

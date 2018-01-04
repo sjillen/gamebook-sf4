@@ -1,199 +1,133 @@
-{% extends "base.html.twig" %}
+{% extends "form/form-layout.html.twig" %}
 
-{% block main %}
-
+{% block form %}
+<div class="chapter-form-container">
     <h2>Creation of a Chapter</h2>
 
-{{ form_start(form) }}
+    {{ form_start(form) }}
     {# render the task's only field: description #}
-    {{ form_row(form.title) }}
-    {{ form_row(form.type) }}
-    {{ form_row(form.textContent1) }}
-    <div class="well">
-        <h5>Monsters included</h5>
-        <ul class="npcs" data-prototype="{{ form_widget(form.npcs.vars.prototype)|e('html_attr') }}">
-            {% for npc in form.npcs %}
-            <li>{{ form_row(npc) }}</li>
-            {% endfor %}
-        </ul>
+    <div class="row">
+        <div class="col m6">
+            {{ form_row(form.title) }}
+        </div>
+        <div class="col m4 offset-m2">
+            {{ form_row(form.type) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col m10 offset-m1 s12">
+            {{ form_row(form.textContent1) }}
+        </div>
     </div>
 
-    <div class="well">
-        <h5>Weapons to be picked in chapter</h5>
-        <ul class="weapons" data-prototype="{{ form_widget(form.weapons.vars.prototype)|e('html_attr') }}">
-            {% for weapon in form.weapons %}
-                <li>{{ form_row(weapon) }}</li>
-            {% endfor %}
-        </ul>
+
+    <div class="items-container row">
+        <div class="row">
+            <div class="col m10 offset-m1 center-align">
+                <h5>Monsters to fight</h5>
+                <p>If you add monsters to a chapter, it will trigger a fight. Items to be picked, the second part of the chapter and choices will display only when the fight is finished</p>
+                <ul class="npcs" data-prototype="{{ form_widget(form.npcs.vars.prototype)|e('html_attr') }}">
+                    {% for npc in form.npcs %}
+                        <li>
+                            {{ form_label(npc) }}
+                            {{ form_widget(npc) }}
+                            {{ form_errors(npc) }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="row pickable-items">
+            <div class="col m10 offset-m1 s12">
+                <h5 class="center-align">Items to pick up in this chapter</h5>
+                <div class="row">
+                    <div class="col m4 offset-m2">
+                        <h6>Weapons</h6>
+                        <ul class="weapons" data-prototype="{{ form_widget(form.weapons.vars.prototype)|e('html_attr') }}">
+                            {% for weapon in form.weapons %}
+                                <li>
+                                    {{ form_label(weapon) }}
+                                    {{ form_widget(weapon) }}
+                                    {{ form_errors(weapon) }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <div class="col m4 offset-m2">
+                        <h6>Special items</h6>
+                        <ul class="specialItems" data-prototype="{{ form_widget(form.specialItems.vars.prototype)|e('html_attr') }}">
+                            {% for specialItem in form.specialItems %}
+                                <li>
+                                    {{ form_label(specialItem) }}
+                                    {{ form_widget(specialItem) }}
+                                    {{ form_errors(specialItem) }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col m10 offset-m1 s12 center-align">
+                        <h6>Consumable items</h6>
+                        <ul class="consumableItems" data-prototype="{{ form_widget(form.consumableItems.vars.prototype)|e('html_attr') }}">
+                            {% for consumableItem in form.consumableItems %}
+                                <li>
+                                    {{ form_label(consumableItem) }}
+                                    {{ form_widget(consumableItem) }}
+                                    {{ form_errors(consumableItem) }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </div>
 
-    <div class="well">
-        <h5>Special items to be picked in chapter</h5>
-        <ul class="specialItems" data-prototype="{{ form_widget(form.specialItems.vars.prototype)|e('html_attr') }}">
-            {% for specialItem in form.specialItems %}
-                <li>{{ form_row(specialItem) }}</li>
-            {% endfor %}
-        </ul>
+    <div class="row">
+        <div class="col s10 offset-s1">
+            {{ form_label(form.textContent2) }}
+            {{ form_widget(form.textContent2) }}
+            {{ form_errors(form.textContent2) }}
+        </div>
     </div>
 
-    <div class="well">
-        <h5>Consumable Items to be picked in chapter</h5>
-        <ul class="consumableItems" data-prototype="{{ form_widget(form.consumableItems.vars.prototype)|e('html_attr') }}">
-            {% for consumableItem in form.consumableItems %}
-                <li>{{ form_row(consumableItem) }}</li>
-            {% endfor %}
-        </ul>
+
+    <div class="row">
+        <div class="col s10 offset-s1 m8 offset-m2">
+            <h4>Choices to be made at the end of te chapter</h4>
+            <ul id="collectionContainer" class="choices"
+                data-prototype="
+         {% filter escape %}
+             {{ include('form/prototype/choice-form.html.twig', { 'choice': form.choices.vars.prototype }) }}
+         {% endfilter %}">
+                {% for choice in form.choices %}
+                    {{ include('form/prototype/choice-form.html.twig', {'choice': choice}) }}
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 
-    {{ form_row(form.textContent2) }}
+    {#<ul class="choices" data-prototype="{{ form_widget(form.choices.vars.prototype)|e('html_attr') }}">
+        {# iterate over each existing tag and render it
 
-    <div class="well">
-    <h4>Choices to be made at the end of te chapter</h4>
-    <ul class="choices" data-prototype="{{ form_widget(form.choices.vars.prototype)|e('html_attr') }}">
-        {# iterate over each existing tag and render it #}
-        {% for choice in form.choices %}
-            <li>{{ form_row(choice) }}</li>
-        {% endfor %}
-    </ul>
+    </ul>#}
 
+
+    {{ form_end(form) }}
+    <div class="row">
+        <div class="col m6 offset-m3 s4 offset-s4 center-align">
+
+            <button type="submit" class ="waves-effect waves-light btn btn-large"><i class="material-icons right">note_add</i>Save this chapter</button>
+
+        </div>
     </div>
-{{ form_end(form) }}
+</div>
+
+
 
 {% endblock %}
 
-{% block javascripts %}
-    {{ parent() }}
 
-    <script>
-        var $choicesHolder;
-        var $npcsHolder;
-        var $weaponsHolder;
-        var $specialItemsHolder;
-        var $consumableItemsHolder;
-
-        // setup an "add a choice" link
-        var $addChoiceLink = $('<a href="#" class="add_choice_link"><button class="btn btn-primary">Add a choice</button></a>');
-        var $newChoiceLinkLi = $('<li></li>').append($addChoiceLink);
-
-        var $addNpcLink = $('<a href="#" class="add_npc_link"><button class="btn btn-warning">Add a npc</button></a>');
-        var $newNpcLinkLi = $('<li></li>').append($addNpcLink);
-
-        var $addWeaponLink = $('<a href="#" class="add_weapon_link"><button class="btn btn-success">Add a weapon</button></a>');
-        var $newWeaponLinkLi = $("<li></li>").append($addWeaponLink);
-
-        var $addSpecialItemLink = $('<a href="#" class="add_specialItem_link"><button class="btn btn-success">Add a special item</button></a>');
-        var $newSpecialItemLinkLi = $("<li></li>").append($addSpecialItemLink);
-
-        var $addConsumableItemLink = $('<a href="#" class="add_consumableItem_link"><button class="btn btn-success">Add a consumable item</button></a>');
-        var $newConsumableItemLinkLi = $("<li></li>").append($addConsumableItemLink);
-
-        jQuery(document).ready(function() {
-            // Get the ul that holds the collection of choices
-            $choicesHolder = $('ul.choices');
-            $npcsHolder = $('ul.npcs');
-            $weaponsHolder = $('ul.weapons');
-            $specialItemsHolder = $('ul.specialItems');
-            $consumableItemsHolder = $('ul.consumableItems');
-
-            // add a delete link to all of the existing tag form li elements
-            $choicesHolder.find('li').each(function() {
-                addTagFormDeleteLink($(this));
-            });
-            $npcsHolder.find('li').each(function() {
-                addTagFormDeleteLink($(this));
-            });
-            $weaponsHolder.find('li').each(function() {
-                addTagFormDeleteLink($(this));
-            });
-            $specialItemsHolder.find('li').each(function() {
-                addTagFormDeleteLink($(this));
-            });
-            $consumableItemsHolder.find('li').each(function() {
-                addTagFormDeleteLink($(this));
-            });
-
-            // add the "add a choice" anchor and li to the choices ul
-            $choicesHolder.append($newChoiceLinkLi);
-            $npcsHolder.append($newNpcLinkLi);
-            $weaponsHolder.append($newWeaponLinkLi);
-            $specialItemsHolder.append($newSpecialItemLinkLi);
-            $consumableItemsHolder.append($newConsumableItemLinkLi);
-
-            // count the current form inputs we have (e.g. 2), use that as the new
-            // index when inserting a new item (e.g. 2)
-            $choicesHolder.data('index', $choicesHolder.find(':input').length);
-            $npcsHolder.data('index', $npcsHolder.find(':input').length);
-            $weaponsHolder.data('index', $weaponsHolder.find(':input').length);
-            $specialItemsHolder.data('index', $specialItemsHolder.find(':input').length);
-            $consumableItemsHolder.data('index', $consumableItemsHolder.find(':input').length);
-
-            $addChoiceLink.on('click', function(e) {
-                // prevent the link from creating a "#" on the URL
-                e.preventDefault();
-
-                // add a new tag form (see next code block)
-                addChildForm($choicesHolder, $newChoiceLinkLi);
-            });
-
-            $addNpcLink.on('click', function(e) {
-                e.preventDefault();
-                addChildForm($npcsHolder, $newNpcLinkLi);
-            });
-
-            $addWeaponLink.on('click', function(e) {
-                e.preventDefault();
-                addChildForm($weaponsHolder, $newWeaponLinkLi);
-            });
-
-            $addSpecialItemLink.on('click', function(e) {
-                e.preventDefault();
-                addChildForm($specialItemsHolder, $newSpecialItemLinkLi);
-            });
-
-            $addConsumableItemLink.on('click', function(e) {
-                e.preventDefault();
-                addChildForm($consumableItemsHolder, $newConsumableItemLinkLi);
-            });
-        });
-        function addChildForm($collectionHolder, $newLinkLi) {
-            // Get the data-prototype explained earlier
-            var prototype = $collectionHolder.data('prototype');
-
-            // get the new index
-            var index = $collectionHolder.data('index');
-
-            var newForm = prototype;
-            // You need this only if you didn't set 'label' => false in your tags field in TaskType
-            // Replace '__name__label__' in the prototype's HTML to
-            // instead be a number based on how many items we have
-            // newForm = newForm.replace(/__name__label__/g, index);
-
-            // Replace '__name__' in the prototype's HTML to
-            // instead be a number based on how many items we have
-            newForm = newForm.replace(/__name__/g, index);
-
-            // increase the index with one for the next item
-            $collectionHolder.data('index', index + 1);
-
-            // Display the form in the page in an li, before the "Add a tag" link li
-            var $newFormLi = $('<li></li>').append(newForm);
-            $newLinkLi.before($newFormLi);
-
-            addTagFormDeleteLink($newFormLi);
-        }
-
-        function addTagFormDeleteLink($tagFormLi) {
-            var $removeFormA = $('<a href="#"><button class="btn btn-small btn-danger">-</button></a>');
-            $tagFormLi.append($removeFormA);
-
-            $removeFormA.on('click', function(e) {
-                // prevent the link from creating a "#" on the URL
-                e.preventDefault();
-
-                // remove the li for the tag form
-                $tagFormLi.remove();
-            });
-        }
-    </script>
-
-{% endblock %}

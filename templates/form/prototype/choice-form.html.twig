@@ -1,0 +1,45 @@
+<li>
+    <div class="row">
+        <div class="col m7">
+            {{ form_label(choice.description) }}
+            {{ form_widget(choice.description) }}
+        </div>
+
+
+
+        <div class="col m4 offset-m1">
+            {{ form_label(choice.targetChapter) }}
+            {{ form_widget(choice.targetChapter) }}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col m6">
+            <label for="choice_checkbox">
+                {{ form_widget(choice.locked,  {"attr": {"id": "choice_checkbox"}}) }}
+                <span>
+                    {{ form_label(choice.locked, "Choice locked") }}
+                </span>
+            </label>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col m5">
+            {{ form_label(choice.skillRequired) }}
+            {{ form_widget(choice.skillRequired) }}
+        </div>
+
+        <div class="col m5 offset-m2">
+            {{ form_label(choice.itemRequired) }}
+            {{ form_widget(choice.itemRequired) }}
+        </div>
+
+        <div class="col m6 offset-m3">
+            {{ form_label(choice.goldRequired) }}
+            {{ form_widget(choice.goldRequired) }}
+        </div>
+    </div>
+
+
+</li>

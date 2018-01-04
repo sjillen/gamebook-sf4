@@ -44,7 +44,7 @@ class ActionType extends AbstractType
                         "expanded" => false,
                         "multiple" => false,
                         "required" => false,
-                        "empty_data" => "None"
+
                     ])
             ->add("itemRequired",
                     EntityType::class, [
@@ -55,13 +55,13 @@ class ActionType extends AbstractType
                         "expanded" => false,
                         "multiple" => false,
                         "required" => false,
-                        "empty_data" => "None"
+
                     ])
             ->add("goldRequired",
                     IntegerType::class, [
                         "label" => "Amount of gold required to the unlock choice",
                         "scale" => 0,
-                        "empty_data" => 0
+                        "empty_data" => "0"
                     ]);
     }
 
