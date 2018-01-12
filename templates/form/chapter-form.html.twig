@@ -1,8 +1,8 @@
-{% extends "form/form-layout.html.twig" %}
+{% extends "base.html.twig" %}
 
-{% block form %}
-<div class="chapter-form-container">
-    <h2>Creation of a Chapter</h2>
+{% block main %}
+<div class="form-container container white">
+    <h2 class="center-align">New Chapter</h2>
 
     {{ form_start(form) }}
     {# render the task's only field: description #}
@@ -26,9 +26,9 @@
             <div class="col m10 offset-m1 center-align">
                 <h5>Monsters to fight</h5>
                 <p>If you add monsters to a chapter, it will trigger a fight. Items to be picked, the second part of the chapter and choices will display only when the fight is finished</p>
-                <ul class="npcs" data-prototype="{{ form_widget(form.npcs.vars.prototype)|e('html_attr') }}">
+                <ul class="npcs row" data-prototype="{{ form_widget(form.npcs.vars.prototype)|e('html_attr') }}">
                     {% for npc in form.npcs %}
-                        <li>
+                        <li class="col m4">
                             {{ form_label(npc) }}
                             {{ form_widget(npc) }}
                             {{ form_errors(npc) }}
@@ -37,11 +37,11 @@
                 </ul>
             </div>
         </div>
-        <div class="row pickable-items">
-            <div class="col m10 offset-m1 s12">
+        <div class="row">
+            <div class="col m10 offset-m1 s12 pickable-items">
                 <h5 class="center-align">Items to pick up in this chapter</h5>
                 <div class="row">
-                    <div class="col m4 offset-m2">
+                    <div class="col m4 offset-m1 center-align">
                         <h6>Weapons</h6>
                         <ul class="weapons" data-prototype="{{ form_widget(form.weapons.vars.prototype)|e('html_attr') }}">
                             {% for weapon in form.weapons %}
@@ -54,7 +54,7 @@
                         </ul>
                     </div>
 
-                    <div class="col m4 offset-m2">
+                    <div class="col m4 offset-m1 center-align">
                         <h6>Special items</h6>
                         <ul class="specialItems" data-prototype="{{ form_widget(form.specialItems.vars.prototype)|e('html_attr') }}">
                             {% for specialItem in form.specialItems %}
@@ -68,7 +68,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col m10 offset-m1 s12 center-align">
+                    <div class="col m4 offset-m1 center-align">
                         <h6>Consumable items</h6>
                         <ul class="consumableItems" data-prototype="{{ form_widget(form.consumableItems.vars.prototype)|e('html_attr') }}">
                             {% for consumableItem in form.consumableItems %}
@@ -80,7 +80,14 @@
                             {% endfor %}
                         </ul>
                     </div>
+                    <div class=" col m4 offset-m1 gold-chapter-form">
+                        <h6 class="center-align">Gold to pick up: </h6>
+                        {{ form_widget(form.gold) }}
+                        {{ form_label(form.gold) }}
+                        {{ form_errors(form.gold) }}
+                    </div>
                 </div>
+
 
             </div>
         </div>
@@ -96,9 +103,9 @@
 
 
     <div class="row">
-        <div class="col s10 offset-s1 m8 offset-m2">
-            <h4>Choices to be made at the end of te chapter</h4>
-            <ul id="collectionContainer" class="choices"
+        <div class="col s12 m10 offset-m1">
+            <h4 class="center-align">End of chapter: Choices</h4>
+            <ul class="choices"
                 data-prototype="
          {% filter escape %}
              {{ include('form/prototype/choice-form.html.twig', { 'choice': form.choices.vars.prototype }) }}
@@ -110,24 +117,17 @@
         </div>
     </div>
 
-    {#<ul class="choices" data-prototype="{{ form_widget(form.choices.vars.prototype)|e('html_attr') }}">
-        {# iterate over each existing tag and render it
-
-    </ul>#}
-
-
-    {{ form_end(form) }}
     <div class="row">
         <div class="col m6 offset-m3 s4 offset-s4 center-align">
 
-            <button type="submit" class ="waves-effect waves-light btn btn-large"><i class="material-icons right">note_add</i>Save this chapter</button>
+            <button type="submit" class ="waves-effect waves-light light-green accent-4 btn btn-large"><i class="material-icons right">note_add</i>Save this chapter</button>
 
         </div>
     </div>
+
+    {{ form_end(form) }}
+
 </div>
 
-
-
 {% endblock %}
-
 

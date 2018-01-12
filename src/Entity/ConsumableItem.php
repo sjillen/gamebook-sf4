@@ -18,19 +18,7 @@ class ConsumableItem extends ItemBase
      */
     private $id;
 
-    /**
-     * How much it increase or decrease a hero attribute
-     * 
-     * @ORM\Column(type="integer")
-     */
-    private $bonusGiven;
 
-    /**
-     * Which attribute will be affected
-     * 
-     * @ORM\Column(type="string")
-     */
-    private $attributeTargeted;
 
     /**
      * @ORM\Column(type="boolean")
@@ -62,26 +50,6 @@ class ConsumableItem extends ItemBase
     public function setId($id) : void 
     {
         $this->id = $id;
-    }
-
-    public function getBonusGiven() : ?int
-    {
-        return $this->bonusGiven;
-    }
-
-    public function setBonusGiven($bonus) : void 
-    {
-        $this->bonusGiven = $bonus;
-    }
-
-    public function getAttributeTargeted() : ?string 
-    {
-        return $this->attributeTargeted;
-    }
-
-    public function setAttributeTargeted($attributeTargeted) : void 
-    {
-        $this->attributeTargeted = $attributeTargeted;
     }
 
     public function getRemovable() : ?bool

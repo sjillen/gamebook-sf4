@@ -1,8 +1,67 @@
 {% extends "base.html.twig" %}
 
 {% block main %}
+    <div class="form-container container">
+        <div class="row">
+            <div class="col s10 offset-s1 m8 offset-m2 white">
+                <div class="row">
+                    <div class="col s12">
+                        <h3 class="center-align">Add a new Special Item for your story</h3>
+                    </div>
+                </div>
+                {{ form_start(form) }}
+                <div class="row">
+                    <div class="col s12 m6 offset-m3 center-align">
+                        {{ form_label(form.name) }}
+                        {{ form_widget(form.name, {"attr": {"class": "center-align"}}) }}
+                        {{ form_errors(form.name) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12 m8 offset-m2 center-align">
+                        {{ form_label(form.description) }}
+                        {{ form_widget(form.description) }}
+                        {{ form_errors(form.description) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s6 m4 offset-m2 center-align">
+                        {{ form_label(form.attributeTargeted) }}
+                        {{ form_widget(form.attributeTargeted) }}
+                        {{ form_errors(form.attributeTargeted) }}
+                    </div>
+                    <div class="col s6 m4 center-align">
+                        {{ form_label(form.bonusGiven) }}
+                        {{ form_widget(form.bonusGiven) }}
+                        {{ form_errors(form.bonusGiven) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s6 m5 offset-m1 center-align">
+                        {{ form_label(form.slot) }}
+                        {{ form_widget(form.slot) }}
+                        {{ form_errors(form.slot) }}
+                    </div>
+                    <div class="col s6 m4 offset-m1 align-center">
+                        <label for="">
+                            {{ form_widget(form.starter) }}
+                            <span>{{ form_label(form.starter) }}</span>
+                        </label>
+                        {{ form_errors(form.starter) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12 center-align">
+                        <button type="submit" class ="waves-effect waves-light btn btn-large"><i class="material-icons right">gavel</i>Create</button>
+                    </div>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
 
-    <h3>Add a new Special Item for your story</h3>
-    {{ form(form) }}
+
+
+
 
 {% endblock %}

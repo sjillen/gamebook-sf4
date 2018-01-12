@@ -1,0 +1,172 @@
+
+    <div id="editor-components" class="col s12 m10 offset-m1 l8 offset-l2 center align">
+        <div class="row">
+            <div class="col s12 m10 offset-m1">
+                <h3>{{ story.title }} - Components</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 editor_component">
+                {% if story.weapons|length > 0 %}
+                    <h5>WEAPONS</h5>
+                    <div class="carousel">
+                        {% for weapon in story.weapons %}
+                            <div class="carousel-item">
+                                <div class="card hoverable">
+                                    <div class="card-image">
+                                        <img src="{{ asset('build/images/weapon_design_by_zoriy-d4q4aty.9e32987c.jpg') }}" class="responsive-img">
+                                    </div>
+                                    <div class="card-content">
+                                        <span class="card-title activator grey-text text-darken-4">{{ weapon.name }}<i class="material-icons right">more_vert</i></span>
+                                    </div>
+                                    <div class="card-action">
+                                        <a href="{{ path('weapon_delete', {'slug': story.slug, 'id': weapon.id}) }}" class="btn-floating waves-effect waves-light red left-align">
+                                            <i class="material-icons">delete</i>
+                                        </a>
+                                        <a href="{{ path('weapon_edit', {'slug': story.slug, 'id': weapon.id}) }}" class="btn-floating waves-effect waves-light amber right-align">
+                                            <i class="material-icons">edit</i>
+                                        </a>
+                                    </div>
+                                    <div class="card-reveal">
+                                        <span class="card-title grey-text text-darken-4">{{ weapon.name }}<i class="material-icons right">close</i></span>
+                                        <p>{{ weapon.description }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <div class="row button-container">
+                    <div class="col s12 center-align">
+                        <a role="button" class="btn waves-effect waves-light" href="{{ path('weapon_add', { "slug": story.slug}) }}">Create a weapon<i class="material-icons right">gavel</i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 editor_component">
+                {% if story.specialItems|length > 0 %}
+                    <h5>SPECIAL ITEMS</h5>
+                    <div class="carousel">
+                        {% for item in story.specialItems %}
+                            <div class="carousel-item">
+                                <div class="card hoverable">
+                                    <div class="card-image">
+                                        <img src="{{ asset('build/images/skull_and_shackles_set_by_mattiasfahlberg-d8l0u44.db88dd52.jpg') }}" class="responsive-img">
+                                    </div>
+                                    <div class="card-content">
+                                        <span class="card-title activator grey-text text-darken-4">{{ item.name }}<i class="material-icons right">more_vert</i></span>
+                                    </div>
+                                    <div class="card-action">
+                                        <a href="{{ path('specialItem_delete', {'slug': story.slug, 'id': item.id}) }}" class="btn-floating waves-effect waves-light red left-align">
+                                            <i class="material-icons">delete</i>
+                                        </a>
+                                        <a href="{{ path('specialItem_edit', {'slug': story.slug, 'id': item.id}) }}" class="btn-floating waves-effect waves-light amber right-align">
+                                            <i class="material-icons">edit</i>
+                                        </a>
+                                    </div>
+                                    <div class="card-reveal">
+                                        <span class="card-title grey-text text-darken-4">{{ item.name }}<i class="material-icons right">close</i></span>
+                                        <p>Attribute:{{ item.attributeTargeted }}</p>
+                                        <p>Bonus: {{ item.bonusGiven }}</p>
+                                        <p>Slot: {{ item.slot }}</p>
+                                        <p>{{ item.description }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <div class="row button-container">
+                    <div class="col s12 center-align">
+                        <a role="button" class="btn waves-effect waves-light" href="{{ path('specialItem_add', { "slug": story.slug}) }}">Create a special item<i class="material-icons right">gavel</i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 editor_component">
+                {% if story.consumableItems|length > 0 %}
+                    <h5>CONSUMABLE ITEMS</h5>
+                    <div class="carousel">
+                        {% for item in story.consumableItems %}
+                            <div class="carousel-item">
+                                <div class="card hoverable">
+                                    <div class="card-image">
+                                        <img src="{{ asset('build/images/potions-card.04283864.jpg') }}" class="responsive-img">
+                                    </div>
+                                    <div class="card-content">
+                                        <span class="card-title activator grey-text text-darken-4">{{ item.name }}<i class="material-icons right">more_vert</i></span>
+                                    </div>
+                                    <div class="card-action">
+                                        <a href="{{ path('consumableItem_delete', {'slug': story.slug, 'id': item.id}) }}" class="btn-floating waves-effect waves-light red left-align">
+                                            <i class="material-icons">delete</i>
+                                        </a>
+                                        <a href="{{ path('consumableItem_edit', {'slug': story.slug, 'id': item.id}) }}" class="btn-floating waves-effect waves-light amber right-align">
+                                            <i class="material-icons">edit</i>
+                                        </a>
+                                    </div>
+                                    <div class="card-reveal">
+                                        <span class="card-title grey-text text-darken-4">{{ item.name }}<i class="material-icons right">close</i></span>
+                                        <p>Attribute: {{ item.attributeTargeted }}</p>
+                                        <p>Bonus: {{ item.bonusGiven }}</p>
+                                        <p>{{ item.description }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <div class="row button-container">
+                    <div class="col s12 center-align">
+                        <a role="button" class="btn waves-effect waves-light" href="{{ path('consumableItem_add', { "slug": story.slug}) }}">Create a Consumable Item<i class="material-icons right">gavel</i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 editor_component">
+                {% if story.npcs|length > 0 %}
+                    <h5>NON PLAYABLE CHARACTERS</h5>
+                    <div class="carousel">
+                        {% for npc in story.npcs %}
+                            <div class="carousel-item">
+                                <div class="card hoverable">
+                                    <div class="card-image">
+                                        <img src="{{ asset('build/images/4e_dnd_orcs_by_ralphhorsley.7a831c1b.jpg') }}" class="responsive-img">
+                                    </div>
+                                    <div class="card-content">
+                                        <span class="card-title activator grey-text text-darken-4">{{ npc.name }}<i class="material-icons right">more_vert</i></span>
+                                    </div>
+                                    <div class="card-action">
+                                        <a href="{{ path('npc_delete', {'slug': story.slug, 'id': npc.id}) }}" class="btn-floating waves-effect waves-light red left-align">
+                                            <i class="material-icons">delete</i>
+                                        </a>
+                                        <a href="{{ path('npc_edit', {'slug': story.slug, 'id': npc.id}) }}" class="btn-floating waves-effect waves-light amber right-align">
+                                            <i class="material-icons">edit</i>
+                                        </a>
+
+                                    </div>
+                                    <div class="card-reveal">
+                                        <span class="card-title grey-text text-darken-4">{{ npc.name }}<i class="material-icons right">close</i></span>
+                                        <p>Life: {{ npc.life }}</p>
+                                        <p>Ability: {{ npc.ability }}</p>
+                                        {% if npc.skillAffect %}
+                                            <p>{{ npc.skillAffect.name }}</p>
+                                        {% endif %}
+                                        <p>{{ npc.description }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <div class="row button-container">
+                    <div class="col s12 center-align">
+                        <a role="button" class="btn waves-effect waves-light" href="{{ path('npc_add', { "slug": story.slug}) }}">Create a Character<i class="material-icons right">gavel</i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+

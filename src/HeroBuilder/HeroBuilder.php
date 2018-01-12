@@ -20,7 +20,7 @@ class HeroBuilder
     {
         $hero->setGold(self::goldStarter($rules));
         $hero->setLife(self::setHpStarter($rules));
-        $hero->setEnergy(self::setEnergyStarter($rules));
+        $hero->setAbility(self::setAbilityStarter($rules));
 
         return $hero;
     }
@@ -37,9 +37,9 @@ class HeroBuilder
         return $hp;
     }
 
-    private static function setEnergyStarter(Ruleset $rules) : int
+    private static function setAbilityStarter(Ruleset $rules) : int
     {
-        $energy = Dice::DiceRoller($rules->getDiceType()) + $rules->getHeroBaseResource();
-        return $energy;
+        $ability = Dice::DiceRoller($rules->getDiceType()) + $rules->getHeroBaseResource();
+        return $ability;
     }
 }

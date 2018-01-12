@@ -26,8 +26,7 @@ class SkillType extends AbstractType
                     TextareaType::class, [
                         "label" => "description of the skill"
                     ])
-                ->add("save", 
-                    SubmitType::class);
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)

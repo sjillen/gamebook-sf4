@@ -1,36 +1,45 @@
 
-    <ul class="hero-header list-group">
-        <li class="list-group-item">
-            <strong>{{ hero.name }}</strong>
+<ul class="collection-with-header hero-ui">
+    <li class="collection-header blue-grey white-text">
+        <h4 class="center-align">{{ hero.name }}</h4>
+    </li>
+    <li class="collection-item-avatar red valign-wrapper">
+        <i class="material-icons circle white-text">favorite</i>
+        <span class="title hero-life white-text">{{ hero.life }} HP</span>
+    </li>
+    <li class="collection-item-avatar blue valign-wrapper">
+        <i class="material-icons circle blue white text">star_border</i>
+        <span class="title hero-ability white-text">{{ hero.ability }} AP</span>
+    </li>
+    <li class="collection-item-avatar yellow accent-4 valign-wrapper">
+        <i class="material-icons circle white-text">monetization_on</i>
+        <span class="title hero-gold white-text">{{ hero.gold }} Gold</span>
+    </li>
+
+    {% for weapon in hero.weapons %}
+        <li class="collection-item-avatar weapon-container cyan accent-4 valign-wrapper">
+            <i class="material-icons circle white-text">fitness_center</i>
+            <span class="title white-text weapon">{{ weapon.name }}</span>
+            <a class="secondary-content right-align" href="{{ path('removeWeapon', {"idChapter": chapter.id, "idHero": hero.id, "idWeapon": weapon.id}) }}"><i class="material-icons circle red white-text">remove_circle</i></a>
         </li>
-        <li class="list-group-item list-group-item-danger">
-            Life: <span class="hero-life">{{ hero.life }}</span>hp
+    {% endfor %}
+
+    {% for item in hero.specialItems %}
+        <li class="collection-item-avatar specialItems-container purple accent-4 valign-wrapper">
+            <i class="material-icons circle white-text">accessibility</i>
+            <span class="title white-text specialItem">{{ item.name }}</span>
+            <a class="secondary-content right-align" href="{{ path('removeSpecialItem', {"slug": story.slug, "idChapter": chapter.id, "idHero": hero.id, "idItem": item.id}) }}"><i class="material-icons circle red white-text">remove_circle</i></a>
         </li>
-        <li class="list-group-item list-group-item-primary">
-            Ability: <span class="hero-energy">{{ hero.energy }}</span>AP
-        </li>
-        <li class="list-group-item list-group-item-warning">
-            {{ hero.gold }} Gold
-        </li>
-    </ul>
-    <ul class="hero-weapons list-group">
-        {% for weapon in hero.weapons %}
-            <li class="list-group-item list-group-item-dark">
-                {{ weapon.name }}
-            </li>
-        {% endfor %}
-    </ul>
-    <ul class="hero-inventory list-group">
-        {% for item in hero.specialItems %}
-            <li class="list-group-item list-group-item-success">
-                {{ item.name }}
-            </li>
-        {% endfor %}
-    </ul>
-    <ul class="hero-backpack list-group">
-        {% for item in hero.backpackItems %}
-            <a href="{{ path('removeFromBackpack', {"idHero" : hero.id, "idChapter" : chapter.id, "idItem": item.id}) }}" class="list-group-item list-group-item-info d-flex justify-content-between align-items-center">
-                {{ item.item.name }} <span class="badge badge-dark badge-pill">{{ item.stock }}</span>
+    {% endfor %}
+
+    {% for item in hero.backpackItems %}
+        <li class="collection-item-avatar backpack-container green accent-4 valign-wrapper">
+            <a href="{{ path('use_consumable', {"slug": story.slug, "idHero": hero.id, "idChapter": chapter.id, "idItem": item.id}) }}">
+                <i class="material-icons circle white-text">cached</i>
             </a>
-        {% endfor %}
-    </ul>
+            <span class="title white-text backpack">{{ item.item.name }}</span>
+            <span class="badge center-align white-text blue-grey darken-2">{{ item.stock }}</span>
+            <a class="secondary-content right-align" href="{{ path('removeFromBackpack', {"idChapter": chapter.id, "idHero": hero.id, "idItem": item.id}) }}"><i class="material-icons circle red white-text">remove_circle</i></a>
+        </li>
+    {% endfor %}
+</ul>

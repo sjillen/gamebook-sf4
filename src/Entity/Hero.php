@@ -20,9 +20,24 @@ class Hero extends CharacterBase
     private $id;
 
     /**
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="heroes", cascade={"persist"})
+     */
+    private $user;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Story")
      */
     private $story;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Chapter")
+     */
+    private $chapter;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $maxLife;
 
     /**
      * @ORM\Column(type="integer")
@@ -67,6 +82,7 @@ class Hero extends CharacterBase
     /* Constructor */
     public function __construct()
     {
+        $this->user = new User();
         $this->skills = new ArrayCollection();
         $this->weapons = new ArrayCollection();
         $this->backpackItems = new ArrayCollection();
@@ -88,6 +104,16 @@ class Hero extends CharacterBase
         $this->id = $id;
     }
 
+    public function getUser() : ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user) : void
+    {
+        $this->user = $user;
+    }
+
     public function getStory() : ?Story
     {
         return $this->story;
@@ -98,6 +124,16 @@ class Hero extends CharacterBase
         $this->story = $story;
     }
 
+    public function getChapter() : ?Chapter
+    {
+        return $this->chapter;
+    }
+
+    public function setChapter(?Chapter $chapter) : void
+    {
+        $this->chapter = $chapter;
+    }
+
     public function getLevel() : int
     {
         return $this->level;
@@ -106,6 +142,16 @@ class Hero extends CharacterBase
     public function setLevel(?int $level) : void
     {
         $this->level = $level;
+    }
+
+    public function setMaxLife(?int $life) : void
+    {
+        $this->maxLife = $life;
+    }
+
+    public function getMaxLife() : ?int
+    {
+        return $this->maxLife;
     }
 
     public function getGold() : int

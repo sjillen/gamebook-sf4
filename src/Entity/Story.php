@@ -33,6 +33,11 @@ class Story
     private $author;
 
     /**
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="stories")
+     */
+    private $user;
+
+    /**
      *
      * @ORM\Column(type="text")
      */
@@ -44,6 +49,16 @@ class Story
      * @ORM\ManyToOne(targetEntity="Saga", inversedBy="stories", cascade={"persist"})
      */
     private $saga;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $intro;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $deathDescription;
 
     /**
      * @ORM\OneToOne(targetEntity="Ruleset", mappedBy="story", cascade={"remove"})
@@ -99,7 +114,14 @@ class Story
      */
     private $slug;
 
-    //Constructor
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isPublished;
+
+    /**
+     * Story constructor.
+     */
     public function __construct()
     {
         $this->skills = new ArrayCollection();
@@ -137,6 +159,16 @@ class Story
         $this->author = $author;
     }
 
+    public function getUser() : ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user) : void
+    {
+        $this->user = $user;
+    }
+
     public function getSummary()
     {
         return $this->summary;
@@ -157,6 +189,26 @@ class Story
         $this->saga = $saga;
     }
 
+    public function getIntro()
+    {
+        return $this->intro;
+    }
+
+    public function setIntro($intro) : void
+    {
+        $this->intro = $intro;
+    }
+
+    public function getDeathDescription()
+    {
+        return $this->deathDescription;
+    }
+
+    public function setDeathDescription($text) : void
+    {
+        $this->deathDescription = $text;
+    }
+
     /**
      * @return mixed
      */
@@ -172,8 +224,6 @@ class Story
     {
         $this->ruleset = $ruleset;
     }
-
-
 
     public function getChapters() : Collection
     {
@@ -273,5 +323,15 @@ class Story
     public function setSlug($slug) : void
     {
         $this->slug = $slug;
+    }
+
+    public function getIsPublished() : ?bool
+    {
+        return $this->isPublished;
+    }
+
+    public function setIsPublished(?bool $isPublished) : void
+    {
+        $this->isPublished = $isPublished;
     }
 }

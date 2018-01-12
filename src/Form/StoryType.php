@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Story;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -18,9 +19,8 @@ class StoryType extends AbstractType
             ->add("author", 
                     TextType::class)
             ->add("summary",
-                TextType::class)
-            ->add("save", 
-                    SubmitType::class);
+                TextareaType::class)
+        ;
         
     }
 

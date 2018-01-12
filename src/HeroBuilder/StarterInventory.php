@@ -8,6 +8,7 @@
 
 namespace App\HeroBuilder;
 
+use App\Adventure\Alteration;
 use App\Entity\BackpackItem;
 use App\Entity\ConsumableItem;
 use App\Entity\Hero;
@@ -42,6 +43,7 @@ class StarterInventory
         $weaponChosen = Dice::DiceRoller($diceType) - 1;
 
         $hero->addWeapon($weapons[$weaponChosen]);
+        $hasWeaponSkill = Alteration::weaponSkillBonus($hero, $weapons[$weaponChosen]);
     }
 
     public function starterItem(Story $story, Hero $hero)
@@ -56,8 +58,8 @@ class StarterInventory
 
         if($diceScore > $lengthConsumables) {
             $itemChosen = Dice::DiceRoller($lengthSpecials) - 1;
-
             $hero->addSpecialItem($specialItems[$itemChosen]);
+            Alteration::equippedSpecialItem($hero, $specialItems[$itemChosen]);
         }else {
             $itemChosen = Dice::DiceRoller($lengthConsumables) - 1;
             $backpackItem = new BackpackItem($hero, $consumables[$itemChosen], 1);

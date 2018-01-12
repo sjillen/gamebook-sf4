@@ -2,20 +2,25 @@
 
 namespace App\Controller\Admin;
 
+use App\Adventure\Alteration;
 use App\Adventure\ChoiceDisplay;
 use App\Adventure\ChoiceInteraction;
 use App\Adventure\ItemPicker;
+use App\Adventure\Saver;
 use App\Entity\BackpackItem;
 use App\Entity\Choice;
 use App\Entity\ConsumableItem;
 use App\Entity\Ruleset;
 use App\Entity\Skill;
 use App\Entity\SpecialItem;
+use App\Entity\User;
 use App\Entity\Weapon;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -26,11 +31,37 @@ use App\Entity\Chapter;
 use App\HeroBuilder\HeroBuilder;
 use App\HeroBuilder\StarterInventory;
 use App\HeroBuilder\HeroSkills;
-
+use Symfony\Component\Validator\Constraints\Collection;
 
 
 class AdventureController extends AbstractController
 {
+
+    /**
+     * @param Story $story
+     * @return RedirectResponse
+     * @Route("/play-story/{slug}", name="story_play")
+     * @ParamConverter("story", options={"mapping": {"slug": "slug"}})
+     */
+    public function startStory(Story $story, Saver $saver) : RedirectResponse
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository(User::class)->findOneBy(["username" => $this->getUser()->getUsername()]);
+        $hero = $saver->loadHero($user, $story);
+
+        if (isset($hero)) {
+            return $this->redirectToRoute("adventure", [
+                "slug" => $story->getSlug(),
+                "idHero" => $hero->getId(),
+                "id" => $hero->getChapter()->getId()
+            ]);
+        } else {
+            return $this->redirectToRoute("newHero", [
+                "slug" => $story->getSlug()
+            ]);
+        }
+    }
+
     /**
      * @param Request
      *
@@ -44,12 +75,16 @@ class AdventureController extends AbstractController
         $hero->setStory($story);
         $em = $this->getDoctrine()->getManager();
         $skills = $em->getRepository(Skill::class)->findSkillsByStory($story);
+
+        $user = $em->getRepository(User::class)->findOneBy(["username" => $this->getUser()->getUsername()]);
+
         $form = $this->createForm(HeroType::class, $hero, ["skills" => $skills]);
         $form->handleRequest($request);
+        $ruleset = $em->getRepository(Ruleset::class)->findOneBy(["story" => $story]);
+        $hero->setMaxLife(0);
 
         if($form->isSubmitted() && $form->isValid()) {
             //Apply the set of rules from the corresponding story to complete the creation of the hero
-            $ruleset = $em->getRepository(Ruleset::class)->findOneBy(["story" => $story]);
             $hero = $heroBuilder->buildHero($hero, $ruleset);
             $starterInventory->setStarterInventory($story, $hero);
 
@@ -58,20 +93,24 @@ class AdventureController extends AbstractController
                 $this->addFlash("warning", "You need to choose 6 skills !");
                 return $this->redirectToRoute("newHero", ["slug" => $story->getSlug()]);
             }
-
             //Choose a weapon for Weaponskill
             $heroSkills->weaponSkillSelection($story, $hero);
+            //Set Hero's max life
+            $hero->setMaxLife($hero->getLife());
+            $hero->setUser($user);
             $em->persist($hero);
             $em->flush();
-
+            $starter = $em->getRepository(Chapter::class)->findOneBy(["story" => $story,"type" => "starter"]);
             $this->addFlash("success", "The creation of your hero is finished");
-            return $this->redirectToRoute("heroResume", [
+            return $this->redirectToRoute("adventure", [
                 "slug" => $story->getSlug(),
-                "id" => $hero->getId()
+                "idHero" => $hero->getId(),
+                "id" => $starter->getId()
             ]);
         }
         return $this->render("form/hero-form.html.twig", [
-            "form" => $form->createView()
+            "form" => $form->createView(),
+            "ruleset" => $ruleset
         ]);
     }
 
@@ -85,7 +124,7 @@ class AdventureController extends AbstractController
      */
     public function heroResume(Request $request, Story $story, Hero $hero) : Response
     {
-        $starter = $this->getDoctrine()->getManager()->getRepository(Chapter::class)->findOneBy(["type" => "starter"]);
+        $starter = $this->getDoctrine()->getManager()->getRepository(Chapter::class)->findOneBy(["story" => $story,"type" => "starter"]);
         return $this->render("story/heroResume.html.twig", ["slug" => $story->getSlug(), "hero" => $hero, "starter" => $starter]);
     }
 
@@ -113,18 +152,61 @@ class AdventureController extends AbstractController
      * @ParamConverter("hero", options={"mapping": {"idHero": "id"}})
      * @ParamConverter("chapter", options={"mapping": {"id": "id"}})
      */
-    public function adventureAction(Story $story, Chapter $chapter, Hero $hero) : Response
+    public function adventureAction(Story $story, $id, Hero $hero, SessionInterface $session, Saver $saver) : Response
     {
-        $unlockChoices = ChoiceDisplay::unlockChoices($hero, $chapter->getChoices());
+        //load the whole content of the chapter
+        $chapter = $this->getDoctrine()->getManager()->getRepository(Chapter::class)->findWholeChapter($id);
+
+        $choices = $chapter->getChoices();
+        //check if chapter is different from previous chapter
+        $chapterSession = $session->get('chapter');
+        //save the hero progression
+        $saver->saveHero($hero, $chapter);
+        if(isset($chapterSession)) {
+            $chapterSession->getId() === $chapter->getId()
+                ? $chapter = $chapterSession //same chapter
+                : $session->set('chapter', $chapter); // if different: set new chapter in session
+        } else {
+            $session->set('chapter', $chapter);
+        }
+        $isDeath = $chapter->getType() === "death"? true : false;
+        $unlockChoices = ChoiceDisplay::unlockChoices($hero, $choices);
+
         return $this->render("adventure/adventure.html.twig", [
             "story" => $story,
             "hero" => $hero,
             "chapter" => $chapter,
-            "specialItems" => $chapter->getSpecialItems(),
-            "consumableItems" => $chapter->getConsumableItems(),
+            "isDeath" => $isDeath,
             "choices" => $unlockChoices,
 
         ]);
+    }
+
+    /**
+     * @param Story $story
+     * @param Hero $hero
+     * @Route("{slug}/death{idHero}", name="adventure_death")
+     * @ParamConverter("story", options={"mapping": {"slug": "slug"}})
+     * @ParamConverter("chapter", options={"mapping": {"idChapter": "id"}})
+     *@ParamConverter("hero", options={"mapping": {"idHero": "id"}})
+     */
+    public function deathChapter(Story $story, Hero $hero)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $hero->setChapter(null);
+        $hero->setGold(0);
+        $backpackItems = $em->getRepository(BackpackItem::class)->findBy(["hero" => $hero]);
+        foreach ($backpackItems as $item) {
+            $em->remove($item);
+        }
+        $em->persist($hero);
+        $em->flush();
+
+        return $this->render('adventure/death.html.twig', [
+            "story" => $story,
+            "hero" => $hero
+        ]);
+
     }
 
     /**
@@ -142,7 +224,8 @@ class AdventureController extends AbstractController
     public function tradeGoldOrItem(Story $story, Choice $choice, Hero $hero, ChoiceInteraction $interaction) : RedirectResponse
     {
         //Check whether requirement is Gold or Item, and remove the corresponding amount or object from inventory
-        $interaction->trade($hero, $choice);
+        $message = $interaction->trade($hero, $choice);
+        $this->addFlash("info", $message);
         return $this->redirectToRoute("adventure", [
             "slug" => $story->getSlug(),
             "idHero" => $hero->getId(),
@@ -160,32 +243,94 @@ class AdventureController extends AbstractController
      * @ParamConverter("story", options={"mapping": {"slug": "slug"}})
      * @ParamConverter("hero", options={"mapping": {"idHero": "id"}})
      * @ParamConverter("chapter", options={"mapping": {"idChapter": "id"}})
-     *
+     * @ParamConverter("specialItem", options={"mapping": {"idItem": "id"}})
      */
-    public function pickUpSpecialItem(Story $story, Hero $hero, Chapter $chapter, $idItem, ItemPicker $itemPicker) : Response
+    public function pickUpSpecialItem(Story $story, Hero $hero, SpecialItem $specialItem, ItemPicker $itemPicker, SessionInterface $session) : RedirectResponse
     {
         $em = $this->getDoctrine()->getManager();
-        //find the item to be picked
-        $specialItem = $em->getRepository(SpecialItem::class)->find($idItem);
-        if($specialItem === null) {
-            throw new NotFoundHttpException("The special item with id " . $idItem . " does not exist!");
+        $chapter = $session->get('chapter');
+
+        //add item to hero if possible
+        $itemPicked = $itemPicker->pickUpSpecialItem($hero, $specialItem);
+        if ($itemPicked) {
+            foreach ($chapter->getSpecialItems() as $item) {
+                if ($item->getId() === $specialItem->getId()) {
+                    $chapter->removeSpecialItem($item);
+                }
+            }
+            $this->addFlash("info", "You picked up " . $specialItem->getName());
+            $this->addFlash("success", "Bonus: +". $specialItem->getBonusGiven(). " ".$specialItem->getAttributeTargeted());
+        } else {
+            $this->addFlash("warning", "Cannot Equip: slot ". $specialItem->getSlot(). " is taken");
         }
-        //add item to hero
-        $itemPicker->pickUpSpecialItem($hero, $specialItem);
-        //remove item from chapter
-        $specialItems = $chapter->getSpecialItems();
-        $specialItems->removeElement($specialItem);
-        //get the corresponding choices of the chapter
-        $unlockChoices = ChoiceDisplay::unlockChoices($hero, $chapter->getChoices());
-        return $this->render("adventure.html.twig", [
-            "story" => $story,
-            "hero" => $hero,
-            "chapter" => $chapter,
-            "specialItems" => $specialItems,
-            "consumableItems" => $chapter->getConsumableItems(),
-            "choices" => $unlockChoices
+
+        $session->set('chapter', $chapter);
+        $em->persist($hero);
+        $em->flush();
+
+        return $this->redirectToRoute("adventure", [
+            "slug" => $story->getSlug(),
+            "idHero" => $hero->getId(),
+            "id" => $chapter->getId()
 
         ]);
+    }
+
+    /**
+     * @param Chapter $chapter
+     * @param Hero $hero
+     * @param SpecialItem $specialItem
+     * @return RedirectResponse
+     * @Route("/{slug}/hero-{idHero}/{idChapter}/remove-si{idItem}", name="removeSpecialItem")
+     * @ParamConverter("chapter", options={"mapping": {"idChapter": "id"}})
+     * @ParamConverter("hero", options={"mapping": {"idHero": "id"}})
+     * @ParamConverter("specialItem", options={"mapping": {"idItem": "id"}})
+     */
+    public function removeSpecialItem(Chapter $chapter, Hero $hero, $idItem) : RedirectResponse
+    {
+        $em = $this->getDoctrine()->getManager();
+        $specialItem = $em->getRepository(SpecialItem::class)->find($idItem);
+        $hero->removeSpecialItem($specialItem);
+        Alteration::removeSpecialItem($hero, $specialItem);
+        $em->persist($hero);
+        $em->flush();
+        $this->addFlash("info", $specialItem->getName(). " removed!");
+        $this->addFlash("warning", "-".$specialItem->getBonusGiven(). " ".$specialItem->getAttributeTargeted());
+
+        return $this->redirectToRoute("adventure", [
+            "slug" => $chapter->getStory()->getSlug(),
+            "idHero" => $hero->getId(),
+            "id" => $chapter->getId(),
+        ]);
+
+    }
+
+    /**
+     * @param Story $story
+     * @param Hero $hero
+     * @param ItemPicker $itemPicker
+     * @param SessionInterface $session
+     * @return RedirectResponse
+     * @Route("/{slug}/{idHero}/{idChapter}/pickGold", name="pickupGold")
+     * @ParamConverter("Story", options={"mapping": {"slug": "slug"}})
+     * @ParamConverter("Hero", options={"hero": {"idHero": "id"}})
+     */
+    public function pickUpGold(Story $story, Hero $hero, ItemPicker $itemPicker, SessionInterface $session) : RedirectResponse
+    {
+        $chapter = $session->get("chapter");
+
+        $message = $itemPicker->pickupGold($hero, $chapter->getGold());
+
+        $chapter->setGold(null);
+        $session->set("chapter", $chapter);
+
+        $this->addFlash("info", $message);
+        return $this->redirectToRoute("adventure", [
+            "slug" => $story->getSlug(),
+            "idHero" => $hero->getId(),
+            "id" => $chapter->getId()
+        ]);
+
     }
 
     /**
@@ -200,13 +345,29 @@ class AdventureController extends AbstractController
      * @ParamConverter("chapter", options={"mapping": {"idChapter": "id"}})
      *
      */
-    public function pickUpConsumableItem(Story $story, Hero $hero, Chapter $chapter, $idItem, ItemPicker $itemPicker) : RedirectResponse
+    public function pickUpConsumableItem(Story $story, Hero $hero, $idChapter, $idItem, ItemPicker $itemPicker, SessionInterface $session) : RedirectResponse
     {
         $em = $this->getDoctrine()->getManager();
         $consumableItem = $em->getRepository(ConsumableItem::class)->find($idItem);
+        if($consumableItem === null) {
+            throw new NotFoundHttpException("The consumable item with id " . $idItem . " does not exist!");
+        }
         $itemPicked = $itemPicker->pickUpConsumableItem($hero, $consumableItem);
 
-        $itemPicked ? $this->addFlash("success", "you picked " . $consumableItem->getName()) : $this->addFlash("warning", "Your bagpack is full!");
+        $chapter = $session->get('chapter');
+        if ($itemPicked) {
+            foreach ($chapter->getConsumableItems() as $item) {
+                if ($item->getId() === $consumableItem->getId()) {
+                    $chapter->removeConsumableItem($item);
+                }
+            }
+            $this->addFlash("info", "You picked " . $consumableItem->getName());
+        } else {
+            $this->addFlash("warning", "Your bagpack is full!");
+        }
+
+        $session->set("chapter", $chapter);
+
         return $this->redirectToRoute("adventure", [
             "slug" => $story->getSlug(),
             "idHero" => $hero->getId(),
@@ -224,10 +385,12 @@ class AdventureController extends AbstractController
      * @ParamConverter("chapter", options={"mapping": {"idChapter": "id"}})
      * @ParamConverter("backpackItem", options={"mapping": {"idItem": "id"}})
      */
-    public function removeBackpackItem(Hero $hero, Chapter $chapter, BackpackItem $backpackItem) : RedirectResponse
+    public function removeBackpackItem(Hero $hero, Chapter $chapter, $idItem) : RedirectResponse
     {
-        $backpackItem->removeStock(1);
         $em = $this->getDoctrine()->getManager();
+        $backpackItem = $em->getRepository(BackpackItem::class)->find($idItem);
+        $backpackItem->removeStock(1);
+        
         if ($backpackItem->getStock() === 0) {
             $em->remove($backpackItem);
         } else {
@@ -235,10 +398,37 @@ class AdventureController extends AbstractController
         }
         $em->flush();
 
+        $this->addFlash("info", "You dropped ". $backpackItem->getItem()->getName());
+
         return $this->redirectToRoute("adventure", [
             "slug" => $hero->getStory()->getSlug(),
             "idHero" => $hero->getId(),
             "id" => $chapter->getId()
+        ]);
+    }
+
+    /**
+     * @param $slug
+     * @param Hero $hero
+     * @param BackpackItem $backpackItem
+     * @param $idChapter
+     * @param Alteration $useConsumable
+     * @return RedirectResponse
+     * @Route("{slug}/{idHero}/useConsumable-{idItem}/{idChapter}", name="use_consumable")
+     * @ParamConverter("hero", options={"mapping": {"idHero": "id"}})
+     * @ParamConverter("backpackItem", options={"mapping": {"idItem": "id"}})
+     */
+    public function useBackpackItem($slug, Hero $hero, BackpackItem $backpackItem, $idChapter, Alteration $useConsumable) : RedirectResponse
+    {
+        $message = $useConsumable->useConsumable($hero, $backpackItem);
+        !$message
+        ? $this->addFlash("warning", "You cannot use this item!")
+        : $this->addFlash("success", $message);
+
+        return $this->redirectToRoute("adventure", [
+            "slug" => $slug,
+            "idHero" => $hero->getId(),
+            "id" => $idChapter
         ]);
     }
 
@@ -250,18 +440,36 @@ class AdventureController extends AbstractController
      * @param ItemPicker $itemPicker
      * @return RedirectResponse
      * @Route("/story/{slug}/{idHero}/{idChapter}/{idWeapon}", name="pickupWeapon")
-     * @ParamConverter("Story", options={"mapping": {"slug": "slug"}})
-     * @ParamConverter("Chapter", options={"mapping": {"idChapter": "id"}})
+     * @ParamConverter("story", options={"mapping": {"slug": "slug"}})
+     * @ParamConverter("chapter", options={"mapping": {"idChapter": "id"}})
+     * @ParamConverter("weapon", options={"mapping": {"idWeapon": "id"}})
      */
-    public function pickUpWeapon(Story $story, $idHero, Chapter $chapter, $idWeapon, ItemPicker $itemPicker) : RedirectResponse
+    public function pickUpWeapon(Story $story, Hero $hero, $idChapter, Weapon $weapon, ItemPicker $itemPicker, SessionInterface $session) : RedirectResponse
     {
-        $hero = $this->getDoctrine()->getManager()->getRepository(Hero::class)->find($idHero);
-        $message = $itemPicker->pickUpWeapon($hero, $idWeapon);
-        if(isset($message)) {
-            $this->addFlash("warning", $message);
+        $em = $this->getDoctrine()->getManager();
+
+        $chapter = $session->get('chapter');
+        //Check whether weapon has been picked or not
+        $messages = $itemPicker->pickUpWeapon($hero, $weapon);
+
+        if(!isset($messages)) {
+            $this->addFlash("warning", "You cannot equip this weapon!");
         } else {
-            $this->addFlash("success", "the weapon has been successfully equipped!");
+            foreach ($chapter->getWeapons() as $weaponChapter) {
+                if ($weaponChapter->getId() === $weapon->getId()) {
+                    $chapter->removeWeapon($weaponChapter);
+                }
+            }
+            //send every relevant message
+            foreach ($messages as $message) {
+                $this->addFlash("success",  $message);
+            }
+
         }
+
+        $session->set('chapter', $chapter);
+        $em->persist($hero);
+        $em->flush();
 
         return $this->redirectToRoute("adventure", [
             "slug" => $story->getSlug(),
@@ -269,5 +477,42 @@ class AdventureController extends AbstractController
             "id" => $chapter->getId()
         ]);
 
+    }
+
+    /**
+     * @param Chapter $chapter
+     * @param Hero $hero
+     * @param Weapon $weapon
+     * @return RedirectResponse
+     * @Route("/{idChapter}/{idHero}/remove{idWeapon}", name="removeWeapon")
+     * @ParamConverter("chapter", options={"mapping": {"idChapter": "id"}})
+     * @ParamConverter("hero", options={"mapping": {"idHero": "id"}})
+     * @ParamConverter("weapon", options={"mapping": {"idWeapon": "id"}})
+     */
+    public function removeWeapon(Chapter $chapter, Hero $hero, Weapon $weapon, Alteration $alteration) : RedirectResponse
+    {
+        $em = $this->getDoctrine()->getManager();
+        //remove weapon
+        $hero->removeWeapon($weapon);
+        $this->addFlash("info", "You dropped " . $weapon->getName());
+        //check if weapon removed was a weaponskill
+        $weaponSkillBonus = Alteration::weaponSkillBonus($hero, $weapon);
+        if($weaponSkillBonus) {
+            //cancel the bonus given
+            $hero->setAbility($hero->getAbility() - 4);
+            $this->addFlash("warning", "Your Weaponskill is not active any more (-2 ability)");
+        }
+        //Check if hero is still carrying at least one weapon
+        if ($hero->getWeapons()->isEmpty()) {
+            $hero->setAbility($hero->getAbility() - 4);
+            $this->addFlash("danger", "No weapon carried - Penalty: -4 ability");
+        }
+        $em->persist($hero);
+        $em->flush();
+        return $this->redirectToRoute("adventure", [
+            "slug" => $chapter->getStory()->getSlug(),
+            "idHero" => $hero->getId(),
+            "id" => $chapter->getId()
+        ]);
     }
 }

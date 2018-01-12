@@ -2,49 +2,56 @@
 
 {% block main %}
 <div class="container-fluid">
-    <h2>Your hero</h2>
-    <div class="well">
-        <strong>Name: </strong>{{ hero.name }} <br/>
-        <strong>Life: </strong> {{ hero.life }} <br/>
-        <strong>Ability: </strong> {{ hero.energy }}<br/>
-        <strong>Gold: </strong> {{ hero.gold }}
-    </div>
+    <div class="row">
+        <div class="col s10 offset-s1 white">
+            <h2>Your hero</h2>
+            <div class="well">
+                <strong>Name: </strong>{{ hero.name }} <br/>
+                <strong>Life: </strong> {{ hero.life }} <br/>
+                <strong>Ability: </strong> {{ hero.ability }}<br/>
+                <strong>Gold: </strong> {{ hero.gold }}
+            </div>
 
-    <div class="jumbotron">
-        <div class="row items-align-center">
-            <div class="col-sm-6">
-                <h4>Your Weapons</h4>
-                {% for weapon in hero.weapons %}
-                <strong>Weapon: </strong>{{ weapon.name }}
-                {% endfor %}
+            <div class="jumbotron">
+                <div class="row items-align-center">
+                    <div class="col-sm-6">
+                        <h4>Your Weapons</h4>
+                        {% for weapon in hero.weapons %}
+                            <strong>Weapon: </strong>{{ weapon.name }}
+                        {% endfor %}
+                    </div>
+                    <div class="col-sm-6">
+                        <h4>Your Skills</h4>
+                        {% for skill in hero.skills %}
+                            <strong>{{ skill.name }}</strong>
+                            <br/>
+                        {% endfor %}
+                        {% if hero.weaponskill %}
+                        <strong>{{ hero.weaponskill.name }}</strong>
+                        <br/>
+                        {% endif %}
+                    </div>
+                    <div class="col-sm-6">
+                        <h4>Your Special Items</h4>
+                        {% for armor in hero.specialItems %}
+                            <strong>{{ armor.name }}</strong> <br/>
+                        {% endfor %}
+                    </div>
+                    <div class="col-sm-6">
+                        <h4>Your backpack</h4>
+                        {% for consumable in hero.backpackItems %}
+                            <strong>{{ consumable.item.name }} x{{ consumable.stock }}</strong> <br/>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
-            <div class="col-sm-6">
-                <h4>Your Skills</h4>
-                {% for skill in hero.skills %}
-                    <strong>{{ skill.name }}</strong>
-                    <br/>
-                {% endfor %}
-                <strong>{{ hero.weaponskill.name }}</strong>
-                <br/>
-            </div>
-            <div class="col-sm-6">
-                <h4>Your Special Items</h4>
-                {% for armor in hero.specialItems %}
-                    <strong>{{ armor.name }}</strong> <br/>
-                {% endfor %}
-            </div>
-            <div class="col-sm-6">
-                <h4>Your backpack</h4>
-                {% for consumable in hero.backpackItems %}
-                    <strong>{{ consumable.item.name }} x{{ consumable.stock }}</strong> <br/>
-                    {% endfor %}
-            </div>
+            <a href="{{ path('adventure', {"slug": slug, "idHero": hero.id, "id": starter.id}) }}"><button class="btn btn-success">Start Adventure</button></a>
+            <a href="{{ path('heroRemove', {"slug": slug, "id": hero.id}) }}"><button class="btn btn-danger">Delete this hero</button></a>
+            <a href="{{ path('story', {"slug": slug}) }}"><button class="btn btn-primary">Back to story</button></a>
+        </div>
         </div>
     </div>
-    <a href="{{ path('adventure', {"slug": slug, "idHero": hero.id, "id": starter.id}) }}"><button class="btn btn-success">Start Adventure</button></a>
-    <a href="{{ path('heroRemove', {"slug": slug, "id": hero.id}) }}"><button class="btn btn-danger">Delete this hero</button></a>
-    <a href="{{ path('story', {"slug": slug}) }}"><button class="btn btn-primary">Back to story</button></a>
-</div>
+
 
 
 

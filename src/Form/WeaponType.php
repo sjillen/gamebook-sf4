@@ -34,8 +34,7 @@ class WeaponType extends AbstractType
                         "label" => "Is your item part of the starter inventory ?",
                         "required" => false
                 ])
-                ->add("save", 
-                    SubmitType::class);
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)

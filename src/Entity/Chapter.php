@@ -80,6 +80,11 @@ class Chapter
      */
     private $consumableItems;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $gold;
+
     /* Constructor */
     public function __construct()
     {
@@ -90,6 +95,7 @@ class Chapter
         $this->specialItems = new ArrayCollection();
         $this->consumableItems = new ArrayCollection();
         $this->weapons = new ArrayCollection();
+        $this->gold = 0;
     }
 
     /* Setters and Getters */
@@ -190,6 +196,11 @@ class Chapter
         $this->specialItems[] = $item;
     }
 
+    public function hasSpecialItem(?SpecialItem $item) : bool
+    {
+        return $this->specialItems->contains($item);
+    }
+
     public function removeSpecialItem(?SpecialItem $item) : void
     {
         $this->specialItems->removeElement($item);
@@ -210,7 +221,7 @@ class Chapter
         $this->consumableItems[] = $item;
     }
 
-    public function removeConsumableItems(?ConsumableItem $item) : void
+    public function removeConsumableItem(?ConsumableItem $item) : void
     {
         $this->consumableItems->removeElement($item);
     }
@@ -233,5 +244,15 @@ class Chapter
     public function hasWeapon(Weapon $weapon): ?bool
     {
         return $this->weapons->contains($weapon);
+    }
+
+    public function getGold() : ?int
+    {
+        return $this->gold;
+    }
+
+    public function setGold(?int $gold) : void
+    {
+        $this->gold = $gold;
     }
 }

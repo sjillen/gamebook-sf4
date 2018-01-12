@@ -28,7 +28,7 @@ Abstract class CharacterBase
      * 
      * @ORM\Column(type="integer")
      */
-    protected $energy;
+    protected $ability;
 
     /* Setters and Getters */
 
@@ -52,13 +52,13 @@ Abstract class CharacterBase
         $this->life = $life;
     }
 
-    public function getEnergy() : ?int
+    public function getAbility() : ?int
     {
-        return $this->energy;
+        return $this->ability;
     }
 
-    public function setEnergy($energy) : void
+    public function setAbility($ability) : void
     {
-        $this->energy = $energy;
+        $this->ability = $ability;
     }
 }

@@ -12,7 +12,6 @@ namespace App\Adventure;
 use App\Entity\BackpackItem;
 use App\Entity\ConsumableItem;
 use App\Entity\Hero;
-use App\Entity\Ruleset;
 use App\Entity\SpecialItem;
 use App\Entity\Weapon;
 use Doctrine\Common\Collections\Collection;
@@ -20,29 +19,67 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class ItemPicker
 {
+    const WEAPONSKILL_MESSAGE = "Weaponskill ! +2 ability !";
+    const ONE_WEAPON_CARRIED = "One weapon carried: +4 ability!";
+    const WEAPON_FULL = "You cannot carry more weapons!";
+
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
     }
 
+    public function pickupGold(Hero $hero, $gold) : string
+    {
+        $currentGold = $hero->getGold();
+        $hero->setGold($currentGold + $gold);
+        $this->em->persist($hero);
+        $this->em->flush();
+        return "You picked " . $gold . " golds";
+    }
 
-    public function pickUpWeapon(Hero $hero, $idWeapon) : ?string
+    public function pickUpWeapon(Hero $hero, Weapon $weaponPickable) : ?array
     {
         $weapons = $hero->getWeapons();
-        $weaponPickable = $this->em->getRepository(Weapon::class)->find($idWeapon);
-        if(false === $weapons->contains($weaponPickable)) {
-            if(count($weapons) < $hero->getStory()->getRuleset()->getMaxWeaponCarried()) {
+        $maxCarry = $hero->getStory()->getRuleset()->getMaxWeaponCarried();
+        $spaceLeft = $maxCarry - count($weapons);
+        $messages = [];
+
+        switch ($spaceLeft) {
+            case $maxCarry:
+                $hero->setAbility($hero->getAbility() + 4);
+
                 $hero->addWeapon($weaponPickable);
-                $this->em->persist($hero);
-                $this->em->flush();
-                return null;
-            }else {
-                return "No space available, please remove an equipped weapon first";
-            }
-        } else {
-            return "Weapon already equipped!";
+                $weaponskill = Alteration::weaponSkillBonus($hero, $weaponPickable);
+
+                $message = "You equipped " . $weaponPickable->getName();
+                $messages[] = $message;
+                $messages[] = self::ONE_WEAPON_CARRIED;
+                if ($weaponskill) {
+                    $messages[] = self::WEAPONSKILL_MESSAGE;
+                }
+                break;
+            case $spaceLeft > 0:
+
+                if (!$weapons->contains($weaponPickable)) {
+                    $hero->addWeapon($weaponPickable);
+                    Alteration::weaponSkillBonus($hero, $weaponPickable);
+                    $message = "You equipped " . $weaponPickable->getName();
+                    $messages[] = $message;
+                } else {
+                    $message = null;
+                }
+                break;
+            default:
+                $message = null;
+                break;
+        }
+        if (count($messages) === 0) {
+            return null;
+        }else {
+            return $messages;
         }
     }
+
 
     public function pickUpConsumableItem(Hero $hero, ConsumableItem $item) : bool
     {
@@ -119,12 +156,13 @@ class ItemPicker
 
     }
 
-    public function pickUpSpecialItem(Hero $hero, SpecialItem $item)
+    public function pickUpSpecialItem(Hero $hero, SpecialItem $item) : bool
     {
         $slot = $item->getSlot();
         //if the pickable item has no specific slot
         if(!isset($slot)) {
             $hero->addSpecialItem($item);
+            Alteration::equippedSpecialItem($hero, $item);
         }elseif(isset($slot)) {
             //check what slots are taken on hero
             $specialItems = $hero->getSpecialItems();
@@ -132,14 +170,13 @@ class ItemPicker
                 $slotHero = $specialItem->getSlot();
                 //In case the corresponding slot is taken
                 if($slotHero === $slot) {
-                    //Remove the object from slot
-                    $hero->removeSpecialItem($specialItem);
+                    return false;
                 }
             }
             //add item to inventory
             $hero->addSpecialItem($item);
+            Alteration::equippedSpecialItem($hero, $item);
         }
-        $this->em->persist($hero);
-        $this->em->flush();
+        return true;
     }
 }

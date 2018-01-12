@@ -27,11 +27,11 @@ security:
                 login_path: security_login
                 check_path: security_login
                 csrf_token_generator: security.csrf.token_manager
-                default_target_path: index
+                default_target_path: homepage
 
             logout:
                 path: security_logout
-                target: index
+                target: homepage
 
     role_hierarchy:
         ROLE_ADMIN: [ROLE_USER, ROLE_ALLOWED_TO_SWITCH]

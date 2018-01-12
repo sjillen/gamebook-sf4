@@ -21,15 +21,20 @@ class ChoiceInteraction
         $this->em = $em;
     }
 
-    public function trade(Hero $hero, Choice $choice) : void
+    public function trade(Hero $hero, Choice $choice) : string
     {
         $item = $choice->getItemRequired();
-        isset($item)
-        ? $this->tradeItem($hero, $item)
-        : $this->tradeGold($hero, $choice)
-        ;
-        $this->em->persist($hero);
-        $this->em->flush();
+        if (isset($item)) {
+            $this->tradeItem($hero, $item);
+            $this->em->persist($hero);
+            $this->em->flush();
+            return $message = "You used ". $item->getName();
+        }else {
+            $this->tradeGold($hero, $choice);
+            $this->em->persist($hero);
+            $this->em->flush();
+            return $message = "You used ". $choice->getGoldRequired(). " golds";
+        }
     }
 
     public function tradeGold(Hero $hero, Choice $choice) : void

@@ -1,38 +1,48 @@
 {% set currentPath = app.request.attributes.get('_route') %}
+<nav class="transparent nav-extended">
+    <div class="nav-wrapper">
+        <a href="{{ path('homepage') }}" class="brand-logo center"><i class="material-icons">cloud</i>Gamebook</a>
+        <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        <ul class="right hide-on-med-and-down tabs-transparent">
+            <li><a target="_self" href="{{ path('homepage') }}">Home</a></li>
+            <li><a target="_self" href="{{ path('about') }}">About</a></li>
+            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                <li><a target="_self" href="{{ path('editor_index') }}">Editor</a></li>
+                <li><a target="_self" href="{{ path('adventure_stories') }}">My Adventures</a></li>
+                <li><a target="_top" href="#dropdown-profile" class="dropdown-trigger" data-target="dropdown-profile">Profile<i class="material-icons right">arrow_drop_down</i></a></li>
+                <!-- Dropdown Structure -->
+                <ul class="dropdown-content transparent" id="dropdown-profile">
+                    <li><a href="{{ path('account_edit') }}">My Account</a></li>
+                    <li><a href="{{ path('security_logout') }}">Logout</a></li>
+                </ul>
 
-<!-- Dropdown Structure -->
-<ul id="dropdown-connect" class="dropdown-content">
-    <li><a href="{{ path('security_login') }}">Login</a></li>
-    <li><a href="{{ path('security_register') }}">Register</a></li>
-</ul>
+            {% else %}
+                <li><a target="_self" href="#dropdown-connect" class="dropdown-trigger" data-target="dropdown-connect">Connect<i class="material-icons right">arrow_drop_down</i></a></li>
+                <!-- Dropdown Structure -->
+                <ul id="dropdown-connect" class="dropdown-content transparent white-text">
+                    <li><a href="{{ path('security_login') }}">Login</a></li>
+                    <li><a href="{{ path('security_register') }}">Register</a></li>
+                </ul>
+            {% endif %}
+        </ul>
+        <!-- Sidenav structure -->
+        <ul class="sidenav blue-grey-transparent text-white" id="mobile-demo">
 
-
-    <nav class="transparent">
-        <div class="nav-wrapper">
-            <a href="#!" class="brand-logo center"><i class="material-icons">cloud</i>Gamebook</a>
-            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-            <ul class="right hide-on-med-and-down">
-                <li><a href="{{ path('index') }}">Home</a></li>
-                <li><a href="{{ path('about') }}">About</a></li>
-                {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-                <li><a href="{{ path('stories') }}">My Adventures</a></li>
-                <li><a href="{{ path('admin') }}">Profile</a></li>
-                <li><a href="{{ path('security_logout') }}">Logout</a></li>
-                {% else %}
-                <li><a href="#!" class="dropdown-trigger" data-target="dropdown-connect">Connect<i class="material-icons right">arrow_drop_down</i></a></li>
-                {% endif %}
-
-            </ul>
-
-            <ul class="sidenav blue-grey-transparent text-white" id="mobile-demo">
-
-                <li><a href="{{ path('index') }}">Home</a></li>
-                <li><a href="{{ path('about') }}">About</a></li>
-                <li><a href="{{ path('security_login') }}">Login</a></li>
-
-            </ul>
-        </div>
-    </nav>
-
-
+            <li><a href="{{ path('homepage') }}">Home</a></li>
+            <li><a href="{{ path('about') }}">About</a></li>
+            <li><a href="{{ path('security_login') }}">Login</a></li>
+        </ul>
+    </div>
+    {% if currentPath == "editor_story" or currentPath == "editor_chapters" %}
+    <!-- extended content -->
+    <div class="nav-content">
+        <ul class="tabs tabs-transparent">
+            <li class="tab"><a href="#editor-story">Story</a></li>
+            <li class="tab"><a href="#editor-components">Components</a></li>
+            <li class="tab"><a class="active" href="#editor-chapters">Chapters</a></li>
+            <li class="tab"><a href="#editor-guidelines">Guide</a></li>
+        </ul>
+    </div>
+    {% endif %}
+</nav>
 

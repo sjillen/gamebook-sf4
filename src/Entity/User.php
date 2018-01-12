@@ -3,6 +3,8 @@
 // src/Entity/User.php
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -53,14 +55,27 @@ class User implements UserInterface, \Serializable
      */
     private $roles;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Hero", mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $heroes;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Story", mappedBy="user", cascade={"persist"})
+     */
+    private $stories;
 
+    /**
+     * User constructor.
+     */
     public function __construct()
     {
         $this->isActive = true;
         // may not be needed, see section on salt below
         // $this->salt = md5(uniqid('', true));
         $this->roles = "ROLE_USER";
+        $this->heroes = new ArrayCollection();
+        $this->stories = new ArrayCollection();
     }
 
     /**
@@ -126,7 +141,7 @@ class User implements UserInterface, \Serializable
         return $this->plainPassword;
     }
 
-    public function setPlainPassword($password)
+    public function setPlainPassword($password) : void
     {
         $this->plainPassword = $password;
     }
@@ -143,7 +158,7 @@ class User implements UserInterface, \Serializable
         return $this->password;
     }
 
-    public function setPassword($password)
+    public function setPassword($password) : void
     {
         $this->password = $password;
     }
@@ -153,9 +168,49 @@ class User implements UserInterface, \Serializable
         return array('ROLE_USER');
     }
 
-    public function setRoles($roles)
+    public function setRoles($roles) : void
     {
         $this->roles = $roles;
+    }
+
+    public function getHeroes() : Collection
+    {
+        return $this->heroes;
+    }
+
+    public function setHeroes(?Collection $heroes) : void
+    {
+        $this->heroes = $heroes;
+    }
+
+    public function addHero(?Hero $hero) : void
+    {
+        $this->heroes[] = $hero;
+    }
+
+    public function removeHero(?Hero $hero) : void
+    {
+        $this->heroes->removeElement($hero);
+    }
+
+    public function hasHero(?Hero $hero) : ?bool
+    {
+        return $this->heroes->contains($hero);
+    }
+
+    public function addStory(?Story $story) : void
+    {
+        $this->stories[] = $story;
+    }
+
+    public function removeStory(?Story $story) : void
+    {
+        $this->stories->removeElement($story);
+    }
+
+    public function hasStory(?Story $story) : ?bool
+    {
+        return $this->stories->contains($story);
     }
 
     public function eraseCredentials()

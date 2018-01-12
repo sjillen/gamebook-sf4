@@ -29,21 +29,22 @@ class NpcType extends AbstractType
                         "label" => "HP of the character",
                         "scale" => 0
                     ])
-                ->add("energy",
+                ->add("ability",
                     IntegerType::class, [
-                        "label" => "Energy of the character",
+                        "label" => "Ability of the character",
                         "scale" => 0
                     ])
                 ->add("skillAffect",
                     EntityType::class, [
-                        "label" => "Skill effective against this character",
+                        "label" => "Weakness",
                         "class" => Skill::class,
                         "choices" => $story->getSkills(),
                         "choice_label" => "name",
+                        "placeholder" => "Choose one",
                         "expanded" => false,
                         "multiple" => false,
                         "required" => false,
-                        "empty_data" => "None"
+                        "empty_data" => null
                     ])
                 ->add("description",
                     TextareaType::class, [
@@ -52,8 +53,7 @@ class NpcType extends AbstractType
                             "placeholder" => "Write a short physical of the character or monster"
                         ]
                     ])
-                ->add("submit", 
-                    SubmitType::class);
+             ;
     }
 
     public function configureOptions(OptionsResolver $resolver)

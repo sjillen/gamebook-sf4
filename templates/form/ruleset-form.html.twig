@@ -1,7 +1,72 @@
 {% extends "base.html.twig" %}
 
 {% block main %}
+    <div class="form-container container">
+        <div class="row">
+            <div class="col s10 offset-s1 m8 offset-m2 white">
+                <div class="row">
+                    <div class="col s12">
+                        <h3 class="center-align">Define a set of rules</h3>
+                    </div>
+                </div>
+                {{ form_start(form) }}
+                <div class="row">
+                    <div class="col s6 m4 offset-m2">
+                        {{ form_label(form.heroBaseLife) }}
+                        {{ form_widget(form.heroBaseLife) }}
+                        {{ form_errors(form.heroBaseLife) }}
+                    </div>
+                    <div class="col s6 m4">
+                        {{ form_label(form.heroBaseResource) }}
+                        {{ form_widget(form.heroBaseResource) }}
+                        {{ form_errors(form.heroBaseResource) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s6 m4 offset-m2">
+                        {{ form_label(form.heroBaseGold) }}
+                        {{ form_widget(form.heroBaseGold) }}
+                        {{ form_errors(form.heroBaseGold) }}
+                    </div>
+                    <div class="col s6 m4">
+                        {{ form_label(form.maxSkill) }}
+                        {{ form_widget(form.maxSkill) }}
+                        {{ form_errors(form.maxSkill) }}
+                    </div>
+                </div>
 
-    {{ form(form) }}
+                <div class="row">
+                    <div class="col s6 m4 offset-m2">
+                        {{ form_label(form.maxWeaponCarried) }}
+                        {{ form_widget(form.maxWeaponCarried) }}
+                        {{ form_errors(form.maxWeaponCarried) }}
+                    </div>
+                    <div class="col s6 m4">
+                        {{ form_label(form.backpackCapacity) }}
+                        {{ form_widget(form.backpackCapacity) }}
+                        {{ form_errors(form.backpackCapacity) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12 m8 offset-m2 center-align">
+                        {{ form_label(form.diceType) }}
+                        {{ form_widget(form.diceType) }}
+                        {{ form_errors(form.diceType) }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col s12 center-align">
+                        <button type="submit" class ="waves-effect waves-light btn btn-large"><i class="material-icons right">description</i>Define</button>
+                    </div>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+
+
+
+
 
 {% endblock %}

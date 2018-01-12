@@ -1,33 +1,39 @@
 {# Use of Materialize Toast for flash messages #}
-        {% if app.request.hasPreviousSession %}
-            {% for type, messages in app.session.flashbag.all() %}
-                {% for message in messages %}
-
+       {% if app.request.hasPreviousSession %}
+            {% for type, messages in app.session.flashbag.all %}
+                {% for key, message in messages %}
                     <script>
-                        let color = "";
-                        switch("{{ type }}") {
-                            case "danger":
-                                color = "red darken-4";
-                                break;
-                            case "warning":
-                                color = "yellow darken-4";
-                                break;
-                            case "success":
-                                color = "green darken-4";
-                                break;
-                            default:
-                                color = "";
-                                break;
-                        }
-                        let toastHTML = '<span>{{ message }}</span><button class="btn-flat toast-action">&times</button>';
-                        M.toast({html:toastHTML, classes: color }, 4000 );
-                        const toastElement = document.querySelector('.toast');
-                        const toastInstance = M.Toast.getInstance(toastElement);
-                        const toastAction = document.querySelector('.toast-action');
-                        toastAction.onclick = function () {
-                            toastInstance.dismiss();
-                        }
 
+                        createToast({{ key }}, "{{ type }}", "{{ message }}");
+
+                        function createToast (key, type, message) {
+                            const time = key * 1500;
+                            let color = "";
+                            switch(type) {
+                                case "danger":
+                                    color = "red-text";
+                                    break;
+                                case "warning":
+                                    color = "yellow-text";
+                                    break;
+                                case "success":
+                                    color = "green-text";
+                                    break;
+                                default:
+                                    color = "";
+                                    break;
+                            }
+                            let toastHTML = '<span>'+ message +'</span><button class="btn-flat toast-action">&times</button>';
+                            setTimeout(M.toast({html:toastHTML, classes: color }, 5000), time);
+                            const toastElement = document.querySelector('.toast');
+                            const toastInstance = M.Toast.getInstance(toastElement);
+                            const toastAction = document.querySelector('.toast-action');
+                            toastAction.onclick = function () {
+                                toastInstance.dismiss();
+                            }
+
+
+                        }
                     </script>
                 {% endfor %}
             {% endfor %}

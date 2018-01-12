@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping\Entity;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -27,11 +28,11 @@ class ChapterType extends AbstractType
 
         $builder->add("title",
                     TextType::class, [
-                        "label" => "title of the chapter"
+                        "label" => "Title"
                     ])
                 ->add("type",
                     ChoiceType::class, [
-                        "label" => "type of chapter",
+                        "label" => "Type of chapter",
                         "required" => true,
                         "expanded" => false,
                         "multiple" => false,
@@ -46,6 +47,7 @@ class ChapterType extends AbstractType
                     TextareaType::class, [
                         "label" => "First part of the chapter",
                         "attr" => [
+                            "class" => "input-field",
                             "placeholder" => "Write the main content of your chapter here..."
                         ]
                     ])
@@ -117,10 +119,17 @@ class ChapterType extends AbstractType
                         "allow_add" => true,
                         "allow_delete" => true
                     ])
+                ->add("gold",
+                    IntegerType::class, [
+                        "label" => "Amount",
+                        "scale" => 0,
+                        "empty_data" => "0"
+                    ])
                 ->add('textContent2',
                     TextareaType::class, [
                         "label" => "Second Part of the chapter (optionnal)",
                         "attr" => [
+                            "class" => "input-field",
                             "placeholder" => "Write here the content that you want to appear after the pickable items, or after a possible fight. This part is optionnal..."
                         ],
                         "required" => false,

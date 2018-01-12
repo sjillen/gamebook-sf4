@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class GamebookController extends Controller
 {
     /**
-     * @Route("/", name="index")
+     * @Route("/", name="homepage")
      */
     public function indexAction(StoryRepository $stories) : Response
     {

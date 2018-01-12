@@ -1,0 +1,103 @@
+
+    <div id="editor-story" class="col s12 m8 offset-m2 center-align">
+        <div class="row">
+            <div class="col s12">
+                <h3 class="center-align">{{ story.title }} - Editor</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 editor-story-element hoverable">
+                <div class="row">
+                    <div class="col s12">
+                        <h5>Story Elements</h5>
+                        <p>Title : {{ story.title }}</p>
+                        <p>Author: {{ story.author }}</p>
+                        <p>Summary: {{ story.summary }}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12 center-align">
+                        <a href="{{ path("story_edit", {"slug": story.slug}) }}" role="button" class="btn waves-effect waves-light amber">
+                            Edit the story
+                            <i class="material-icons right">settings</i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 editor-story-element hoverable">
+                <div class="row">
+                    <div class="col s12">
+                        <h5>Rule set of the story</h5>
+                    </div>
+                </div>
+                {% if story.ruleset %}
+                    <div class="row">
+                        <div class="col s6 m5 offset-m1">
+                            <h6>Base life for the Hero: {{ story.ruleset.heroBaseLife }} HP</h6>
+                            <blockquote>This is the minimum amount of life given to the hero at its creation. An additional amount is given through a dice roll.</blockquote>
+                        </div>
+                        <div class="col s6 m5">
+                            <h6>Base resource for the Hero: {{ story.ruleset.heroBaseResource }} Ability</h6>
+                            <blockquote>This is the minimum amount of resource given to the hero at its creation. An additional amount is given through a dice roll.</blockquote>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s6 m5 offset-m1">
+                            <h6>Base amount of gold: {{ story.ruleset.heroBaseGold }} Gold</h6>
+                            <blockquote>The amount of gold you want to give to the hero at its creation. An additionnal amount is given through a dice roll.</blockquote>
+                        </div>
+                        <div class="col s6 m5">
+                            <h6>Maximum number of skills: {{ story.ruleset.maxSkill }}</h6>
+                            <blockquote>The number of skills the player has to select when he creates its Hero.</blockquote>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col s6 m5 offset-m1">
+                            <h6>Maximum number of weapons carried: {{ story.ruleset.maxWeaponCarried }} weapons</h6>
+                            <blockquote>The maximum amount of weapons that the hero can carry during its adventure.</blockquote>
+                        </div>
+                        <div class="col s6 m5">
+                            <h6>Maximum number of consumable items carried: {{ story.ruleset.backpackCapacity }} items</h6>
+                            <blockquote>The maximum amount of consumable items the hero can carry during his adventure.</blockquote>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12 m8 offset-m2 center-align">
+                            <h6>Dice : D{{ story.ruleset.diceType }}</h6>
+                            <blockquote>What can of dice will be thrown to determine the hero's attributes and the damages done and taken during a fight.</blockquote>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12 center-align">
+                            <a href="{{ path("ruleset_edit", {"slug": story.slug, "id": story.ruleset.id}) }}" role="button" class="btn waves-effect waves-light amber">
+                                Edit the rule set
+                                <i class="material-icons right">settings</i>
+                            </a>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="row">
+                        <div class="col s12 center-align">
+                            <a href="{{ path("ruleset_add", {"slug": story.slug}) }}" role="button" class="btn waves-effect waves-light amber">
+                                Define the rule set
+                                <i class="material-icons right">build</i>
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 center-align">
+                <a href="{{ path('story_delete', {"slug": story.slug}) }}" role="button" class="btn btn-large waves-effect waves-light red">
+                    Delete the story
+                    <i class="material-icons left white-text">warning</i>
+                </a>
+            </div>
+        </div>
+    </div>
+

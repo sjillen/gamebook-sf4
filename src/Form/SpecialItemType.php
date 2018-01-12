@@ -8,6 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -29,23 +30,43 @@ class SpecialItemType extends AbstractType
                 ChoiceType::class, [
                     "label" => "Slot where the item is carried by the hero (The hero can only carry one item per slot)",
                     "choices" => [
-                        "head" => "Head",
-                        "chest" => "Chest",
-                        "hands" => "Hands",
-                        "legs" => "Legs",
-                        "feet" => "Feet",
+                        "Head" => "head",
+                        "Chest" => "chest",
+                        "Hands" => "hands",
+                        "Legs" => "legs",
+                        "Feet" => "feet",
+                        "Other" => null
                     ],
+                    "placeholder" => "Choose a slot",
                     "multiple" => false,
                     "expanded" => false,
                     "required" => false,
-                    "empty_data" => "None"
+                    "empty_data" => null
                 ])
             ->add("starter",
                 CheckboxType::class, [
-                    "label" => "Is your item part of th starter inventory ?",
+                    "label" => "Is your item part of the starter inventory ?",
                     "required" => false
                 ])
-            ->add("save", SubmitType::class)
+            ->add("attributeTargeted",
+                ChoiceType::class, [
+                    "label" => "Bonus Attribute",
+                    "placeholder" => "Select Attribute",
+                    "choices" => [
+                        "Life" => "life",
+                        "Energy" => "energy",
+                        "None" => null
+                    ],
+                    "required" => false,
+                    "expanded" => false,
+                    "multiple" => false,
+                    "empty_data" => null
+                ])
+            ->add("bonusGiven",
+                IntegerType::class, [
+                    "scale" => 0,
+                    "empty_data" => "0"
+                ])
         ;
     }
 

@@ -55,9 +55,9 @@ class RulesetType extends AbstractType
                         "min" => 1
                     ]
                 ])
-            ->add("bagpackCapacity",
+            ->add("backpackCapacity",
                 IntegerType::class, [
-                    "label" => "Maximum number of item that can be carried in the bagpack of the hero",
+                    "label" => "Maximum number of item that can be carried in the backpack of the hero",
                     "scale" => 0,
                     "attr" => [
                         "min" => 1
@@ -74,7 +74,6 @@ class RulesetType extends AbstractType
                         "D20" => 20
                     ]
                 ])
-            ->add("save", SubmitType::class)
         ;
     }
 

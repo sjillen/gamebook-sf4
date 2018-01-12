@@ -18,7 +18,7 @@ class SkillRepository extends ServiceEntityRepository
         return $qb = $this->createQueryBuilder("s")
             ->where("s.story = :story")
             ->setParameter("story", $story)
-            ->andWhere("s INSTANCE OF App\Entity\Skill")
+            ->andWhere("s NOT INSTANCE OF App\Entity\Weaponskill")
             ->getQuery()
             ->getResult()
             ;

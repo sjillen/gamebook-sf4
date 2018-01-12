@@ -1,23 +1,40 @@
-.chapter-form-container{
+/***** CHAPTER FORM *****/
+.form-container {
   textarea {
     height: 10rem;
   }
-  .items-container {
-    .npcs {
-      display: inline-flex;
-      li {
-        margin-right: 15px;
-      }
+  h6 {
+    color: #009688;
+  }
+
+  .gold-chapter-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    input {
+      max-width: 15rem;
     }
+  }
+  ul.choices {
+
+    .choice-container {
+      border: 1px solid #009688 ;
+      margin:  0 1rem 1rem 5rem;
+      padding: .5rem;
+    }
+  }
+
+  .add_npc_link, .add_consumableItem_link,
+  .add_weapon_link, .add_specialItem_link {
+    margin-left: 4.5rem;
+  }
+
+
+  .items-container {
+
     .pickable-items{
       border-top: 1px solid #009688;
       border-bottom: 1px solid #009688;
-    }
-    .consumableItems {
-      display: inline-flex;
-      li {
-        margin-right: 15px;
-      }
     }
     li {
       display: inline-flex;
@@ -30,4 +47,33 @@
       }
     }
   }
+  .choices {
+    li {
+      display: flex;
+      justify-content: center;
+
+    }
+  }
+}
+
+@media #{$medium-and-up} {
+    .npcs {
+      display: inline-flex;
+      li {
+        margin-right: 15px;
+      }
+    }
+  }
+
+@media #{$small-and-down} {
+
+    .npcs {
+      display:inline-block;
+    }
+  }
+
+/***** HERO-FORM *****/
+
+.hero-form-container {
+  margin-top: 5rem;
 }

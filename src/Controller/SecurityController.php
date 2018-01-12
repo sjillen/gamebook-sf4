@@ -25,7 +25,7 @@ class SecurityController extends AbstractController
         if($error) {
             $this->addFlash("danger", "invalid credentials");
         }elseif (!$error) {
-            $this->addFlash("info", "Welcome !");
+            $this->addFlash("info", "Welcome!");
         }
 
         return $this->render("security/login.html.twig", [
@@ -76,7 +76,7 @@ class SecurityController extends AbstractController
             $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
             $this->get('security.token_storage')->setToken($token);
             $this->get('session')->set('_security_main', serialize($token));
-            return $this->redirectToRoute("index");
+            return $this->redirectToRoute("homepage");
         }
 
         return $this->render("security/registration.html.twig", ["form" => $form->createView()]);

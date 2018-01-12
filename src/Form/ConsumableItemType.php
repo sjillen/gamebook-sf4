@@ -2,8 +2,10 @@
 
 namespace App\Form;
 
+use App\Entity\Choice;
 use App\Entity\ConsumableItem;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -27,13 +29,24 @@ class ConsumableItemType extends AbstractType
                 ])
             ->add("bonusGiven",
                 NumberType::class, [
-                    "label" => "Alteration",
-                    "required" => false
+                    "label" => "Bonus given",
+                    "required" => false,
+                    "scale" => 0,
+                    "empty_data" => "0"
                 ])
             ->add("attributeTargeted",
-                TextType::class, [
+                ChoiceType::class, [
                     "label" => "Attribute altered",
-                    "required" => false
+                    "placeholder" => "Select one...",
+                    "required" => false,
+                    "choices" => [
+                        "Life" => "life",
+                        "Energy" => "energy",
+                        "None" => null
+                    ],
+                    "expanded" => false,
+                    "multiple" => false,
+                    "empty_data" => null
                 ])
             ->add("removable",
                 CheckboxType::class,[
@@ -44,7 +57,6 @@ class ConsumableItemType extends AbstractType
                     "label" => "Is your item part of the starter inventory ?",
                     "required" => false
                 ])
-            ->add("save", SubmitType::class)
         ;
     }
 

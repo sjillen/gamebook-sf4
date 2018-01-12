@@ -28,7 +28,6 @@ class HeroType extends AbstractType
                 "expanded" => true,
                 "multiple" => true,
             ])
-            ->add('save', SubmitType::class)
         ;
     }
 

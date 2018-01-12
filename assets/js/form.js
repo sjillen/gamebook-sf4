@@ -5,24 +5,27 @@ var $specialItemsHolder;
 var $consumableItemsHolder;
 
 // setup an "add a choice" link
-var $addChoiceLink = $('<a href="#" class="add_choice_link"><button class="btn btn-primary">Add a choice</button></a>');
+var $addChoiceLink = $('<a role="button" href="#" class="add_choice_link btn waves-light waves-effect center-align">Add a choice</a>');
 var $newChoiceLinkLi = $('<li></li>').append($addChoiceLink);
 
-var $addNpcLink = $('<a href="#" class="add_npc_link"><button class="btn waves-light waves-effect amber accent-4">Add a npc</button></a>');
+var $addNpcLink = $('<a href="#" role="button" class="add_npc_link btn waves-light waves-effect amber accent-4"><i class="material-icons">add</i></a>');
 var $newNpcLinkLi = $('<li></li>').append($addNpcLink);
 
-var $addWeaponLink = $('<a href="#" class="add_weapon_link"><button class="btn waves-light waves-effect cyan accent-4">Add a weapon</button></a>');
+var $addWeaponLink = $('<a href="#" role="button" class="add_weapon_link btn waves-light waves-effect cyan accent-4"><i class="material-icons">add</i></a>');
 var $newWeaponLinkLi = $("<li></li>").append($addWeaponLink);
 
-var $addSpecialItemLink = $('<a href="#" class="add_specialItem_link"><button class="btn waves-effect waves-light purple accent-4">Add a special item</button></a>');
+var $addSpecialItemLink = $('<a href="#" role="button" class="add_specialItem_link btn waves-effect waves-light purple accent-4"><i class="material-icons">add</i></a>');
 var $newSpecialItemLinkLi = $("<li></li>").append($addSpecialItemLink);
 
-var $addConsumableItemLink = $('<a href="#" class="add_consumableItem_link"><button class="btn waves-effect waves-light green accent-4">Add a consumable</button></a>');
+var $addConsumableItemLink = $('<a href="#" role="button" class="add_consumableItem_link btn waves-effect waves-light green accent-4"><i class="material-icons">add</i></a>');
 var $newConsumableItemLinkLi = $("<li></li>").append($addConsumableItemLink);
 
 $(document).ready(function() {
 
     initializeLabelCheckbox();
+    displayRequirements();
+
+    $('textarea').characterCounter();
 
     //initialize select elements for Materialize
     const baseSelects = document.querySelectorAll("select");
@@ -120,6 +123,7 @@ function addChildForm($collectionHolder, $newLinkLi) {
     // Display the form in the page in an li, before the "Add a tag" link li
     var $newFormLi = $('<li></li>').append(newForm);
     $newLinkLi.before($newFormLi);
+
     addTagFormDeleteLink($newFormLi);
     const selectElts = document.querySelectorAll("select");
     selectElts.forEach((select) => {
@@ -127,10 +131,11 @@ function addChildForm($collectionHolder, $newLinkLi) {
     });
 
     initializeLabelCheckbox();
+    displayRequirements();
 }
 
 function addTagFormDeleteLink($tagFormLi) {
-    var $removeFormA = $('<a href="#"><button class="btn-floating waves-effect waves-light red"><i class="material-icons">delete</i></button></a>');
+    var $removeFormA = $('<a class="collection-remove" href="#"><button class="btn waves-effect waves-light red"><i class="material-icons">delete</i></button></a>');
     $tagFormLi.append($removeFormA);
 
     $removeFormA.on('click', function(e) {
@@ -146,5 +151,28 @@ function initializeLabelCheckbox() {
     const checkboxes = document.querySelectorAll("[type=checkbox]");
     checkboxes.forEach ( (checkbox)=> {
         $(checkbox).parent().attr('for', $(checkbox).attr('id'));
+    });
+}
+
+function displayRequirements() {
+    const checkboxes = document.querySelectorAll("[type=checkbox]");
+    checkboxes.forEach((checkbox) => {
+        let requirement = $(checkbox.parentNode.parentNode.parentNode.nextSibling.nextSibling);
+        if ($(requirement).hasClass("requirements")) {
+            if ($(checkbox).is(':checked')) {
+                requirement.fadeIn("slow");
+            } else {
+                requirement.fadeOut();
+            }
+            $(checkbox).on('change', () => {
+
+                if ($(checkbox).is(':checked')) {
+                    requirement.fadeIn("slow");
+                } else {
+                    requirement.fadeOut("slow");
+                }
+            });
+        }
+
     });
 }
