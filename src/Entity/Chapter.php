@@ -35,6 +35,7 @@ class Chapter
      * Starter
      * Standard
      * Death
+     * End
      *
      * @ORM\Column(type="string", length=255, nullable=false)
      */

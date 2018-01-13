@@ -3,9 +3,66 @@ body {
 }
 
 
+#home-nav, #about-nav, #editor-nav, #adventures-nav, #profile-nav, #connect-nav {
+  transition: all 0.5s ease 0.2s !important;
+
+}
+
+#home-nav {
+  &:hover {
+    transform: scale(1.3);
+    color: teal !important;
+  }
+}
+#about-nav {
+  &:hover {
+    transform: scale(1.3);
+    color: purple !important;
+  }
+}
+#editor-nav {
+  &:hover {
+    transform: scale(1.3);
+    color: yellow !important;
+  }
+}
+#adventures-nav {
+  &:hover {
+    transform: scale(1.3);
+    color: green !important;
+  }
+}
+#profile-nav, #connect-nav {
+  &:hover {
+    transform: scale(1.3);
+    color: blue !important;
+  }
+}
+
+.sidenav-header {
+  width: 100%;
+  display: block;
+  height: 20%;
+  margin-bottom: 2rem;
+}
+.sidenav .user-view {
+  height: 300px !important;
+  .brand-logo {
+    text-shadow: 1px 1px 1px #000;
+  }
+}
+.sidenav {
+  .collapsible-header {
+    padding-left: 32px;
+    padding-right:  70px;
+  }
+}
 .dropdown-content {
   a {
     color: white !important;
   }
+}
 
+h2 {
+  text-shadow: 2px 2px 2px #000;
 }

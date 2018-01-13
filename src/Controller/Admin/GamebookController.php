@@ -44,23 +44,5 @@ class GamebookController extends Controller
         return $this->render('admin/credentials.html.twig', [
             "form" => $form->createView()
         ]);
-
-    }
-
-    /**
-     * @param StoryRepository $storyRepository
-     * @return Response
-     * @Route("/story-list", name="adventure_stories")
-     *
-     */
-    public function gamebookIndex(StoryRepository $storyRepository) : Response
-    {
-      $stories = $storyRepository->findBy(["isPublished" => true]);
-      $userHeroes = $this->getUser()->getHeroes();
-
-
-      return $this->render('adventure/stories.html.twig', [
-          "stories" => $stories
-      ]);
     }
 }

@@ -12,6 +12,10 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Hero extends CharacterBase
 {
+    const IS_DEAD = 0;
+    const ON_ADVENTURE = 1;
+    const AT_TAVERN = 2;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -79,7 +83,22 @@ class Hero extends CharacterBase
      */
     private $specialItems;
 
-    /* Constructor */
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $chapterIterator;
+
+    /**
+     * @ORM\Column(type="integer")
+     * 0 : ISDEAD
+     * 1 : ONADVENTURE
+     * 2 : ATTAVERN
+     */
+    private $status;
+
+    /**
+     * Hero constructor.
+     */
     public function __construct()
     {
         $this->user = new User();
@@ -90,6 +109,8 @@ class Hero extends CharacterBase
         $this->level = 1;
         $this->gold = 0;
         $this->numberOfMeals = 0;
+        $this->chapterIterator = 1;
+        $this->status = self::ON_ADVENTURE;
     }
 
     /* Setters and Getters */
@@ -262,5 +283,35 @@ class Hero extends CharacterBase
     public function removeSpecialItem(?SpecialItem $specialItem) : void
     {
         $this->specialItems->removeElement($specialItem);
+    }
+
+    public function getChapterIterator() : ?int
+    {
+        return $this->chapterIterator;
+    }
+
+    public function setChapterIterator(?int $iterator) : void
+    {
+        $this->chapterIterator = $iterator;
+    }
+
+    public function iterate() : void
+    {
+        $this->chapterIterator += 1;
+    }
+
+    public function iteratorReset() : void
+    {
+        $this->chapterIterator = 0;
+    }
+
+    public function getStatus() : ?int
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?int $status) : void
+    {
+        $this->status = $status;
     }
 }

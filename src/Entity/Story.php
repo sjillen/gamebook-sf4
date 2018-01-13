@@ -51,16 +51,6 @@ class Story
     private $saga;
 
     /**
-     * @ORM\Column(type="text")
-     */
-    private $intro;
-
-    /**
-     * @ORM\Column(type="text")
-     */
-    private $deathDescription;
-
-    /**
      * @ORM\OneToOne(targetEntity="Ruleset", mappedBy="story", cascade={"remove"})
      */
     private $ruleset;
@@ -187,26 +177,6 @@ class Story
     public function setSaga($saga) : void
     {
         $this->saga = $saga;
-    }
-
-    public function getIntro()
-    {
-        return $this->intro;
-    }
-
-    public function setIntro($intro) : void
-    {
-        $this->intro = $intro;
-    }
-
-    public function getDeathDescription()
-    {
-        return $this->deathDescription;
-    }
-
-    public function setDeathDescription($text) : void
-    {
-        $this->deathDescription = $text;
     }
 
     /**

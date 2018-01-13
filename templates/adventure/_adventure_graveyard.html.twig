@@ -1,0 +1,45 @@
+<div class="row" id="adventure-graveyard">
+    <div class="col s12 m10 offset-m1">
+        <h2 class="center-align purple-text text-accent-4">GRAVEYARD</h2>
+        <div class="row">
+            <div class="col s12 ">
+                <div class="row stories-card-container">
+                    {% for hero in deceasedHeroes %}
+                        <div class="col s6 card-item">
+                            <div class="card hoverable">
+                                <div class="card-image">
+                                    <img src="{{ asset('build/images/excalibur-hd.c188dace.jpg') }}">
+                                </div>
+                                <div class="card-content">
+                                    <span class="card-title activator purple-text center-align">{{ hero.name }}<i class="material-icons right">more_vert</i></span>
+                                </div>
+                                <div class="card-action story-action-card valign-wrapper">
+                                    <div class="story-author-card">
+                                        <p>{{ hero.story.title }}</p>
+                                    </div>
+                                    <div class="publish-button-card">
+                                        <a role="button" class="btn waves-effect waves-light purple darken-1" href="#">
+                                            Resting in peace
+                                            <i class="material-icons right">nature</i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="card-reveal">
+                                    <span class="card-title purple-text purple-darken-4">{{ hero.name }}<i class="material-icons right">close</i></span>
+                                    <h6 class="center-align">Stats: </h6>
+                                    <p>Number of chapters traveled : {{ hero.chapterIterator }}</p>
+                                    <p>Gold in purse: {{ hero.gold }}</p>
+                                    <a href="{{ path('hero_delete', {"slug": hero.story.slug, "id": hero.id}) }}" class="btn red waves-effect waves-light">
+                                        <i class="material-icons left">warning</i>
+                                        delete hero
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

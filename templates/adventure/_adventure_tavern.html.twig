@@ -1,0 +1,45 @@
+<div class="row" id="adventure-tavern">
+    <div class="col s12 m10 offset-m1">
+        <h2 class="center-align amber-text">TAVERN</h2>
+        <div class="row">
+            <div class="col s12 ">
+                <div class="row stories-card-container">
+                    {% for hero in tavernHeroes %}
+                        <div class="col s6 card-item">
+                            <div class="card hoverable">
+                                <div class="card-image">
+                                    <img src="{{ asset('build/images/tavern-hero.ef19884c.jpg') }}">
+                                </div>
+                                <div class="card-content">
+                                    <span class="card-title activator amber-text center-align">{{ hero.name }} <i class="material-icons right">more_vert</i> </span>
+                                </div>
+                                <div class="card-action story-action-card valign-wrapper">
+                                    <div class="story-author-card">
+                                        <p>{{ hero.story.title }}</p>
+                                    </div>
+                                    <div class="publish-button-card">
+                                        <a role="button" class="btn waves-effect waves-light amber darken-1" href="#">
+                                            Now resting
+                                            <i class="material-icons right">donut_small</i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="card-reveal">
+                                    <span class="card-title amber-text amber-darken-4">{{ hero.name }}<i class="material-icons right">close</i></span>
+                                    <h6 class="center-align">Stats: </h6>
+                                    <p>Number of chapters traveled : {{ hero.chapterIterator }}</p>
+                                    <p>Gold in purse: {{ hero.gold }}</p>
+                                    <a href="{{ path('hero_delete', {"slug": hero.story.slug, "id": hero.id}) }}" class="btn red waves-effect waves-light">
+                                        <i class="material-icons left">warning</i>
+                                        delete hero
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

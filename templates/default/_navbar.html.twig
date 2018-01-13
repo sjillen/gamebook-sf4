@@ -2,22 +2,24 @@
 <nav class="transparent nav-extended">
     <div class="nav-wrapper">
         <a href="{{ path('homepage') }}" class="brand-logo center"><i class="material-icons">cloud</i>Gamebook</a>
-        <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-        <ul class="right hide-on-med-and-down tabs-transparent">
-            <li><a target="_self" href="{{ path('homepage') }}">Home</a></li>
-            <li><a target="_self" href="{{ path('about') }}">About</a></li>
+        <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        <ul class="right hide-on-med-and-down">
+            <li><a id="home-nav" target="_self" href="{{ path('homepage') }}">Home</a></li>
+            <li><a id="about-nav" target="_self" href="{{ path('about') }}">About</a></li>
             {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-                <li><a target="_self" href="{{ path('editor_index') }}">Editor</a></li>
-                <li><a target="_self" href="{{ path('adventure_stories') }}">My Adventures</a></li>
-                <li><a target="_top" href="#dropdown-profile" class="dropdown-trigger" data-target="dropdown-profile">Profile<i class="material-icons right">arrow_drop_down</i></a></li>
+                {% if app.user.roles[0] == "ROLE_ADMIN" %}
+                <li><a id="editor-nav" target="_self" href="{{ path('editor_index') }}">Editor</a></li>
+                {% endif %}
+                <li><a id="adventures-nav" target="_self" href="{{ path('adventure_stories') }}">Adventures</a></li>
+                <li><a id="profile-nav" target="_top" href="#dropdown-profile" class="dropdown-trigger" data-target="dropdown-profile">Profile<i class="material-icons right">arrow_drop_down</i></a></li>
                 <!-- Dropdown Structure -->
                 <ul class="dropdown-content transparent" id="dropdown-profile">
-                    <li><a href="{{ path('account_edit') }}">My Account</a></li>
+                    <li><a href="{{ path('account_edit') }}">Account</a></li>
                     <li><a href="{{ path('security_logout') }}">Logout</a></li>
                 </ul>
 
             {% else %}
-                <li><a target="_self" href="#dropdown-connect" class="dropdown-trigger" data-target="dropdown-connect">Connect<i class="material-icons right">arrow_drop_down</i></a></li>
+                <li><a id="connect-nav" target="_self" href="#dropdown-connect" class="dropdown-trigger" data-target="dropdown-connect">Connect<i class="material-icons right">arrow_drop_down</i></a></li>
                 <!-- Dropdown Structure -->
                 <ul id="dropdown-connect" class="dropdown-content transparent white-text">
                     <li><a href="{{ path('security_login') }}">Login</a></li>
@@ -26,12 +28,7 @@
             {% endif %}
         </ul>
         <!-- Sidenav structure -->
-        <ul class="sidenav blue-grey-transparent text-white" id="mobile-demo">
-
-            <li><a href="{{ path('homepage') }}">Home</a></li>
-            <li><a href="{{ path('about') }}">About</a></li>
-            <li><a href="{{ path('security_login') }}">Login</a></li>
-        </ul>
+        {% include "default/_sidenav.html.twig" %}
     </div>
     {% if currentPath == "editor_story" or currentPath == "editor_chapters" %}
     <!-- extended content -->
@@ -41,6 +38,16 @@
             <li class="tab"><a href="#editor-components">Components</a></li>
             <li class="tab"><a class="active" href="#editor-chapters">Chapters</a></li>
             <li class="tab"><a href="#editor-guidelines">Guide</a></li>
+        </ul>
+    </div>
+
+    {% elseif currentPath == "adventure_stories" %}
+    <div class="nav-content">
+        <ul class="tabs tabs-transparent">
+            <li class="tab"><a href="#adventure-graveyard">Graveyard</a></li>
+            <li class="tab"><a href="#adventure-tavern">Tavern</a></li>
+            <li class="tab"><a class="active" href="#adventure-stories">Stories</a></li>
+            <li class="tab disabled"><a href="#adventure-pantheon">Pantheon</a></li>
         </ul>
     </div>
     {% endif %}

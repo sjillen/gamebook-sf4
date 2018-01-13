@@ -13,6 +13,8 @@
 
 .story-elements-container {
   background-color: rgba(white,0.9);
+  display: block;
+  overflow: auto;
   .editor-story-element {
     border: #009688 solid 1px;
   }
@@ -63,7 +65,7 @@
 @media #{$large-and-up} {
   .fixed-action-btn {
     right: 15rem;
-    bottom: 40rem;
+    bottom: 37rem;
 
   }
 }
@@ -71,13 +73,13 @@
 @media #{$medium-only} {
   .fixed-action-btn {
     right: 5rem;
-    bottom: 40rem;
+    bottom: 37rem;
   }
 }
 
 @media #{$small-and-down} {
   .fixed-action-btn {
     right: 1rem;
-    bottom: 40rem;
+    bottom: 37rem;
   }
 }

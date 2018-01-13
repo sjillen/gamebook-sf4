@@ -51,7 +51,7 @@ class User implements UserInterface, \Serializable
     private $isActive;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="array")
      */
     private $roles;
 
@@ -73,7 +73,7 @@ class User implements UserInterface, \Serializable
         $this->isActive = true;
         // may not be needed, see section on salt below
         // $this->salt = md5(uniqid('', true));
-        $this->roles = "ROLE_USER";
+        $this->roles = ["ROLE_USER"];
         $this->heroes = new ArrayCollection();
         $this->stories = new ArrayCollection();
     }
@@ -163,9 +163,14 @@ class User implements UserInterface, \Serializable
         $this->password = $password;
     }
 
-    public function getRoles()
+    public function getRoles() : array
     {
-        return array('ROLE_USER');
+        return $this->roles;
+    }
+
+    public function addRole(?string $role) : void
+    {
+        $this->roles[] = strtoupper($role);
     }
 
     public function setRoles($roles) : void

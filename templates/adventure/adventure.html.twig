@@ -6,9 +6,9 @@
 <div class="hero-container">
     {% include "adventure/_hero.html.twig" %}
 </div>
- <div class="container white">
+ <div class="container">
      <div class="row">
-         <div class="col s12 white text-center adventure">
+         <div class="col s12 white text-center story-elements-container">
              <h2 class="center-align">{{ story.title }}</h2>
              <div class="row" >
                  <div class="col-s12">
@@ -24,7 +24,7 @@
                      {% if chapter.weapons %}
                      <div class="row weapons-chapter-container">
                          {% for weapon in chapter.weapons %}
-                             <div class="center-align">
+                             <div class="col s12 center-align">
                                  <a class="btn waves-light waves-effect cyan accent-4" role="button" href="{{ path('pickupWeapon', {"slug": story.slug, "idHero": hero.id, "idChapter": chapter.id, "idWeapon": weapon.id}) }}">
                                      {{ weapon.name }}
                                  </a>
@@ -36,7 +36,7 @@
                      {% if chapter.specialItems %}
                      <div class="row special-items-chapter-container">
                          {% for item in chapter.specialItems %}
-                             <div class="center-align">
+                             <div class="col s12 center-align">
                                  <a class="btn waves-effect waves-light purple accent-4" role="button" href="{{ path('pickupSpecialItem', {"slug": story.slug, "idHero": hero.id, "idChapter": chapter.id, "idItem": item.id}) }}">
                                      {{ item.name }}
                                  </a>
@@ -48,7 +48,7 @@
                      {% if chapter.consumableItems %}
                      <div class="row consumable-items-chapter-container">
                          {% for item in chapter.consumableItems %}
-                             <div class="center-align">
+                             <div class="col s12 center-align">
                                  <a class="btn waves-effect waves-light green accent-4" role="button" href="{{ path('pickupConsumableItem', {"slug": story.slug, "idHero": hero.id, "idChapter": chapter.id, "idItem": item.id}) }}">
                                      {{ item.name }}
                                  </a>
@@ -76,6 +76,14 @@
                              </a>
                          </div>
                      </div>
+                     {% elseif isEnd %}
+                         <div class="row">
+                             <div class="col s12 center-align">
+                                 <a role="button" class="btn btn-large green waves-light waves-effect" href="{{ path('adventure_end', {"slug": story.slug, "idHero": hero.id}) }}">
+                                     You finished this adventure!
+                                 </a>
+                             </div>
+                         </div>
                      {% else %}
                      {% for choice in choices %}
                      <div class="row choices-chapter-container">

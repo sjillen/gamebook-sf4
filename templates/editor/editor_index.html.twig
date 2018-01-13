@@ -14,12 +14,12 @@
                         </a>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row stories-card-container">
                     {% for story in stories %}
-                    <div class="col s6">
+                    <div class="col s6 card-item">
                         <div class="card hoverable">
                             <div class="card-image">
-                                <img src="{{ asset('build/images/mystic_book_by_adalbertofsouza-d2xvmui.25355ce3.jpg') }}">
+                                <img src="{{ asset('build/images/mystic_book_by_adalbertofsouza-d2xvmui.b8e02752.jpg') }}">
                                 <span class="card-title">{{ story.title }}</span>
                                 <a href="{{ path('editor_story', {'slug': story.slug}) }}" class="btn-floating halfway-fab waves-effect waves-light amber darken-1">
                                     <i class="material-icons">add</i>

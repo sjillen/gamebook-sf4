@@ -12,7 +12,7 @@ use App\Entity\Chapter;
 use App\Entity\Story;
 use App\Repository\ChapterRepository;
 
-class UniqueStarter
+class UniqueChapterType
 {
     private $chapters;
 
@@ -21,11 +21,19 @@ class UniqueStarter
         $this->chapters = $chapters;
     }
 
-    public function CheckUniqueStarter(Story $story, Chapter $chapter)
+    public function checkUniqueStarter(Story $story, Chapter $chapter)
     {
         if($chapter->getType() == "starter") {
             $starter = $this->chapters->findOneBy(["story" => $story, "type" => "starter"]);
                 return $starter ? $starter : null;
+        }
+    }
+
+    public function checkUniqueIntro(Story $story, Chapter $chapter)
+    {
+        if($chapter->getType() == "intro") {
+            $intro = $this->chapters->findOneBy(["story" => $story, "type" => "intro"]);
+            return $intro ? $intro : null;
         }
     }
 }

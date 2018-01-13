@@ -37,9 +37,11 @@ class ChapterType extends AbstractType
                         "expanded" => false,
                         "multiple" => false,
                         "choices" => [
-                            "Standard" => "standard",
+                            "Intro" => "intro",
                             "Starter" => "starter",
-                            "Death" => "death"
+                            "Standard" => "standard",
+                            "Death" => "death",
+                            "End" => "end"
                         ],
                         "empty_data" => "standard"
                     ])

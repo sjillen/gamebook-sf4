@@ -10,8 +10,12 @@ require('../images/skull_and_shackles_set_by_mattiasfahlberg-d8l0u44.jpg');
 require('../images/weapon_design_by_zoriy-d4q4aty.jpg');
 require('../images/4e_dnd_orcs_by_ralphhorsley.jpg');
 require('../images/open_book.jpg');
+require('../images/excalibur-hd.jpg');
+require('../images/book_of_monsters_by_gailee-d563tn5.jpg');
+require('../images/tavern-hero.jpg');
 
 $(document).ready(function (){
+    $('.sidenav').sidenav();
     $(".dropdown-trigger").dropdown({
         coverTrigger: false,
     });

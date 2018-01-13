@@ -1,0 +1,84 @@
+{% extends "base.html.twig" %}
+
+{% block title %}{{ story.title }} - intro{% endblock %}
+
+{% block main %}
+    <div class="container story-elements-container">
+        <div class="row">
+            <div class="col s12 text-center">
+                <h2 class="center-align teal-text">{{ story.title }} - introduction</h2>
+            <div class="row" >
+            <div class="col-s12">
+                <h4 class="center-align amber-text text-darken-3">{{ intro.title }}</h4>
+        <div class="row">
+            <div class="col m10 offset-m1 s12">
+                <div class="text-content center-align">
+                    {{ intro.textContent1 }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col m10 offset-m1 s12">
+                <h4 class="center-align red-text text-lighten-1">Rules of the story</h4>
+                <div class="row">
+                    <div class="col s12">
+                        <div class="row">
+                            <div class="col s6 m5 offset-m1">
+                                <h6>Base life for the Hero: {{ story.ruleset.heroBaseLife }} HP</h6>
+                                <blockquote>This is the minimum amount of life given to your hero at its creation. An additional amount is given through a dice roll.</blockquote>
+                            </div>
+                            <div class="col s6 m5">
+                                <h6>Base resource for the Hero: {{ story.ruleset.heroBaseResource }} Ability</h6>
+                                <blockquote>This is the minimum amount of resource given to your hero at its creation. An additional amount is given through a dice roll.</blockquote>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s6 m5 offset-m1">
+                                <h6>Base amount of gold: {{ story.ruleset.heroBaseGold }} Gold</h6>
+                                <blockquote>The amount of gold your hero starts with. An additionnal amount is given through a dice roll.</blockquote>
+                            </div>
+                            <div class="col s6 m5">
+                                <h6>Maximum number of skills: {{ story.ruleset.maxSkill }}</h6>
+                                <blockquote>The number of skills you have to select when he creates its Hero.</blockquote>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col s6 m5 offset-m1">
+                                <h6>Maximum number of weapons carried: {{ story.ruleset.maxWeaponCarried }} weapons</h6>
+                                <blockquote>The maximum amount of weapons your hero can carry during its adventure.</blockquote>
+                            </div>
+                            <div class="col s6 m5">
+                                <h6>Maximum number of consumable items carried: {{ story.ruleset.backpackCapacity }} items</h6>
+                                <blockquote>The maximum amount of consumable items your hero can carry during his adventure.</blockquote>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s12 m8 offset-m2 center-align">
+                                <h6>Dice : D{{ story.ruleset.diceType }}</h6>
+                                <blockquote>What can of dice will be thrown to determine your hero's attributes and the damages done and taken during a fight.</blockquote>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col m10 offset-m1 s12 center-align">
+                {{ intro.textContent2 }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 center-align">
+                <a role="button" class="btn btn-large teal waves-light waves-effect" href="{{ path('hero_create', {"slug": story.slug}) }}">
+                    <i class="material-icons right">gavel</i>
+                    Create Hero
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}
