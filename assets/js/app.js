@@ -3,6 +3,7 @@ const $ = require("jquery");
 require("materialize-css");
 require("./adventure");
 require("./form");
+require("./dropup.js");
 require("../images/forest.jpg");
 require('../images/potions-card.jpg');
 require('../images/mystic_book_by_adalbertofsouza-d2xvmui.jpg');
@@ -32,11 +33,9 @@ $(document).ready(function (){
 
     const actionBtns = document.querySelectorAll(".fixed-action-btn");
     actionBtns.forEach((btn) => {
-
         const btnInstance = M.FloatingActionButton.init(btn, {
             direction: "bottom"
         });
-
     });
 
     $("a[href='#top']").click(function() {

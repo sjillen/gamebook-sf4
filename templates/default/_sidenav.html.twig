@@ -7,7 +7,7 @@
             <a href="{{ path('homepage') }}" class="brand-logo center">Gamebook</a>
         </div></li>
     <li><a class="waves-effect waves-teal" href="{{ path('homepage') }}">Home</a></li>
-    <li><a class="waves-effect waves-ripple" target="_self" href="{{ path('about') }}">About</a></li>
+    <li><a class="waves-effect waves-blue" target="_self" href="{{ path('about') }}">About</a></li>
     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
         {% if app.user.roles[0] == "ROLE_ADMIN" %}
             <li><a class="waves-effect waves-yellow" href="{{ path('editor_index') }}">Editor</a></li>
@@ -16,11 +16,11 @@
         <li class="no-padding">
             <ul class="collapsible collapsible-accordion">
                 <li>
-                    <a class="collapsible-header waves-effect waves-purple">Profile<i class="material-icons right">arrow_drop_down</i></a>
+                    <a class="collapsible-header waves-effect waves-red">Profile<i class="material-icons right">arrow_drop_down</i></a>
                     <div class="collapsible-body">
                         <ul>
-                            <li><a class="waves-effect waves-purple" href="{{ path('account_edit') }}">Account</a></li>
-                            <li><a class="waves-effect waves-purple" href="{{ path('security_logout') }}">Log out</a></li>
+                            <li><a class="waves-effect waves-red" href="{{ path('account_edit') }}">Account</a></li>
+                            <li><a class="waves-effect waves-red" href="{{ path('security_logout') }}">Log out</a></li>
                         </ul>
                     </div>
                 </li>
@@ -31,11 +31,11 @@
         <li class="no-padding">
             <ul class="collapsible collapsible-accordion">
                 <li>
-                    <a class="collapsible-header waves-effect waves-purple">Connect<i class="material-icons right">arrow_drop_down</i></a>
+                    <a class="collapsible-header waves-effect waves-red">Connect<i class="material-icons right">arrow_drop_down</i></a>
                     <div class="collapsible-body">
                         <ul>
-                            <li><a class="waves-effect waves-purple" href="{{ path('security_login') }}">Log in</a></li>
-                            <li><a class="waves-effect waves-purple" href="{{ path('security_register') }}">Sign up</a></li>
+                            <li><a class="waves-effect waves-red" href="{{ path('security_login') }}">Log in</a></li>
+                            <li><a class="waves-effect waves-red" href="{{ path('security_register') }}">Sign up</a></li>
                         </ul>
                     </div>
                 </li>

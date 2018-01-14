@@ -5,37 +5,38 @@ body {
 
 #home-nav, #about-nav, #editor-nav, #adventures-nav, #profile-nav, #connect-nav {
   transition: all 0.5s ease 0.2s !important;
+  text-shadow: 1px, 1px, 1px, #000;
 
 }
 
 #home-nav {
   &:hover {
     transform: scale(1.3);
-    color: teal !important;
+    color: color("teal", "lighten-2") !important;
   }
 }
 #about-nav {
   &:hover {
     transform: scale(1.3);
-    color: purple !important;
+    color: color("blue", "lighten-2") !important;
   }
 }
 #editor-nav {
   &:hover {
     transform: scale(1.3);
-    color: yellow !important;
+    color: color("yellow","lighten-2") !important;
   }
 }
 #adventures-nav {
   &:hover {
     transform: scale(1.3);
-    color: green !important;
+    color: color("green", "lighten-2") !important;
   }
 }
 #profile-nav, #connect-nav {
   &:hover {
     transform: scale(1.3);
-    color: blue !important;
+    color: $primary-color !important;
   }
 }
 
@@ -58,8 +59,20 @@ body {
   }
 }
 .dropdown-content {
+  li {
+    transition: all 0.5s ease 0.2s !important;
+    &:hover {
+      background-color: rgba(0,0,0,0) !important;
+    }
+  }
   a {
     color: white !important;
+    transition: all 0.5s ease 0.2s !important;
+    &:hover {
+      background-color: rgba(0,0,0,0) !important;
+      transform: scale(1.3);
+      color: $primary-color !important;
+    }
   }
 }
 

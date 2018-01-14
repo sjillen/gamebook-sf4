@@ -1,5 +1,5 @@
 
-<ul class="collection-with-header hero-ui">
+{#<ul class="collection-with-header hero-ui">
     <li class="collection-header blue-grey white-text">
         <h4 class="center-align">{{ hero.name }}</h4>
     </li>
@@ -42,4 +42,89 @@
             <a class="secondary-content right-align" href="{{ path('removeFromBackpack', {"idChapter": chapter.id, "idHero": hero.id, "idItem": item.id}) }}"><i class="material-icons circle red white-text">remove_circle</i></a>
         </li>
     {% endfor %}
-</ul>
+</ul>#}
+
+
+
+    <ul class="hero-bar valign-wrapper">
+        <li class="header-bar name-header blue-grey"><a href="">{{ hero.name }}</a></li>
+        <li class="header-bar life-header red valign-wrapper">
+            <a href="">
+                <span class="valign-wrapper"><i class="material-icons left circle white-text">favorite</i>{{ hero.life }}</span>
+            </a>
+        </li>
+        <li class="header-bar ability-header blue valign-wrapper">
+            <a href="">
+
+                <span class="valign-wrapper"><i class="material-icons left circle white-text">fitness_center</i>{{ hero.ability }}</span>
+            </a>
+        </li>
+        <li class="header-bar gold-header amber valign-wrapper">
+            <a href="">
+                <span class="valign-wrapper"><i class="material-icons left circle white-text">monetization_on</i>{{ hero.gold }}</span>
+            </a>
+        </li>
+        <li class="header-bar weapons-header green accent-4 valign-wrapper">
+            <a href="#">
+                <span class="header-title-item center-align valign-wrapper">
+                    <i class="material-icons circle left white-text">colorize</i>
+                    <span class="hide-on-small-and-down">Weapons</span>
+                </span>
+            </a>
+            <ul>
+                {% for weapon in hero.weapons %}
+                <li><a href="#">{{ weapon.name }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </li>
+        <li class="header-bar specialItems-header teal valign-wrapper">
+            <a href="#">
+                <span class="valign-wrapper header-title-item center-align">
+                    <i class="material-icons circle white-text">accessibility</i>
+                    <span class="hide-on-small-and-down">Inventory</span>
+                </span>
+
+            </a>
+            <ul>
+                {% for item in hero.specialItems %}
+                    <li><a href="#">{{ item.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </li>
+        <li class="header-bar consumableItems-header lime valign-wrapper">
+            <a href="#" class="valign-wrapper">
+                <span class="header-title-item center-align valign-wrapper">
+                    <i class="material-icons circle white-text">cached</i>
+                    <span class="hide-on-small-and-down">Backpack</span>
+                </span>
+
+            </a>
+            <ul>
+                {% for item in hero.backpackItems %}
+                    <li><a href="#">{{ item.item.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </li>
+        <li class="header-bar skills-header purple accent-4 valign-wrapper">
+            <a href="#">
+                <span class="header-title-item center-align valign-wrapper">
+                    <i class="material-icons circle white-text">flash_on</i>
+                    <span class="hide-on-small-and-down">Skills</span>
+                </span>
+            </a>
+            <ul>
+                {% for skill in hero.skills %}
+                    <li><a href="#">{{ skill.name }}</a>
+                    </li>
+                {% endfor %}
+                {% if hero.weaponskill %}
+                    <li><a href="">{{ hero.weaponskill.name }}</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </li>
+    </ul>
+
