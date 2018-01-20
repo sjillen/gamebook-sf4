@@ -28,7 +28,7 @@
                 <p>If you add monsters to a chapter, it will trigger a fight. Items to be picked, the second part of the chapter and choices will display only when the fight is finished</p>
                 <ul class="npcs row" data-prototype="{{ form_widget(form.npcs.vars.prototype)|e('html_attr') }}">
                     {% for npc in form.npcs %}
-                        <li class="col m4">
+                        <li class="center-align">
                             {{ form_label(npc) }}
                             {{ form_widget(npc) }}
                             {{ form_errors(npc) }}

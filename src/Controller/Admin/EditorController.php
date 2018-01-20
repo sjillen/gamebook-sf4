@@ -797,12 +797,12 @@ class EditorController extends Controller
             $starter = $unique->checkUniqueStarter($story, $chapter);
             if($starter) {
                 $this->addFlash("warning", "A Starter chapter already exists : " . $starter->getTitle());
-                return $this->redirectToRoute("chapterEdit", ["slug" => $story->getSlug(), "id" => $chapter->getId()]);
+                return $this->redirectToRoute("chapter_edit", ["slug" => $story->getSlug(), "id" => $chapter->getId()]);
             }
             $intro = $unique->checkUniqueIntro($story, $chapter);
             if($intro) {
                 $this->addFlash("warning", "A Intro chapter already exists : " . $intro->getTitle());
-                return $this->redirectToRoute("chapterEdit", ["slug" => $story->getSlug(), "id" => $chapter->getId()]);
+                return $this->redirectToRoute("chapter_edit", ["slug" => $story->getSlug(), "id" => $chapter->getId()]);
             }
             foreach($chapter->getChoices() as $choice) {
                 $choice->setChapter($chapter);

@@ -38,7 +38,7 @@
     }
     li {
       display: inline-flex;
-      width: 100%;
+      min-width: max-content;
       .select-wrapper {
         margin-right: 20px;
       }
@@ -59,6 +59,7 @@
 @media #{$medium-and-up} {
     .npcs {
       display: inline-flex;
+      flex-wrap: wrap;
       li {
         margin-right: 15px;
       }
@@ -66,7 +67,6 @@
   }
 
 @media #{$small-and-down} {
-
     .npcs {
       display:inline-block;
     }

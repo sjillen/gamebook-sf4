@@ -2,6 +2,10 @@ body {
   background: url("../images/bg-home.jpg") no-repeat top center fixed;
 }
 
+h2 {
+  color: color("teal", "base");
+}
+
 
 #home-nav, #about-nav, #editor-nav, #adventures-nav, #profile-nav, #connect-nav {
   transition: all 0.5s ease 0.2s !important;

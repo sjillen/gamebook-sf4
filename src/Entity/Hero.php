@@ -69,7 +69,7 @@ class Hero extends CharacterBase
     private $weaponskill;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Weapon")
+     * @ORM\ManyToMany(targetEntity="Weapon", fetch="EAGER")
      */
     private $weapons;
 

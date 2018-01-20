@@ -52,7 +52,7 @@ class Chapter
     private $textContent2;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Npc")
+     * @ORM\ManyToMany(targetEntity="Npc", fetch="EAGER")
      *
      */
     private $npcs;

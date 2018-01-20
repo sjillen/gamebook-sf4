@@ -37,41 +37,39 @@ class ItemPicker
         return "You picked " . $gold . " golds";
     }
 
-    public function pickUpWeapon(Hero $hero, Weapon $weaponPickable) : ?array
+    public static function pickUpWeapon(Hero $hero, Weapon $weaponPickable) : ?array
     {
         $weapons = $hero->getWeapons();
         $maxCarry = $hero->getStory()->getRuleset()->getMaxWeaponCarried();
         $spaceLeft = $maxCarry - count($weapons);
         $messages = [];
 
-        switch ($spaceLeft) {
-            case $maxCarry:
-                $hero->setAbility($hero->getAbility() + 4);
+        if ($spaceLeft === $maxCarry) {
+;
+            $hero->setAbility($hero->getAbility() + 4);
 
+            $hero->addWeapon($weaponPickable);
+            $weaponskill = Alteration::weaponSkillBonus($hero, $weaponPickable);
+
+            $message = "You equipped " . $weaponPickable->getName();
+            $messages[] = $message;
+            $messages[] = self::ONE_WEAPON_CARRIED;
+            if ($weaponskill) {
+                $messages[] = self::WEAPONSKILL_MESSAGE;
+            }
+        } else if ($spaceLeft > 0) {
+            if (!$weapons->contains($weaponPickable)) {
                 $hero->addWeapon($weaponPickable);
-                $weaponskill = Alteration::weaponSkillBonus($hero, $weaponPickable);
-
+                Alteration::weaponSkillBonus($hero, $weaponPickable);
                 $message = "You equipped " . $weaponPickable->getName();
                 $messages[] = $message;
-                $messages[] = self::ONE_WEAPON_CARRIED;
-                if ($weaponskill) {
-                    $messages[] = self::WEAPONSKILL_MESSAGE;
-                }
-                break;
-            case $spaceLeft > 0:
-
-                if (!$weapons->contains($weaponPickable)) {
-                    $hero->addWeapon($weaponPickable);
-                    Alteration::weaponSkillBonus($hero, $weaponPickable);
-                    $message = "You equipped " . $weaponPickable->getName();
-                    $messages[] = $message;
-                } else {
-                    $message = null;
-                }
-                break;
-            default:
+            } else {
                 $message = null;
-                break;
+            }
+        }else if ($spaceLeft === 0) {
+
+            $message = null;
+
         }
         if (count($messages) === 0) {
             return null;
@@ -139,10 +137,8 @@ class ItemPicker
     public function checkStock(?Hero $hero, Collection $backpack, ConsumableItem $item) : ?int
     {
         $maxCapacity = $hero->getStory()->getRuleset()->getBackPackCapacity();
-        $currentCapacity = 0;
-        foreach ($backpack as $bpItem) {
-            $currentCapacity += $bpItem->getStock();
-        }
+        $currentCapacity = self::getCurrentStock($hero);
+
         $quantity = $item->getQuantity();
         if ($currentCapacity == $maxCapacity) {
             return null;
@@ -159,13 +155,19 @@ class ItemPicker
     public function pickUpSpecialItem(Hero $hero, SpecialItem $item) : bool
     {
         $slot = $item->getSlot();
+        $specialItems = $hero->getSpecialItems();
+
         //if the pickable item has no specific slot
-        if(!isset($slot)) {
+        if(!isset($slot) || $slot === "") {
+            foreach ($specialItems as $specialItem) {
+                if($item->getId() === $specialItem->getId()) {
+                    return false;
+                }
+            }
             $hero->addSpecialItem($item);
             Alteration::equippedSpecialItem($hero, $item);
-        }elseif(isset($slot)) {
+        }elseif(isset($slot) || $slot !== "") {
             //check what slots are taken on hero
-            $specialItems = $hero->getSpecialItems();
             foreach ($specialItems as $specialItem ) {
                 $slotHero = $specialItem->getSlot();
                 //In case the corresponding slot is taken
@@ -178,5 +180,15 @@ class ItemPicker
             Alteration::equippedSpecialItem($hero, $item);
         }
         return true;
+    }
+
+    public static function getCurrentStock(Hero $hero) : ?int
+    {
+        $backpackItems = $hero->getBackpackItems();
+        $stock = 0;
+        foreach ($backpackItems as $item) {
+            $stock += $item->getStock();
+        }
+        return $stock;
     }
 }

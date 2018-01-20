@@ -17,7 +17,7 @@ class Alteration
         $this->em = $em;
     }
 
-    public function useConsumable(Hero $hero, BackpackItem $backpackItem) : string
+    public function useConsumable(Hero $hero, BackpackItem $backpackItem) : ?string
     {
         $item = $backpackItem->getItem();
 
@@ -29,7 +29,7 @@ class Alteration
                 $message = $this->ConsumableGivesEnergy($hero, $backpackItem);
                 break;
             default:
-                false;
+                $message = null;
         }
         return $message;
     }

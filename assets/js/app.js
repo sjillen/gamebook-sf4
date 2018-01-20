@@ -4,6 +4,7 @@ require("materialize-css");
 require("./adventure");
 require("./form");
 require("./dropup.js");
+require("./encounter");
 require("../images/forest.jpg");
 require('../images/potions-card.jpg');
 require('../images/mystic_book_by_adalbertofsouza-d2xvmui.jpg');
@@ -42,5 +43,18 @@ $(document).ready(function (){
         $("html, body").animate({ scrollTop: 0 }, "slow");
         return false;
     });
+});
+
+$.fn.extend({
+    animateCss: function (animationName, callback) {
+        var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+        this.addClass('animated ' + animationName).one(animationEnd, function() {
+            $(this).removeClass('animated ' + animationName);
+            if (callback) {
+                callback();
+            }
+        });
+        return this;
+    }
 });
 

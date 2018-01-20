@@ -47,84 +47,120 @@
 
 
     <ul class="hero-bar valign-wrapper">
-        <li class="header-bar name-header blue-grey"><a href="">{{ hero.name }}</a></li>
+        <li class="header-bar name-header blue-grey"><a class="dropup-trigger" href="">{{ hero.name }}</a></li>
         <li class="header-bar life-header red valign-wrapper">
-            <a href="">
-                <span class="valign-wrapper"><i class="material-icons left circle white-text">favorite</i>{{ hero.life }}</span>
-            </a>
-        </li>
-        <li class="header-bar ability-header blue valign-wrapper">
-            <a href="">
-
-                <span class="valign-wrapper"><i class="material-icons left circle white-text">fitness_center</i>{{ hero.ability }}</span>
-            </a>
-        </li>
-        <li class="header-bar gold-header amber valign-wrapper">
-            <a href="">
-                <span class="valign-wrapper"><i class="material-icons left circle white-text">monetization_on</i>{{ hero.gold }}</span>
-            </a>
-        </li>
-        <li class="header-bar weapons-header green accent-4 valign-wrapper">
-            <a href="#">
-                <span class="header-title-item center-align valign-wrapper">
-                    <i class="material-icons circle left white-text">colorize</i>
-                    <span class="hide-on-small-and-down">Weapons</span>
+            <a href="#!" role="button" class="btn waves-light waves-effect red dropup-trigger">
+                <span class="valign-wrapper center-align">
+                    <i class="material-icons left circle white-text tooltipped" data-position="top" data-delay="50" data-tooltip="Your life">favorite</i>
+                    <span class="hero-life">{{ hero.life }}</span>
                 </span>
             </a>
-            <ul>
+        </li>
+
+        <li class="header-bar weapons-header green accent-4 valign-wrapper">
+            <a href="#!" role="button" class="btn waves-effect waves-light green accent-4 dropup-trigger weapons-dropup-trigger">
+                <div class="header-title-item valign-wrapper center-align">
+                    <i class="material-icons circle white-text tooltipped" data-position="top" data-delay="50" data-tooltip="Weapons">colorize</i>
+                    <span class="hide-on-med-and-down">Weapons</span>
+                    <span class="hide-on-small-and-down green darken-2 badge white-text">{{ hero.weapons|length }}/{{ ruleset.maxWeaponCarried }}</span>
+                </div>
+            </a>
+
+            <ul class="dropup-list dropup-weapons">
                 {% for weapon in hero.weapons %}
-                <li><a href="#">{{ weapon.name }}</a>
+                <li class="dropup-list-item">
+                    <div class="hero-weapon-item valign-wrapper">
+                        <span><a href="#" class="use-weapon tooltipped" data-position="left" data-delay="50" data-tooltip="{{ weapon.description }}">{{ weapon.name }}</a></span>
+                        <a href="{{ path('weapon_remove', {"idChapter": chapter.id, "idHero": hero.id, "idWeapon": weapon.id}) }}" class="valign-wrapper remover tooltipped" data-position="right" data-delay="50" data-tooltip="Remove this item"><i class="material-icons circle transparent red-text">clear</i></a>
+                    </div>
+
                 </li>
                 {% endfor %}
             </ul>
         </li>
         <li class="header-bar specialItems-header teal valign-wrapper">
-            <a href="#">
-                <span class="valign-wrapper header-title-item center-align">
-                    <i class="material-icons circle white-text">accessibility</i>
-                    <span class="hide-on-small-and-down">Inventory</span>
-                </span>
+            <a href="#!" role="button" class="btn waves-light waves-effect teal dropup-trigger inventory-dropup-trigger">
+                <div class="valign-wrapper header-title-item center-align">
+                    <i class="material-icons circle white-text tooltipped" data-position="top" data-delay="50" data-tooltip="Inventory">accessibility</i>
+                    <span class="hide-on-med-and-down">Inventory</span>
+                    <span class="hide-on-small-and-down teal darken-3 badge white-text">{{ hero.specialItems|length }}</span>
+                </div>
 
             </a>
-            <ul>
+            <ul class="dropup-list dropup-inventory">
                 {% for item in hero.specialItems %}
-                    <li><a href="#">{{ item.name }}</a>
+                    <li class="dropup-list-item">
+                        <div class="hero-inventory-item valign-wrapper">
+                            <span><a class="use-inventory tooltipped" data-position="left" data-delay="50" data-tooltip="{{ item.description }}" href="#">{{ item.name }}</a></span>
+                            <a href="{{ path('specialItem_remove', {"slug": story.slug, "idChapter": chapter.id, "idHero": hero.id, "idItem": item.id}) }}" class="valign-wrapper remover tooltipped" data-position="right" data-delay="50" data-tooltip="Remove this item"><i class="material-icons circle transparent red-text">clear</i></a>
+                        </div>
+
                     </li>
                 {% endfor %}
             </ul>
         </li>
         <li class="header-bar consumableItems-header lime valign-wrapper">
-            <a href="#" class="valign-wrapper">
+            <a href="#!" role="button" class="btn waves-effect waves-light lime dropup-trigger backpack-dropup-trigger">
                 <span class="header-title-item center-align valign-wrapper">
-                    <i class="material-icons circle white-text">cached</i>
-                    <span class="hide-on-small-and-down">Backpack</span>
+                    <i class="material-icons circle white-text tooltipped" data-position="top" data-delay="50" data-tooltip="Backpack">cached</i>
+                    <span class="hide-on-med-and-down">Backpack</span>
+                    <span class="hide-on-small-and-down lime darken-4 badge white-text">{{ backpackStock }}/{{ ruleset.backpackCapacity }}</span>
                 </span>
 
             </a>
-            <ul>
+            <ul class="dropup-list dropup-backpack">
                 {% for item in hero.backpackItems %}
-                    <li><a href="#">{{ item.item.name }}</a>
+                    <li class="dropup-list-item valign-wrapper">
+                        <div class="hero-backpack-item valign-wrapper">
+                            <span><a class="use-item tooltipped" data-position="left" data-delay="50" data-tooltip="Use - {{ item.item.description }}" href="{{ path('use_consumable', {"slug": story.slug, "idHero": hero.id, "idItem": item.id, "idChapter": chapter.id}) }}">{{ item.item.name }}</a></span>
+                            <span class="lime darken-4 badge white-text">{{ item.stock }}</span>
+                            <a href="{{ path('backpackItem_remove', {"idChapter": chapter.id, "idHero": hero.id, "idItem": item.id}) }}" class="valign-wrapper remover tooltipped" data-position="right" data-delay="50" data-tooltip="Remove this item"><i class="material-icons circle transparent red-text">clear</i></a>
+                        </div>
                     </li>
                 {% endfor %}
             </ul>
         </li>
         <li class="header-bar skills-header purple accent-4 valign-wrapper">
-            <a href="#">
+            <a href="#!" role="button" class="btn purple accent-4 waves-light waves-effect dropup-trigger skills-dropup-trigger">
                 <span class="header-title-item center-align valign-wrapper">
-                    <i class="material-icons circle white-text">flash_on</i>
+                    <i class="material-icons circle white-text tooltipped" data-position="top" data-delay="50" data-tooltip="Skills">flash_on</i>
                     <span class="hide-on-small-and-down">Skills</span>
                 </span>
             </a>
-            <ul>
+            <ul class="dropup-list dropup-skills">
                 {% for skill in hero.skills %}
-                    <li><a href="#">{{ skill.name }}</a>
-                    </li>
+                    <div class="dropup-list-item hero-skill-item">
+                        <div class="hero-skill-item valign-wrapper">
+                            <span><a href="#!"  class=" use-skill tooltipped {{ skill.id }}" data-position="left" data-delay="50" data-tooltip="{{ skill.description }}">{{ skill.name }}</a></span>
+                            <button href="#!" role="button" class="btn-flat skill-icon valign-wrapper remover"><i class="pulse material-icons circle transparent purple-text text-lighten-1">flash_on</i></button>
+                       </div>
+                    </div>
                 {% endfor %}
                 {% if hero.weaponskill %}
-                    <li><a href="">{{ hero.weaponskill.name }}</a>
+                    <li class="dropup-list-item hero-skill-item">
+                        <div class="hero-skill-item valign-wrapper">
+                            <span><a href="#!" class="use-skill tooltipped" data-position="left" data-delay="50" data-tooltip="{{ hero.weaponskill.description }}">{{ hero.weaponskill.name }}</a></span>
+                            <a href="#" class="valign-wrapper remover"><i class="material-icons circle transparent purple-text text-lighten-1">flash_on</i></a>
+                        </div>
                     </li>
                 {% endif %}
             </ul>
+        </li>
+        <li class="header-bar ability-header blue valign-wrapper">
+            <a href="#!" role="button" class="btn waves-effect waves-light blue ability-dropup-trigger dropup-trigger">
+                <span class="valign-wrapper center-align">
+                    <i class="material-icons left circle white-text tooltipped" data-position="top" data-delay="50" data-tooltip="Your Ability">fitness_center</i>
+                    <span class="hero-ability">{{ hero.ability }}</span>
+                </span>
+            </a>
+        </li>
+        <li class="header-bar gold-header amber valign-wrapper">
+            <a href="#!" role="button" class="btn waves-light waves-effect amber dropup-trigger">
+                <span class="valign-wrapper center-align">
+                    <i class="material-icons left circle white-text tooltipped" data-position="top" data-delay="50" data-tooltip="Your Gold">monetization_on</i>
+                    {{ hero.gold }}
+                </span>
+            </a>
         </li>
     </ul>
 

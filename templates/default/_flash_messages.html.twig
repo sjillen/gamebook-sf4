@@ -4,9 +4,9 @@
                 {% for key, message in messages %}
                     <script>
 
-                        createToast({{ key }}, "{{ type }}", "{{ message }}");
+                        createToastFlash({{ key }}, "{{ type }}", "{{ message }}");
 
-                        function createToast (key, type, message) {
+                        function createToastFlash (key, type, message) {
                             const time = key * 1500;
                             let color = "";
                             switch(type) {
@@ -24,13 +24,16 @@
                                     break;
                             }
                             let toastHTML = '<span>'+ message +'</span><button class="btn-flat toast-action">&times</button>';
-                            setTimeout(M.toast({html:toastHTML, classes: color }, 5000), time);
-                            const toastElement = document.querySelector('.toast');
-                            const toastInstance = M.Toast.getInstance(toastElement);
-                            const toastAction = document.querySelector('.toast-action');
-                            toastAction.onclick = function () {
-                                toastInstance.dismiss();
-                            }
+                            setTimeout( () => {
+                                M.toast({html:toastHTML, classes: color }, 5000);
+                                const toastElement = document.querySelector('.toast');
+                                const toastInstance = M.Toast.getInstance(toastElement);
+                                const toastAction = document.querySelector('.toast-action');
+                                toastAction.onclick = function () {
+                                    toastInstance.dismiss();
+                                }
+                                }, time);
+
 
 
                         }

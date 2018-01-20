@@ -1,11 +1,11 @@
 .hero-container {
   background: transparent;
   height: 50px;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Roboto, Arial, Helvetica, sans-serif;
   font-size: 15px;
   color: #000000;
-  margin-left: 0;
-  width:100%;
+  margin-left: 5%;
+  width:90%;
   position:fixed;
   bottom: 0;
   z-index: 4;
@@ -18,8 +18,17 @@
     .name-header {
       border-top-left-radius: 10px;
     }
-    .skills-header {
+    .gold-header {
       border-top-right-radius: 10px;
+      .dropup-trigger {
+        border-top-right-radius: 10px;
+      }
+    }
+    span.badge {
+      border-radius: 10px;
+      padding: 0 !important;
+      min-width:  2rem !important;
+      //margin: 1rem;
     }
   }
   //every ul li and a
@@ -34,38 +43,103 @@
   //every link
   a {
     text-decoration: none;
-    color: #000000;
   }
   //item in list-bar
-  ul > li {
+  .header-bar {
     float: left;
+    display: flex;
+    flex-direction: column;
+    &:hover {
+      background: #666666;
+    }
 
   }
   //link in header item
-  ul > li a {
+  .dropup-trigger {
     color: #fff;
     font-weight: bold;
     line-height: 50px;
     height:50px;
-    display:block;
+    display:flex;
     min-width: 15%;
     padding:0px 10px;
+    &:hover {
+      background: #666666;
+    }
   }
-  ul li a:hover {
-    background: #666666;
-  }
+
   //list in dropup
-  ul li ul {
+  .dropup-list {
     display: none;
     position: absolute;
     background: #333333;
     bottom:50px;
+    min-width: max-content;
+
   }
   //list-item in dropup
-  ul li ul li {
+  .dropup-list-item {
     float: none;
     line-height: 50px;
     height: 50px;
+    min-width: 10rem;
+    color: #fff;
+    padding-left:0.5rem;
+    &:hover {
+      background: #666666;
+    }
+
+    .hero-weapon-item {
+      &:hover {
+        a {
+          color: color("green", "lighten-3");
+        }
+      }
+    }
+    .hero-inventory-item {
+      &:hover {
+        a {
+          color: color("teal", "lighten-3");
+        }
+
+      }
+
+    }
+    .hero-backpack-item {
+      &:hover {
+        a {
+          color: color("lime", "lighten-3");
+        }
+      }
+    }
+    .hero-skill-item {
+      &:hover {
+        a {
+          color: color("purple", "lighten-3");
+        }
+      }
+      .skill-icon {
+        padding: 0 !important;
+        position: absolute;
+        right: 7px;
+      }
+    }
+
+    span {
+      a {
+        text-decoration: none !important;
+        color: white;
+      }
+      margin-right: 2rem;
+    }
+    span.badge {
+      min-width: 1.5rem !important;
+    }
+    .remover{
+      position: absolute;
+      right: 0.5rem;
+    }
   }
+
 }
 

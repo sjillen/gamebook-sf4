@@ -1,6 +1,6 @@
 {
   "devDependencies": {
-    "@symfony/webpack-encore": "^0.17.0",
+    "@symfony/webpack-encore": "^0.17.1",
     "autoprefixer": "^7.2.3",
     "jquery": "^3.2.1",
     "node-sass": "^4.7.2",
@@ -15,6 +15,7 @@
     "ios >= 8"
   ],
   "dependencies": {
+    "animate.css": "^3.5.2",
     "bootstrap": "4.0.0-beta.3",
     "materialize-css": "^1.0.0-alpha.3",
     "popper.js": "^1.12.9",
