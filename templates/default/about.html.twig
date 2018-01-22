@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {% block stylesheets %}
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="{{ asset('build/css/app.css') }}" />
+    {% endblock %}
+    <title>Gamebook - about</title>
+</head>
+<body>
+{% include "default/_navbar.html.twig" %}
+<div class="parallax-container">
+    <div class="parallax"><img src="{{ asset('build/images/bg-home.jpg') }}"></div>
+</div>
+<div class="section white">
+    <div class="row container">
+        <div class="row">
+
+            <div class="col s4 center-align">
+                <i class="material-icons large teal-text">book</i>
+                <h4 class="grey-text center-align">Epic</h4>
+                <p class="teal-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci at consequuntur culpa distinctio dolore doloremque eius excepturi in labore nulla provident, sapiente sequi tenetur vero? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus, quia.</p>
+
+            </div>
+            <div class="col s4 center-align">
+                <i class="material-icons large blue-text text-darken-3">explore</i>
+                <h4 class="grey-text center-align">Interactive</h4>
+                <p class="blue-text text-darken-3">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci at consequuntur culpa distinctio dolore doloremque eius excepturi in labore nulla provident, sapiente sequi tenetur vero? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Distinctio, quibusdam.</p>
+
+            </div>
+            <div class="col s4 center-align">
+                <i class="material-icons large green-text text-darken-3">create</i>
+                <h4 class="grey-text center-align">Adventures</h4>
+                <p class="green-text text-darken-3">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci at consequuntur culpa distinctio dolore doloremque eius excepturi in labore nulla provident, sapiente sequi tenetur vero? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores, soluta!</p>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="parallax-container">
+    <div class="parallax"><img src="{{ asset('build/images/forest.88c6b23d.jpg') }}"></div>
+</div>
+{% block javascripts %}
+
+    <script src="{{ asset('build/js/app.js') }}"></script>
+
+    {% include "/default/_flash_messages.html.twig" %}
+
+{% endblock %}
+</body>
+</html>

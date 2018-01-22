@@ -101,7 +101,7 @@ class Chapter
 
     /* Setters and Getters */
 
-    public function getId() : int
+    public function getId() : ?int
     {
         return $this->id;
     }

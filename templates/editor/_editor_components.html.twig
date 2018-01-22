@@ -168,5 +168,43 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col s12 editor_component">
+                {% if skills|length > 0 %}
+                    <h5>SKILLS</h5>
+                    <div class="carousel">
+                        {% for skill in skills %}
+                            <div class="carousel-item">
+                                <div class="card hoverable">
+                                    <div class="card-image">
+                                        <img src="{{ asset('build/images/skills.450e6586.jpg') }}" class="responsive-img">
+                                    </div>
+                                    <div class="card-content">
+                                        <span class="card-title activator grey-text text-darken-4">{{ skill.name }}<i class="material-icons right">more_vert</i></span>
+                                    </div>
+                                    <div class="card-action">
+                                        <a href="{{ path('skill_delete', {'slug': story.slug, 'id': skill.id}) }}" class="btn-floating waves-effect waves-light red left-align">
+                                            <i class="material-icons">delete</i>
+                                        </a>
+                                        <a href="{{ path('skill_edit', {'slug': story.slug, 'id': skill.id}) }}" class="btn-floating waves-effect waves-light amber right-align">
+                                            <i class="material-icons">edit</i>
+                                        </a>
+                                    </div>
+                                    <div class="card-reveal">
+                                        <span class="card-title grey-text text-darken-4">{{ skill.name }}<i class="material-icons right">close</i></span>
+                                        <p>{{ skill.description }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <div class="row button-container">
+                    <div class="col s12 center-align">
+                        <a role="button" class="btn waves-effect waves-light" href="{{ path('skill_add', { "slug": story.slug}) }}">Create a skill<i class="material-icons right">gavel</i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 

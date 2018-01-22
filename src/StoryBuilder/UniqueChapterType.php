@@ -25,7 +25,7 @@ class UniqueChapterType
     {
         if($chapter->getType() == "starter") {
             $starter = $this->chapters->findOneBy(["story" => $story, "type" => "starter"]);
-            if ($starter->getId() !== $chapter->getId()) {
+            if (isset($starter) && $starter->getId() !== $chapter->getId()) {
                 return $starter;
             }
         }
@@ -35,7 +35,7 @@ class UniqueChapterType
     {
         if($chapter->getType() == "intro") {
             $intro = $this->chapters->findOneBy(["story" => $story, "type" => "intro"]);
-            if ($intro->getId() !== $chapter->getId()) {
+            if (isset($intro) && $intro->getId() !== $chapter->getId()) {
                 return $intro;
             }
         }

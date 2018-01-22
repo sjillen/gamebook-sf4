@@ -31,7 +31,7 @@ class WeaponType extends AbstractType
                     ])
                 ->add("starter",
                     CheckboxType::class, [
-                        "label" => "Is your item part of the starter inventory ?",
+                        "label" => "Is this weapon part of the starter inventory ?",
                         "required" => false
                 ])
         ;

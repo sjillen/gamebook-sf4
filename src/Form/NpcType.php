@@ -19,6 +19,7 @@ class NpcType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $story = $options["story"];
+        $skills = $options["skills"];
         
         $builder->add("name",
                     TextType::class, [
@@ -38,7 +39,7 @@ class NpcType extends AbstractType
                     EntityType::class, [
                         "label" => "Weakness",
                         "class" => Skill::class,
-                        "choices" => $story->getSkills(),
+                        "choices" => $skills,
                         "choice_label" => "name",
                         "placeholder" => "Choose one",
                         "expanded" => false,
@@ -60,7 +61,8 @@ class NpcType extends AbstractType
     {
         $resolver->setDefaults([
             "data_class" => Npc::class,
-            "story" => null
+            "story" => null,
+            "skills" => null
         ]);
     }
 }

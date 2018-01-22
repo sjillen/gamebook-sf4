@@ -109,7 +109,7 @@ class Hero extends CharacterBase
         $this->level = 1;
         $this->gold = 0;
         $this->numberOfMeals = 0;
-        $this->chapterIterator = 1;
+        $this->chapterIterator = 0;
         $this->status = self::ON_ADVENTURE;
     }
 

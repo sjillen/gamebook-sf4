@@ -67,8 +67,9 @@
                             <div class="row weapons-chapter-container">
                                 <div class="col s12 center-align chapter-item">
                                     {% for weapon in chapter.weapons %}
-                                        <a class="btn waves-light waves-effect cyan accent-4" role="button" href="{{ path('pickupWeapon', {"slug": story.slug, "idHero": hero.id, "idChapter": chapter.id, "idWeapon": weapon.id}) }}">
+                                        <a class="btn waves-light waves-effect green accent-4" role="button" href="{{ path('pickupWeapon', {"slug": story.slug, "idHero": hero.id, "idChapter": chapter.id, "idWeapon": weapon.id}) }}">
                                             {{ weapon.name }}
+                                            <i class="material-icons left">edit</i>
                                         </a>
                                     {% endfor %}
                                 </div>
@@ -80,8 +81,9 @@
                             <div class="row special-items-chapter-container">
                                 <div class="col s12 center-align chapter-item">
                                     {% for item in chapter.specialItems %}
-                                        <a class="btn waves-effect waves-light purple accent-4" role="button" href="{{ path('pickupSpecialItem', {"slug": story.slug, "idHero": hero.id, "idChapter": chapter.id, "idItem": item.id}) }}">
+                                        <a class="btn waves-effect waves-light teal" role="button" href="{{ path('pickupSpecialItem', {"slug": story.slug, "idHero": hero.id, "idChapter": chapter.id, "idItem": item.id}) }}">
                                             {{ item.name }}
+                                            <i class="material-icons left">accessibility</i>
                                         </a>
                                     {% endfor %}
                                 </div>
@@ -92,8 +94,9 @@
                             <div class="row consumable-items-chapter-container">
                                 <div class="col s12 center-align chapter-item">
                                     {% for item in chapter.consumableItems %}
-                                        <a class="btn waves-effect waves-light green accent-4" role="button" href="{{ path('pickupConsumableItem', {"slug": story.slug, "idHero": hero.id, "idChapter": chapter.id, "idItem": item.id}) }}">
+                                        <a class="btn waves-effect waves-light lime" role="button" href="{{ path('pickupConsumableItem', {"slug": story.slug, "idHero": hero.id, "idChapter": chapter.id, "idItem": item.id}) }}">
                                             {{ item.name }}
+                                            <i class="material-icons left">cached</i>
                                         </a>
                                     {% endfor %}
                                 </div>
@@ -102,7 +105,10 @@
 
                         {% if chapter.gold > 0 %}
                             <div class="row gold-chapter-container center-align chapter-item">
-                                <a href="{{ path('pickupGold', {"slug": story.slug, "idHero": hero.id, "idChapter": chapter.id}) }}" role="button" class="waves-effect waves-light btn yellow accent-4">{{ chapter.gold }} golds</a>
+                                <a href="{{ path('pickupGold', {"slug": story.slug, "idHero": hero.id, "idChapter": chapter.id}) }}" role="button" class="waves-effect waves-light btn yellow accent-4">
+                                    {{ chapter.gold }}
+                                    <i class="material-icons left">monetization_on</i>
+                                </a>
                             </div>
                         {% endif %}
 
@@ -131,12 +137,30 @@
                             {% for choice in choices %}
                                 <div class="row choices-chapter-container">
                                     <div class="col s12 center-align">
-                                        {% if choice.goldRequired > 0 or choice.itemRequired %}
-                                            <a class="btn btn-large waves-effect waves-light" role="button" href="{{ path('tradeGoldOrItem', {"slug": story.slug, "idHero": hero.id, "idChoice": choice.id}) }}">
-                                                {{ choice.description }}
+                                        {% if choice.goldRequired > 0%}
+                                            <a class="btn btn-large amber waves-effect waves-light goldRequired tooltipped" data-position="top" data-delay="50" data-tooltip="Pay {{ choice.goldRequired }} golds" role="button" href="{{ path('tradeGoldOrItem', {"slug": story.slug, "idHero": hero.id, "idChoice": choice.id}) }}">
+                                                <span>
+                                                    <i class="material-icons left">monetization_on</i>
+                                                    {{ choice.description }}
+                                                </span>
+                                            </a>
+                                        {% elseif choice.itemRequired %}
+                                            <a class="btn btn-large waves-effect waves-light teal itemRequired" data-choice-item="{{ choice.itemRequired.name }}"  role="button" href="{{ path('tradeGoldOrItem', {"slug": story.slug, "idHero": hero.id, "idChoice": choice.id}) }}">
+                                                <span>
+                                                    {{ choice.description }}
+                                                    <i class="material-icons left">accessibility</i>
+                                                </span>
+                                            </a>
+                                        {% elseif choice.skillRequired %}
+                                            <a class="btn btn-large waves-effect waves-light purple lighten-1 skillRequired" data-choice-skill="{{ choice.skillRequired.name }}" role="button" href="{{ path('adventure', {"slug": story.slug, "idHero": hero.id, "id": choice.targetChapter.id}) }}">
+                                                <span>
+                                                    {{ choice.description }}
+                                                    <i class="material-icons left">flash_on</i>
+                                                </span>
+
                                             </a>
                                         {% else %}
-                                            <a class="btn btn-large waves-effect waves-light" role="button" href="{{ path('adventure', {"slug": story.slug, "idHero": hero.id, "id": choice.targetChapter.id}) }}">
+                                            <a class="btn btn-large waves-effect waves-light blue lighten-1" role="button" href="{{ path('adventure', {"slug": story.slug, "idHero": hero.id, "id": choice.targetChapter.id}) }}">
                                                 {{ choice.description }}
                                             </a>
                                         {% endif %}

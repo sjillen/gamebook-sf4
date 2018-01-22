@@ -76,7 +76,7 @@ Abstract class ItemBase
         return $this->bonusGiven;
     }
 
-    public function setBonusGiven($bonus) : void
+    public function setBonusGiven(int $bonus) : void
     {
         $this->bonusGiven = $bonus;
     }
@@ -86,7 +86,7 @@ Abstract class ItemBase
         return $this->attributeTargeted;
     }
 
-    public function setAttributeTargeted($attributeTargeted) : void
+    public function setAttributeTargeted(?string $attributeTargeted) : void
     {
         $this->attributeTargeted = $attributeTargeted;
     }

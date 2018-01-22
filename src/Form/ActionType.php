@@ -19,6 +19,7 @@ class ActionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {   
         $story = $options["story"];
+        $skills = $options["skills"];
 
         $builder->add("description", 
                     TextType::class)
@@ -39,7 +40,7 @@ class ActionType extends AbstractType
                     EntityType::class, [
                         "label" => "Skill required to unlock the choice",
                         "class" => Skill::class,
-                        "choices" => $story->getSkills(),
+                        "choices" => $skills,
                         "choice_label" => "name",
                         "expanded" => false,
                         "multiple" => false,
@@ -70,6 +71,7 @@ class ActionType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Choice::class,
             "story" => null,
+            "skills" => null
         ]);
     }
 }

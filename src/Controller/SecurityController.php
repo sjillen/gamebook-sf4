@@ -22,9 +22,9 @@ class SecurityController extends AbstractController
         $error = $authUtils->getLastAuthenticationError();
         $lastUsername = $authUtils->getLastUsername();
 
-        if($error) {
+        if(isset($error)) {
             $this->addFlash("danger", "invalid credentials");
-        }elseif (!$error) {
+        }elseif (!isset($error)) {
             $this->addFlash("info", "Welcome!");
         }
 

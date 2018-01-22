@@ -5,27 +5,34 @@
 {% block main %}
 <div class="container homepage">
 
-    <div class="row center-align card-home-container">
-
-                <div class="col s8 offset-s2 m3 offset-m2 l2 offset-l3 card blue-grey blue-grey-transparent hoverable card-home">
-                    <div class="card-content white-text">
-                        <span class="card-title"><i class="medium material-icons">explore</i></span>
-                        <p>Live epic adventures ! Many legendary stories await for you through free online gamebooks! Create you own hero and start yours if you dare...</p>
-                    </div>
-                    <div class="card-action">
-                        <a class="waves-effect waves-light btn" href="#">Play</a>
-                    </div>
+    <div class="row center-align card-home-container valign-wrapper">
+        <div class="col s10 offset-s1 m8 offset-m2 l6 offset-l3 welcome-container">
+                <h4 class="center-align">LIVE EPIC ADVENTURES !</h4>
+            <img src="{{ asset('build/images/forest.88c6b23d.jpg') }}" class="circle responsive-img" alt="forest">
+            <div class="row">
+                <div class="col s12 flow-text white-text">
+                    <p><strong>Welcome to gamebook !</strong> <br/> A place where you can go on epic adventure through interactive stories.
+                    </p>
                 </div>
-
-                <div class="col s8 offset-s2 m3 offset-m2 l2 offset-l2 card blue-grey blue-grey-transparent hoverable card-home">
-                    <div class="card-content white-text">
-                        <span class="card-title"><i class="medium material-icons">build</i></span>
-                        <p>Write your own adventures for others to play ! Give life to monsters, create weapons and skills and see adventurers playing your stories...</p>
-                    </div>
-                    <div class="card-action">
-                        <a class="waves-effect waves-light btn" href="#">Create</a>
-                    </div>
+            </div>
+            <div class="row">
+                {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                <div class="col s12 center-align">
+                    <a role="button" class="btn waves-effect waves-light teal pulse" href="{{ path('adventure_stories') }}">Go on adventure</a>
                 </div>
+                {% else %}
+                <div class="col s6 center-align">
+                    <a role="button" class="btn waves-effect waves-light blue pulse" href="{{ path('security_register') }}">Sign up</a>
+                </div>
+                <div class="col s6 center-align">
+                    <a role="button" class="btn waves-effect waves-light teal pulse" href="{{ path('security_login') }}">Sign in</a>
+                </div>
+                {% endif %}
+            </div>
+
+        </div>
+
+
 
 
     </div>

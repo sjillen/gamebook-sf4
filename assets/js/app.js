@@ -4,7 +4,7 @@ require("materialize-css");
 require("./adventure");
 require("./form");
 require("./dropup.js");
-require("./encounter");
+//require("./encounter");
 require("../images/forest.jpg");
 require('../images/potions-card.jpg');
 require('../images/mystic_book_by_adalbertofsouza-d2xvmui.jpg');
@@ -15,12 +15,14 @@ require('../images/open_book.jpg');
 require('../images/excalibur-hd.jpg');
 require('../images/book_of_monsters_by_gailee-d563tn5.jpg');
 require('../images/tavern-hero.jpg');
+require('../images/skills.jpg');
 
 $(document).ready(function (){
     $('.sidenav').sidenav();
     $(".dropdown-trigger").dropdown({
         coverTrigger: false,
     });
+    $('.parallax').parallax();
     $('.carousel').carousel({
         shift: 50,
         padding: 50
@@ -57,4 +59,6 @@ $.fn.extend({
         return this;
     }
 });
+
+
 

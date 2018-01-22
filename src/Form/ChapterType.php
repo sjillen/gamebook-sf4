@@ -25,6 +25,7 @@ class ChapterType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $story = $options["story"];
+        $skills = $options["skills"];
 
         $builder->add("title",
                     TextType::class, [
@@ -141,7 +142,8 @@ class ChapterType extends AbstractType
                         "entry_type" => ActionType::class,
                         "entry_options" => [
                             "attr" => ["class" => "choice-box"],
-                            "story" => $story
+                            "story" => $story,
+                            "skills" => $skills
                         ],
                         "required" => false,
                         "label" => false,
@@ -161,6 +163,7 @@ class ChapterType extends AbstractType
         $resolver->setDefaults([
             "data_class" => Chapter::class,
             "story" => null,
+            "skills" => null
         ]);
     }
 }

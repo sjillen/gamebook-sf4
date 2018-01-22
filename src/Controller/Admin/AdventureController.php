@@ -144,7 +144,7 @@ class AdventureController extends AbstractController
 
             //Check if the number of skills chosen complies with the rules
             if (HeroSkills::maxSkillAllowed($ruleset, $hero)) {
-                $this->addFlash("warning", "You need to choose 6 skills !");
+                $this->addFlash("warning", "You need to choose " . $ruleset->getMaxSkill() ." skills !");
                 return $this->redirectToRoute("hero_create", ["slug" => $story->getSlug()]);
             }
             //Choose a weapon for Weaponskill
@@ -179,11 +179,14 @@ class AdventureController extends AbstractController
     public function deleteHero(Story $story,Hero $hero)
     {
         $this->addFlash("danger", $hero->getName()." has been forever forgotten...");
+        $status = $hero->getStatus();
+        $status === Hero::IS_DEAD ? $anchor = "adventure-graveyard" : $anchor = "adventure-tavern";
         $em = $this->getDoctrine()->getManager();
         $em->remove($hero);
         $em->flush();
 
-        return $this->redirectToRoute("adventure_stories");
+        $url = $this->generateUrl("adventure_stories");
+        return $this->redirect(sprintf('%s#%s', $url, $anchor));
     }
 
     /**

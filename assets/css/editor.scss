@@ -23,15 +23,19 @@
   .editor_component {
     border-top: #009688 solid 1px;
     .carousel {
-      height: 405px !important;
+      height: 450px !important;
+      .card .card-title {
+        font-size: 20px !important;
+        font-weight: 400 !important;
+      }
     }
     h5 {
       position: relative;
       top: 5rem;
       z-index: 99999;
     }
-    .button-container a {
-      margin-top: 1rem;
+    .button-container {
+      margin-top: 2rem;
     }
 
     .card-action {

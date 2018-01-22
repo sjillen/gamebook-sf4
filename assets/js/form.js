@@ -157,22 +157,23 @@ function initializeLabelCheckbox() {
 function displayRequirements() {
     const checkboxes = document.querySelectorAll("[type=checkbox]");
     checkboxes.forEach((checkbox) => {
-        let requirement = $(checkbox.parentNode.parentNode.parentNode.nextSibling.nextSibling);
+        let requirement = checkbox.parentNode.parentNode.parentNode.nextSibling.nextSibling;
         if ($(requirement).hasClass("requirements")) {
             if ($(checkbox).is(':checked')) {
-                requirement.fadeIn("slow");
+                $(requirement).fadeIn("slow");
             } else {
-                requirement.fadeOut();
+                $(requirement).fadeOut();
             }
             $(checkbox).on('change', () => {
 
                 if ($(checkbox).is(':checked')) {
-                    requirement.fadeIn("slow");
+                    $(requirement).fadeIn("slow");
                 } else {
-                    requirement.fadeOut("slow");
+                    $(requirement).fadeOut("slow");
                 }
             });
         }
 
     });
 }
+

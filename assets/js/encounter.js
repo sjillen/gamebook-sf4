@@ -1,6 +1,5 @@
 
-
-$(document).ready(function () {
+function encounter () {
     let fightContainer = document.querySelector(".monsters-chapter-container");
     if (typeof hasFight !== "undefined") {
         const diceType = $('.monsters-chapter-container').data("dice-type");
@@ -14,7 +13,7 @@ $(document).ready(function () {
 
         const winBtn = `
             <div class="col s12 center-align">
-                <a role="button" href="#!" class="winBtn btn btn-large btn waves-light waves-effect green">YOU WIN !</a>    
+                <h4 class="red-text text-lighten-1 winBtn">YOU WIN !</h4>    
             </div>`;
         
         const loseBtn = `
@@ -23,20 +22,25 @@ $(document).ready(function () {
             </div>
         `;
 
-        const displayContent = function() {
-            fightContainer.innerHTML = winBtn;
-            let win = fightContainer.querySelector(".winBtn");
-            win.addEventListener("click", () => pulseTimer(win), false);
-            $(victoryContent).fadeIn("slow");
-        };
-
         const isVictory = function () {
             let monsters = document.querySelectorAll(".npc-card");
             let monstersLeft = monsters.length;
             if (monstersLeft > 0) {
                 $(victoryContent).hide();
             } else {
-                displayContent();
+                let monstersContainer = document.querySelector(".monsters-chapter-container");
+                console.log(monstersContainer);
+                $(monstersContainer).animateCss("bounceOutUp", () => {
+                    monstersContainer.innerHTML = winBtn;
+                    let win = monstersContainer.querySelector(".winBtn");
+                    $(monstersContainer).animateCss("jackInTheBox", () => {
+                        win.addEventListener("click", () => {
+                            $(win).animateCss("jello");
+                        }, false);
+
+                    });
+                    $(victoryContent).fadeIn("slow");
+                });
                 let dataElt = document.querySelector(".hero-life");
                 let data = {"heroLife" : dataElt.textContent};
                 $.ajax({
@@ -52,6 +56,7 @@ $(document).ready(function () {
                         console.log(err);
                     }
                 });
+                choicesDisplayer();
             }
         };
 
@@ -74,28 +79,6 @@ $(document).ready(function () {
         };
 
 
-        //add pulse to an elt
-        const addPulse = function(elt) {
-            if (!elt.classList.contains("pulse")) {
-                elt.className += " pulse";
-            }
-        };
-        const addIconPulse = function(elt) {
-            //add specific pulse to the icon of the concerned skill
-            let icon = elt.parentNode.parentNode.querySelector('.skill-icon');
-
-            icon.className += " pulse-purple";
-        };
-
-        //remove pulse from elt
-        const removePulse = function (elt) {
-            elt.classList.remove('pulse');
-        };
-
-        const pulseTimer = function(elt) {
-            addPulse(elt);
-            setTimeout(() => removePulse(elt), 3000);
-        };
 
         // func event : increase ability of hero
         const abilityUp = function () {
@@ -221,4 +204,27 @@ $(document).ready(function () {
         }
 
     }
-});
+}
+
+//add pulse to an elt
+const addPulse = function(elt) {
+    if (!elt.classList.contains("pulse")) {
+        elt.className += " pulse";
+    }
+};
+const addIconPulse = function(elt) {
+    //add specific pulse to the icon of the concerned skill
+    let icon = elt.parentNode.parentNode.querySelector('.skill-icon');
+
+    icon.className += " pulse-purple";
+};
+
+//remove pulse from elt
+const removePulse = function (elt) {
+    elt.classList.remove('pulse');
+};
+
+const pulseTimer = function(elt) {
+    addPulse(elt);
+    setTimeout(() => removePulse(elt), 3000);
+};

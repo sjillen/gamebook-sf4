@@ -1,6 +1,14 @@
 .homepage {
   min-height: 100%;
    .card-home-container {
-     margin-top: 15rem;
+     margin-top: 5rem;
    }
+  .welcome-container {
+    background-color: rgba(color("grey", "darken-1"), 0.9);
+    color: color("teal", "lighten-4");
+    img {
+      width: 10rem;
+      height: 10rem;
+    }
+  }
  }

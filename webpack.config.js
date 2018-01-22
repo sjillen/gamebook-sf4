@@ -6,7 +6,7 @@ Encore
     // the public path used by the web server to access the previous directory
     .setPublicPath('/build')
     .cleanupOutputBeforeBuild()
-    .enableSourceMaps(!Encore.isProduction())
+    //.enableSourceMaps(!Encore.isProduction())
     // uncomment to create hashed filenames (e.g. app.abc123.css)
     //.enableVersioning(Encore.isProduction())
 
@@ -25,10 +25,6 @@ Encore
 
     // uncomment for legacy applications that require $/jQuery as a global variable
     .autoProvidejQuery()
-
-
-
-    .enableSourceMaps(!Encore.isProduction())
 
     .enableBuildNotifications()
 ;

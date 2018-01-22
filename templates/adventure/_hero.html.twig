@@ -91,7 +91,8 @@
                 {% for item in hero.specialItems %}
                     <li class="dropup-list-item">
                         <div class="hero-inventory-item valign-wrapper">
-                            <span><a class="use-inventory tooltipped" data-position="left" data-delay="50" data-tooltip="{{ item.description }}" href="#">{{ item.name }}</a></span>
+                            <span><a class="use-inventory tooltipped" data-position="left" data-delay="50" data-tooltip="{{ item.description }}" href="#!">{{ item.name }}</a></span>
+                            <span class="key-button-icon"></span>
                             <a href="{{ path('specialItem_remove', {"slug": story.slug, "idChapter": chapter.id, "idHero": hero.id, "idItem": item.id}) }}" class="valign-wrapper remover tooltipped" data-position="right" data-delay="50" data-tooltip="Remove this item"><i class="material-icons circle transparent red-text">clear</i></a>
                         </div>
 
@@ -129,12 +130,12 @@
             </a>
             <ul class="dropup-list dropup-skills">
                 {% for skill in hero.skills %}
-                    <div class="dropup-list-item hero-skill-item">
+                    <li class="dropup-list-item hero-skill-item">
                         <div class="hero-skill-item valign-wrapper">
                             <span><a href="#!"  class=" use-skill tooltipped {{ skill.id }}" data-position="left" data-delay="50" data-tooltip="{{ skill.description }}">{{ skill.name }}</a></span>
                             <button href="#!" role="button" class="btn-flat skill-icon valign-wrapper remover"><i class="pulse material-icons circle transparent purple-text text-lighten-1">flash_on</i></button>
                        </div>
-                    </div>
+                    </li>
                 {% endfor %}
                 {% if hero.weaponskill %}
                     <li class="dropup-list-item hero-skill-item">
