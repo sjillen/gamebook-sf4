@@ -39,6 +39,13 @@ class Choice
     private $targetChapter;
 
     /**
+     * will be chosen randomly amongst all the random choices of a chapter
+     *
+     * @ORM\Column(type="boolean")
+     */
+    private $randomized;
+
+    /**
      * display by default or not
      * 
      * @ORM\Column(type="boolean")
@@ -66,11 +73,22 @@ class Choice
      */
      private $goldRequired;
 
-     /* Constructor */
+    /**
+     * damage that he hero has to take for this choice
+     *
+     * @ORM\Column(type="integer")
+     */
+    private $damages;
+
+    /**
+     * Choice constructor.
+     */
      public function __construct()
      {
          $this->locked = false;
+         $this->randomized = false;
          $this->goldRequired = 0;
+         $this->damages = 0;
      }
 
      /* Setters and Getters */
@@ -108,6 +126,16 @@ class Choice
      public function setTargetChapter(?Chapter $targetChapter) : void
      {
          $this->targetChapter = $targetChapter;
+     }
+
+     public function isRandomized() : bool
+     {
+         return $this->randomized;
+     }
+
+     public function setRandomized(bool $randomized) : void
+     {
+         $this->randomized = $randomized;
      }
 
      public function isLocked() : bool
@@ -150,9 +178,17 @@ class Choice
          $this->goldRequired = $goldRequired;
      }
 
+     public function getDamages() : int
+     {
+         return $this->damages;
+     }
 
-
-
-
+    /**
+     * @param int $damages
+     */
+    public function setDamages(int $damages) : void
+    {
+        $this->damages = $damages;
+    }
     
 }

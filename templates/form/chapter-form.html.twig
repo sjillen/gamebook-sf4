@@ -28,7 +28,7 @@
                 <p>If you add monsters to a chapter, it will trigger a fight. Items to be picked, the second part of the chapter and choices will display only when the fight is finished</p>
                 <ul class="npcs row" data-prototype="{{ form_widget(form.npcs.vars.prototype)|e('html_attr') }}">
                     {% for npc in form.npcs %}
-                        <li class="center-align">
+                        <li class="center-align list-npc-item">
                             {{ form_label(npc) }}
                             {{ form_widget(npc) }}
                             {{ form_errors(npc) }}
@@ -41,11 +41,11 @@
             <div class="col m10 offset-m1 s12 pickable-items">
                 <h5 class="center-align">Items to pick up in this chapter</h5>
                 <div class="row">
-                    <div class="col m4 offset-m1 center-align">
+                    <div class="col m6 s12 center-align">
                         <h6>Weapons</h6>
                         <ul class="weapons" data-prototype="{{ form_widget(form.weapons.vars.prototype)|e('html_attr') }}">
                             {% for weapon in form.weapons %}
-                                <li>
+                                <li class="list-weapon-item">
                                     {{ form_label(weapon) }}
                                     {{ form_widget(weapon) }}
                                     {{ form_errors(weapon) }}
@@ -54,11 +54,11 @@
                         </ul>
                     </div>
 
-                    <div class="col m4 offset-m1 center-align">
+                    <div class="col m6 s12 center-align">
                         <h6>Special items</h6>
                         <ul class="specialItems" data-prototype="{{ form_widget(form.specialItems.vars.prototype)|e('html_attr') }}">
                             {% for specialItem in form.specialItems %}
-                                <li>
+                                <li class="list-special-item">
                                     {{ form_label(specialItem) }}
                                     {{ form_widget(specialItem) }}
                                     {{ form_errors(specialItem) }}
@@ -68,11 +68,11 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col m4 offset-m1 center-align">
+                    <div class="col m6 s12 center-align">
                         <h6>Consumable items</h6>
                         <ul class="consumableItems" data-prototype="{{ form_widget(form.consumableItems.vars.prototype)|e('html_attr') }}">
                             {% for consumableItem in form.consumableItems %}
-                                <li>
+                                <li class="list-consumable-item">
                                     {{ form_label(consumableItem) }}
                                     {{ form_widget(consumableItem) }}
                                     {{ form_errors(consumableItem) }}
@@ -80,7 +80,7 @@
                             {% endfor %}
                         </ul>
                     </div>
-                    <div class=" col m4 offset-m1 gold-chapter-form">
+                    <div class=" col m6 s12 gold-chapter-form">
                         <h6 class="center-align">Gold to pick up: </h6>
                         {{ form_widget(form.gold) }}
                         {{ form_label(form.gold) }}

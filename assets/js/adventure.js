@@ -79,6 +79,28 @@ function displaySkillChoice () {
     }
 }
 
+function displayRandomChoice () {
+    let choice = document.querySelector(".randomized");
+    console.log(choice);
+    if (choice !== null) {
+        let container = document.querySelector(".random-container");
+        let randomBtn =
+            `<div class="row diceBtn">
+                        <div class="col s12 center-align">
+                            <button class="btn waves-light waves-effect orange darken-4 pulse">Show your fate!</button>
+                        </div>
+                    </div>`;
+        $(choice).hide();
+        container.innerHTML += randomBtn;
+        let randomDisplayer = container.querySelector(".diceBtn");
+        randomDisplayer.addEventListener("click", () => {
+            $(choice).fadeIn("slow", () => pulseTimer(choice), false);
+            container.removeChild(randomDisplayer);
+        });
+    }
+
+}
+
 
 
 // func event : display choice with item requirement
@@ -151,6 +173,7 @@ function choicesDisplayer () {
 $(document).ready(function () {
    let monsters = document.querySelectorAll(".npc-card");
    if (monsters.length === 0) {
+       displayRandomChoice();
        choicesDisplayer();
    } else {
        disableLinks();
@@ -244,6 +267,7 @@ function encounter () {
                 });
                 activateLinks();
                 $(victoryContent).fadeIn("slow");
+                displayRandomChoice();
                 choicesDisplayer();
             }
         };

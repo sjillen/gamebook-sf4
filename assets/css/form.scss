@@ -41,6 +41,9 @@
       min-width: max-content;
       .select-wrapper {
         margin-right: 20px;
+        ul.dropdown-content {
+          min-width: max-content;
+        }
       }
       label {
         display: none;

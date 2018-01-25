@@ -704,8 +704,9 @@ class EditorController extends Controller
         $em = $this->getDoctrine()->getManager();
         $chapter = $em->getRepository(Chapter::class)->find($id);
         $choices = $em->getRepository(Choice::class)->findBy(["chapter" => $chapter]);
+        $skills = $em->getRepository(Skill::class)->findSkillsByStory($story);
 
-        $form = $this->createForm(ChapterType::class, $chapter, ['story' => $story]);
+        $form = $this->createForm(ChapterType::class, $chapter, ['story' => $story, "skills"=>$skills]);
         $form->handleRequest($request);
 
         $originalChoices = new ArrayCollection();

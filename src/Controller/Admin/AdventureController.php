@@ -226,8 +226,9 @@ class AdventureController extends AbstractController
         $hasFight = count($chapter->getNpcs()) === 0 ? false: true;
         $isDeath = $chapter->getType() === "death"? true : false;
         $isEnd = $chapter->getType() === "end"? true : false;
-        $unlockChoices = ChoiceDisplay::unlockChoices($hero, $choices);
+        $choicesDisplayed = ChoiceDisplay::choiceDisplayer($hero, $choices);
         $backpackStock = ItemPicker::getCurrentStock($hero);
+
 
         return $this->render("adventure/adventure.html.twig", [
             "story" => $story,
@@ -238,7 +239,7 @@ class AdventureController extends AbstractController
             "hasFight" => $hasFight,
             "isDeath" => $isDeath,
             "isEnd" => $isEnd,
-            "choices" => $unlockChoices,
+            "choices" => $choicesDisplayed,
 
         ]);
     }
@@ -327,17 +328,33 @@ class AdventureController extends AbstractController
      * @param Hero $hero
      * @param ChoiceInteraction $interaction
      * @return RedirectResponse
-     * @Route("/{slug}/{idHero}/trade/{idChoice}", name="tradeGoldOrItem")
+     * @Route("/{slug}/{idHero}/trade/{idChoice}", name="adventure_trade")
      * @ParamConverter("story", options={"mapping": {"slug": "slug"}})
      * @ParamConverter("choice", options={"mapping": {"idChoice": "id"}})
      * @ParamConverter("hero", options={"mapping": {"idHero": "id"}})
      */
-    public function tradeGoldOrItem(Story $story, Choice $choice, Hero $hero, ChoiceInteraction $interaction) : RedirectResponse
+    public function tradeChoice(Story $story, Choice $choice, Hero $hero) : RedirectResponse
     {
-        //Check whether requirement is Gold or Item, and remove the corresponding amount or object from inventory
-        $message = $interaction->trade($hero, $choice);
+        $trades = ChoiceInteraction::trade($hero, $choice);
+        if (isset($trades)) {
+            foreach ($trades as $trade) {
+                switch ($trade) {
+                    case ChoiceInteraction::GOLD:
+                        $this->addFlash("warning","You used ". $choice->getGoldRequired(). " golds !");
+                        break;
+                    case ChoiceInteraction::ITEM:
+                        $this->addFlash("warning", "You used ". $choice->getItemRequired()->getName(). " !");
+                        break;
+                    case ChoiceInteraction::LIFE:
+                        $this->addFlash("warning", " You lost ". $choice->getDamages(). " life !");
+                        break;
+                }
+            }
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($hero);
+            $em->flush();
+        }
 
-        $this->addFlash("info", $message);
         return $this->redirectToRoute("adventure", [
             "slug" => $story->getSlug(),
             "idHero" => $hero->getId(),

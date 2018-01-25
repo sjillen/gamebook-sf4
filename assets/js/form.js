@@ -1,24 +1,24 @@
-var $choicesHolder;
-var $npcsHolder;
-var $weaponsHolder;
-var $specialItemsHolder;
-var $consumableItemsHolder;
+let $choicesHolder;
+let $npcsHolder;
+let $weaponsHolder;
+let $specialItemsHolder;
+let $consumableItemsHolder;
 
 // setup an "add a choice" link
-var $addChoiceLink = $('<a role="button" href="#" class="add_choice_link btn waves-light waves-effect center-align">Add a choice</a>');
-var $newChoiceLinkLi = $('<li></li>').append($addChoiceLink);
+const $addChoiceLink = $('<a role="button" href="#" class="add_choice_link btn waves-light waves-effect center-align">Add a choice</a>');
+let $newChoiceLinkLi = $('<li></li>').append($addChoiceLink);
 
-var $addNpcLink = $('<a href="#" role="button" class="add_npc_link btn waves-light waves-effect amber accent-4"><i class="material-icons">add</i></a>');
-var $newNpcLinkLi = $('<li></li>').append($addNpcLink);
+const $addNpcLink = $('<a href="#" role="button" class="add_npc_link btn waves-light waves-effect amber accent-4"><i class="material-icons">add</i></a>');
+let $newNpcLinkLi = $('<li></li>').append($addNpcLink);
 
-var $addWeaponLink = $('<a href="#" role="button" class="add_weapon_link btn waves-light waves-effect cyan accent-4"><i class="material-icons">add</i></a>');
-var $newWeaponLinkLi = $("<li></li>").append($addWeaponLink);
+const $addWeaponLink = $('<a href="#" role="button" class="add_weapon_link btn waves-light waves-effect cyan accent-4"><i class="material-icons">add</i></a>');
+let $newWeaponLinkLi = $("<li></li>").append($addWeaponLink);
 
-var $addSpecialItemLink = $('<a href="#" role="button" class="add_specialItem_link btn waves-effect waves-light purple accent-4"><i class="material-icons">add</i></a>');
-var $newSpecialItemLinkLi = $("<li></li>").append($addSpecialItemLink);
+const $addSpecialItemLink = $('<a href="#" role="button" class="add_specialItem_link btn waves-effect waves-light purple accent-4"><i class="material-icons">add</i></a>');
+let $newSpecialItemLinkLi = $("<li></li>").append($addSpecialItemLink);
 
-var $addConsumableItemLink = $('<a href="#" role="button" class="add_consumableItem_link btn waves-effect waves-light green accent-4"><i class="material-icons">add</i></a>');
-var $newConsumableItemLinkLi = $("<li></li>").append($addConsumableItemLink);
+const $addConsumableItemLink = $('<a href="#" role="button" class="add_consumableItem_link btn waves-effect waves-light green accent-4"><i class="material-icons">add</i></a>');
+let $newConsumableItemLinkLi = $("<li></li>").append($addConsumableItemLink);
 
 $(document).ready(function() {
 
@@ -40,19 +40,19 @@ $(document).ready(function() {
     $consumableItemsHolder = $('ul.consumableItems');
 
     // add a delete link to all of the existing tag form li elements
-    $choicesHolder.find('li').each(function() {
+    $choicesHolder.find('.list-choice-item').each(function() {
         addTagFormDeleteLink($(this));
     });
-    $npcsHolder.find('li').each(function() {
+    $npcsHolder.find('.list-npc-item').each(function() {
         addTagFormDeleteLink($(this));
     });
-    $weaponsHolder.find('li').each(function() {
+    $weaponsHolder.find('.list-weapon-item').each(function() {
         addTagFormDeleteLink($(this));
     });
-    $specialItemsHolder.find('li').each(function() {
+    $specialItemsHolder.find('.list-special-item').each(function() {
         addTagFormDeleteLink($(this));
     });
-    $consumableItemsHolder.find('li').each(function() {
+    $consumableItemsHolder.find('.list-consumable-item').each(function() {
         addTagFormDeleteLink($(this));
     });
 
@@ -135,7 +135,7 @@ function addChildForm($collectionHolder, $newLinkLi) {
 }
 
 function addTagFormDeleteLink($tagFormLi) {
-    var $removeFormA = $('<a class="collection-remove" href="#"><button class="btn waves-effect waves-light red"><i class="material-icons">delete</i></button></a>');
+    const $removeFormA = $('<a class="collection-remove" href="#"><button class="btn waves-effect waves-light red"><i class="material-icons">delete</i></button></a>');
     $tagFormLi.append($removeFormA);
 
     $removeFormA.on('click', function(e) {
@@ -155,7 +155,7 @@ function initializeLabelCheckbox() {
 }
 
 function displayRequirements() {
-    const checkboxes = document.querySelectorAll("[type=checkbox]");
+    const checkboxes = document.querySelectorAll(".checkbox_require");
     checkboxes.forEach((checkbox) => {
         let requirement = checkbox.parentNode.parentNode.parentNode.nextSibling.nextSibling;
         if ($(requirement).hasClass("requirements")) {

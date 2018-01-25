@@ -11,41 +11,65 @@ namespace App\Adventure;
 
 use App\Entity\Choice;
 use App\Entity\Hero;
-use App\Entity\SpecialItem;
-use Doctrine\ORM\EntityManagerInterface;
+
 
 class ChoiceInteraction
 {
-    public function __construct(EntityManagerInterface $em)
-    {
-        $this->em = $em;
-    }
 
-    public function trade(Hero $hero, Choice $choice) : string
+    const GOLD = 1;
+    const ITEM = 2;
+    const LIFE = 3;
+
+    public static function trade(Hero $hero, Choice $choice) : ?array
     {
-        $item = $choice->getItemRequired();
+        $trades = [];
+        $gold = self::tradeGold($hero, $choice);
+        if (isset($gold)) {
+            $trades[] = $gold;
+        }
+        $item = self::tradeItem($hero, $choice);
         if (isset($item)) {
-            $this->tradeItem($hero, $item);
-            $this->em->persist($hero);
-            $this->em->flush();
-            return $message = "You used ". $item->getName();
-        }else {
-            $this->tradeGold($hero, $choice);
-            $this->em->persist($hero);
-            $this->em->flush();
-            return $message = "You used ". $choice->getGoldRequired(). " golds";
+            $trades[] = $item;
+        }
+        $life = self::tradeLife($hero, $choice);
+        if (isset($life)) {
+            $trades[] = $life;
+        }
+        if (count($trades) > 0) {
+            return $trades;
+        } else {
+            return null;
         }
     }
 
-    public function tradeGold(Hero $hero, Choice $choice) : void
+    public static function tradeGold(Hero $hero, Choice $choice)
     {
         $goldRequired = $choice->getGoldRequired();
-        $goldCarried = $hero->getGold();
-        $hero->setGold($goldCarried - $goldRequired);
+        if ($goldRequired !== 0) {
+            $goldCarried = $hero->getGold();
+            $hero->setGold($goldCarried - $goldRequired);
+            return self::GOLD;
+        }
+
     }
 
-    public function tradeItem(Hero $hero, SpecialItem $item) : void
+    public static function tradeLife(Hero $hero, Choice $choice)
     {
-        $hero->removeSpecialItem($item);
+        $damages = $choice->getDamages();
+        if ($damages !== 0) {
+            $life = $hero->getLife();
+            $lifeLeft = $life - $damages;
+            $lifeLeft <= 0 ? $hero->setLife(0) : $hero->setLife($lifeLeft);
+            return self::LIFE;
+        }
+    }
+
+    public static function tradeItem(Hero $hero, Choice $choice)
+    {
+        $item = $choice->getItemRequired();
+        if (isset($item)) {
+            $hero->removeSpecialItem($item);
+            return self::ITEM;
+        }
     }
 }

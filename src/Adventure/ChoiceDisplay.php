@@ -12,6 +12,7 @@ namespace App\Adventure;
  * This service will unlock the choices for which the hero satisfies the requirements in gold, item or skill
  */
 
+use App\Dice\Dice;
 use App\Entity\Choice;
 use App\Entity\Hero;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -19,6 +20,32 @@ use Doctrine\Common\Collections\Collection;
 
 class ChoiceDisplay
 {
+
+    public static function choiceDisplayer (Hero $hero, Collection $choices) : Collection
+    {
+        $unlockChoices = self::unlockChoices($hero, $choices);
+        $choicesDisplayed = self::chooseRandomChoice($unlockChoices);
+        return $choicesDisplayed;
+
+    }
+
+    public static function chooseRandomChoice(Collection $choices) : Collection
+    {
+        $randomChoices = new ArrayCollection();
+        foreach ($choices as $choice) {
+            if ($choice->isRandomized()) {
+                $randomChoices[] = $choice;
+                $choices->removeElement($choice);
+            }
+        }
+        $max = count($randomChoices);
+        if ($max > 0) {
+            $key = Dice::DiceRoller($max) - 1;
+            $chosenChoice = $randomChoices[$key];
+            $choices[] = $chosenChoice;
+        }
+        return $choices;
+    }
 
     public static function unlockChoices(Hero $hero, Collection $choices) : Collection
     {
@@ -37,6 +64,7 @@ class ChoiceDisplay
         self::goldUnlock($hero, $choice);
         self::skillUnlock($hero, $choice);
         self::itemUnlock($hero, $choice);
+        self::damagesUnlock($hero, $choice);
 
         return $choice;
     }
@@ -51,6 +79,17 @@ class ChoiceDisplay
                 : $choice->setLocked(false);
         }
 
+    }
+
+    private static function damagesUnlock(Hero $hero, Choice $choice) : void
+    {
+        $damages = $choice->getDamages();
+        $life = $hero->getLife();
+        if ($damages > 0) {
+            $damages > $life
+            ? $choice->setLocked(true)
+            : $choice->setLocked(false);
+        }
     }
 
     private static function skillUnlock(Hero $hero, Choice $choice) : void

@@ -31,6 +31,11 @@ class ActionType extends AbstractType
                         "expanded" => false,
                         "multiple" => false,                    
                     ])
+            ->add("randomized",
+                    CheckboxType::class, [
+                        "label" => "Make this choice randomly chosen among other random choices ?",
+                        "required" => false,
+                ])
             ->add("locked",
                     CheckboxType::class, [
                         "label" => "Do you wish to lock this choice? ",
@@ -63,7 +68,14 @@ class ActionType extends AbstractType
                         "label" => "Amount of gold required to the unlock choice",
                         "scale" => 0,
                         "empty_data" => "0"
-                    ]);
+                    ])
+            ->add("damages",
+                    IntegerType::class, [
+                        "label" => "Damages inflicted to the hero if he chooses this path",
+                        "scale" => 0,
+                        "empty_data" => "0"
+                ])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)

@@ -1,5 +1,5 @@
 
-<li>
+<li class="list-choice-item">
     <div class="choice-container">
         <div class="row">
             <div class="col m7">
@@ -16,10 +16,19 @@
         </div>
 
         <div class="row">
-            <div class="col s6 offset-s3">
+            <div class="col s6">
+                {{ form_errors(choice.randomized) }}
+                <label for="">
+                    {{ form_widget(choice.randomized,  {"attr": {"id": "choice_random"}}) }}
+                    <span>
+                    {{ form_label(choice.randomized, "Choice random") }}
+                </span>
+                </label>
+            </div>
+            <div class="col s6">
                 {{ form_errors(choice.locked) }}
                 <label for="">
-                    {{ form_widget(choice.locked,  {"attr": {"id": "choice_checkbox"}}) }}
+                    {{ form_widget(choice.locked,  {"attr": {"id": "choice_checkbox", "class": "checkbox_require"}}) }}
                     <span>
                     {{ form_label(choice.locked, "Choice locked") }}
                 </span>
@@ -28,22 +37,28 @@
         </div>
 
         <div class="row requirements">
-            <div class="col m5 filter">
+            <div class="col m5 s12">
                 {{ form_errors(choice.skillRequired) }}
                 {{ form_label(choice.skillRequired) }}
                 {{ form_widget(choice.skillRequired) }}
             </div>
 
-            <div class="col m5 offset-m2">
+            <div class="col m5 offset-m2 s12">
                 {{ form_errors(choice.itemRequired) }}
                 {{ form_label(choice.itemRequired) }}
                 {{ form_widget(choice.itemRequired) }}
             </div>
 
-            <div class="col m6 offset-m3">
+            <div class="col m5 s12">
                 {{ form_errors(choice.goldRequired) }}
                 {{ form_label(choice.goldRequired) }}
                 {{ form_widget(choice.goldRequired) }}
+            </div>
+
+            <div class="col m5 offset-m2 s12">
+                {{ form_errors(choice.damages) }}
+                {{ form_label(choice.damages) }}
+                {{ form_widget(choice.damages) }}
             </div>
         </div>
     </div>
