@@ -13,7 +13,7 @@ const addIconPulse = function(elt, color) {
 const removeIconPulse = function(elt, color) {
     //remove specific pulse to the icon of the concerned skill
     let icon = elt.parentNode.parentNode.querySelector('.skill-icon');
-    icon.classList.remove(`.pulse-${color}`);
+    icon.classList.remove(`pulse-${color}`);
 };
 
 //remove pulse from elt
@@ -67,8 +67,8 @@ function displaySkillChoice () {
         M.toast({html:`${this.innerText}: new choice discovered!`, classes: "purple-text text-lighten-3" }, 5000);
     });
     //remove the pulse from skill icon
-    let icon = this.parentNode.parentNode.querySelector('.skill-icon');
-    removeIconPulse(icon, "purple");
+
+    removeIconPulse(this, "purple");
     //remove add listener
     this.removeEventListener("click", displaySkillChoice);
     //decrement the counter
@@ -83,8 +83,7 @@ function displaySkillChoice () {
 
 // func event : display choice with item requirement
 function displayItemChoice () {
-    console.log("test");
-    //get choice to with corresponding item
+    //get choice with corresponding item
     let choices = [];
     //get choice to with corresponding item
     itemRequirements.forEach( (requirement) => {
@@ -102,8 +101,7 @@ function displayItemChoice () {
     });
 
     //empty the key-icon pulse
-    let icon = this.parentNode.parentNode.querySelector('.skill-icon');
-    removeIconPulse(icon, "teal");
+    removeIconPulse(this, "teal");
     //remove add listener
     this.removeEventListener("click", displayItemChoice);
     //decrement the counter
@@ -115,13 +113,13 @@ function displayItemChoice () {
 }
 
 function choicesDisplayer () {
-    //check if skills hero matches weaknesses of npcs
+    //check if skills hero matches requirement of choice
     heroSkillElts.forEach( (elt) => {
         if (skillsRequired.includes(elt.innerText)) {
             //add pulse to the bar skill button if it doesn't already contains it
             addPulse(skillPulse);
             addIconPulse(elt, "purple");
-            //bind event for each active skill :  increment ability
+            //bind event for each active skill :  display choice
             elt.addEventListener("click", displaySkillChoice, false);
             //increment counter for each active skill
             ++ skillEventCounter;
@@ -155,10 +153,31 @@ $(document).ready(function () {
    if (monsters.length === 0) {
        choicesDisplayer();
    } else {
+       disableLinks();
        encounter();
    }
 
 });
+
+function disableLinks () {
+    let removerLinks = document.querySelectorAll(".remover");
+    let useWeaponLinks = document.querySelectorAll(".use-weapon");
+    let useInventoryLinks = document.querySelectorAll(".use-inventory");
+    let useBackpackLinks = document.querySelectorAll(".use-item");
+    [...removerLinks, ...useBackpackLinks, ...useInventoryLinks, ...useWeaponLinks].forEach( (link) => {
+        link.className += " disabled";
+    });
+}
+
+function activateLinks () {
+    let removerLinks = document.querySelectorAll(".remover");
+    let useWeaponLinks = document.querySelectorAll(".use-weapon");
+    let useInventoryLinks = document.querySelectorAll(".use-inventory");
+    let useBackpackLinks = document.querySelectorAll(".use-item");
+    [...removerLinks, ...useBackpackLinks, ...useInventoryLinks, ...useWeaponLinks].forEach( (link) => {
+        link.classList.remove("disabled");
+    });
+}
 
 function encounter () {
     let fightContainer = document.querySelector(".monsters-chapter-container");
@@ -185,8 +204,11 @@ function encounter () {
 
         const isVictory = function () {
             let monsters = document.querySelectorAll(".npc-card");
+
+
             let monstersLeft = monsters.length;
             if (monstersLeft > 0) {
+
                 $(victoryContent).hide();
             } else {
                 let monstersContainer = document.querySelector(".monsters-chapter-container");
@@ -203,16 +225,14 @@ function encounter () {
                         win.addEventListener("click", () => {
                             $(win).animateCss("jello");
                         }, false);
-
                     });
-                    $(victoryContent).fadeIn("slow");
                 });
                 let dataElt = document.querySelector(".hero-life");
                 let data = {"heroLife" : dataElt.textContent};
                 $.ajax({
                     url: url,
                     data: data,
-                    type: "post",
+                    type: "get",
                     dataType: "json",
                     success: function(status) {
                         console.log(status);
@@ -222,6 +242,8 @@ function encounter () {
                         console.log(err);
                     }
                 });
+                activateLinks();
+                $(victoryContent).fadeIn("slow");
                 choicesDisplayer();
             }
         };
@@ -259,7 +281,7 @@ function encounter () {
             //send toast message for skill bonus ability
             M.toast({html:`${this.innerText}: Ability +2!`, classes: "purple-text text-lighten-1" }, 5000);
             //remove the pulse from skill icon
-            this.parentNode.parentNode.querySelector('.skill-icon').classList.remove('pulse-purple');
+            removeIconPulse(this, "purple");
             //remove add listener
             this.removeEventListener("click", abilityUp);
             //decrement the counter

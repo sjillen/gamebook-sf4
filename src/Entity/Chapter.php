@@ -64,19 +64,19 @@ class Chapter
     private $choices;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Weapon")
+     * @ORM\ManyToMany(targetEntity="Weapon", fetch="EAGER")
      *
      */
     private $weapons;
 
     /**
-     * @ORM\ManyToMany(targetEntity="SpecialItem")
+     * @ORM\ManyToMany(targetEntity="SpecialItem", fetch="EAGER")
      *
      */
     private $specialItems;
 
     /**
-     * @ORM\ManyToMany(targetEntity="ConsumableItem")
+     * @ORM\ManyToMany(targetEntity="ConsumableItem", fetch="EAGER")
      *
      */
     private $consumableItems;

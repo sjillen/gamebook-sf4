@@ -60,5 +60,9 @@ $.fn.extend({
     }
 });
 
+function goBack() {
+    window.history.back();
+}
+
 
 

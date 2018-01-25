@@ -20,13 +20,13 @@ class Alteration
     public function useConsumable(Hero $hero, BackpackItem $backpackItem) : ?string
     {
         $item = $backpackItem->getItem();
-
-        switch($item->getAttributeTargeted()) {
+        $attribute = $item->getAttributeTargeted();
+        switch($attribute) {
             case "life":
                 $message = $this->ConsumableGivesLife($hero, $backpackItem);
                 break;
             case "ability":
-                $message = $this->ConsumableGivesEnergy($hero, $backpackItem);
+                $message = $this->ConsumableGivesAbility($hero, $backpackItem);
                 break;
             default:
                 $message = null;
@@ -34,7 +34,7 @@ class Alteration
         return $message;
     }
 
-    public function ConsumableGivesEnergy(Hero $hero, BackpackItem $backpackItem) : string
+    public function ConsumableGivesAbility(Hero $hero, BackpackItem $backpackItem) : string
     {
         $item = $backpackItem->getItem();
         $bonus = $item->getBonusGiven();
@@ -46,7 +46,7 @@ class Alteration
 
         $this->em->persist($hero);
         $this->em->flush();
-        return "You gain +". $item->getAttributeTargeted(). "!";
+        return "You gain +". $item->getBonusGiven(). " ". $item->getAttributeTargeted(). " !";
 
     }
 
@@ -65,18 +65,21 @@ class Alteration
             ? $this->em->remove($backpackItem)
             : $this->em->persist($backpackItem);
 
-            if ($bonus + $heroLife < $maxLife) {
-                $lifeRegained = $bonus + $heroLife - $maxLife;
+            $newLife = $bonus + $heroLife;
+            if ($newLife <= $maxLife) {
+                $hero->setLife($newLife);
+                $this->em->persist($hero);
+                $this->em->flush();
+                return "You regain " . $bonus. " life !";
+            } else {
+                $lifeRegained = $bonus + $maxLife - $newLife;
                 $hero->setLife($maxLife);
                 $this->em->persist($hero);
                 $this->em->flush();
-                return "You regain " . $lifeRegained . " HP!";
-            } else {
-                $hero->setLife($heroLife + $bonus);
-                $this->em->persist($hero);
-                $this->em->flush();
-                return "You regain " . $bonus . " HP!";
+                return "You regain " . $lifeRegained. " life !";
+
             }
+
         }
     }
 

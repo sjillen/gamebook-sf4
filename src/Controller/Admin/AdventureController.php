@@ -81,6 +81,7 @@ class AdventureController extends AbstractController
         $user = $em->getRepository(User::class)->findOneBy(["username" => $this->getUser()->getUsername()]);
 
         $hero = $saver->loadHero($user, $story);
+
         $intro = $em->getRepository(Chapter::class)->findOneBy(["story" => $story, "type" => "intro"]);
 
         if (isset($hero)) {
@@ -261,7 +262,7 @@ class AdventureController extends AbstractController
         $chapter = $em->getRepository(Chapter::class)->find($idChapter);
         $chapter->getNpcs()->clear();
         $session->set("chapter", $chapter);
-        $status = array('status' => "success","HeroSaved" => true);
+        $status = array('status' => "success","HeroSaved" => true, "heroLife" => $hero->getLife());
 
         return new JsonResponse($status);
 
@@ -326,7 +327,7 @@ class AdventureController extends AbstractController
      * @param Hero $hero
      * @param ChoiceInteraction $interaction
      * @return RedirectResponse
-     * @Route("/{slug}/hero-{idHero}/trade/{idChoice}", name="tradeGoldOrItem")
+     * @Route("/{slug}/{idHero}/trade/{idChoice}", name="tradeGoldOrItem")
      * @ParamConverter("story", options={"mapping": {"slug": "slug"}})
      * @ParamConverter("choice", options={"mapping": {"idChoice": "id"}})
      * @ParamConverter("hero", options={"mapping": {"idHero": "id"}})
@@ -350,7 +351,7 @@ class AdventureController extends AbstractController
      * @param Hero $hero
      * @param SpecialItem $specialItem
      * @return Response
-     * @Route("/{slug}/hero-{idHero}/{idChapter}/pickup-si/{idItem}", name="pickupSpecialItem")
+     * @Route("/{slug}/{idHero}/{idChapter}/pickup-si/{idItem}", name="pickupSpecialItem")
      * @ParamConverter("story", options={"mapping": {"slug": "slug"}})
      * @ParamConverter("hero", options={"mapping": {"idHero": "id"}})
      * @ParamConverter("chapter", options={"mapping": {"idChapter": "id"}})
@@ -394,7 +395,7 @@ class AdventureController extends AbstractController
      * @param Hero $hero
      * @param SpecialItem $specialItem
      * @return RedirectResponse
-     * @Route("/{slug}/hero-{idHero}/{idChapter}/remove-si/{idItem}", name="specialItem_remove")
+     * @Route("/{slug}/{idHero}/{idChapter}/remove-si/{idItem}", name="specialItem_remove")
      * @ParamConverter("chapter", options={"mapping": {"idChapter": "id"}})
      * @ParamConverter("hero", options={"mapping": {"idHero": "id"}})
      * @ParamConverter("specialItem", options={"mapping": {"idItem": "id"}})
@@ -452,7 +453,7 @@ class AdventureController extends AbstractController
      * @param Hero $hero
      * @param ConsumableItem $consumableItem
      * @return RedirectResponse
-     * @Route("/{slug}/hero-{idHero}/{idChapter}pickup-ci/{idItem}", name="pickupConsumableItem")
+     * @Route("/{slug}/{idHero}/{idChapter}/pickup-ci/{idItem}", name="pickupConsumableItem")
      * @ParamConverter("story", options={"mapping": {"slug": "slug"}})
      * @ParamConverter("hero", options={"mapping": {"idHero": "id"}})
      * @ParamConverter("chapter", options={"mapping": {"idChapter": "id"}})
@@ -493,7 +494,7 @@ class AdventureController extends AbstractController
      * @param Chapter $chapter
      * @param BackpackItem $item
      * @return RedirectResponse
-     * @Route("/hero/{idHero}/{idChapter}/bpi-remove-{idItem}", name="backpackItem_remove")
+     * @Route("/hero/{idHero}/{idChapter}/bpi-remove/{idItem}", name="backpackItem_remove")
      * @ParamConverter("hero", options={"mapping": {"idHero": "id"}})
      * @ParamConverter("chapter", options={"mapping": {"idChapter": "id"}})
      * @ParamConverter("backpackItem", options={"mapping": {"idItem": "id"}})
@@ -527,14 +528,15 @@ class AdventureController extends AbstractController
      * @param $idChapter
      * @param Alteration $useConsumable
      * @return RedirectResponse
-     * @Route("/{slug}/{idHero}/useConsumable-{idItem}/{idChapter}", name="use_consumable")
+     * @Route("/{slug}/{idHero}/useConsumable/{idItem}/{idChapter}", name="use_consumable")
      * @ParamConverter("hero", options={"mapping": {"idHero": "id"}})
      * @ParamConverter("backpackItem", options={"mapping": {"idItem": "id"}})
      */
     public function useBackpackItem($slug, Hero $hero, BackpackItem $backpackItem, $idChapter, Alteration $useConsumable) : RedirectResponse
     {
         $message = $useConsumable->useConsumable($hero, $backpackItem);
-        !$message
+
+        !isset($message)
         ? $this->addFlash("warning", "You cannot use this item!")
         : $this->addFlash("success", $message);
 

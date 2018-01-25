@@ -54,7 +54,7 @@ class SpecialItemType extends AbstractType
                     "placeholder" => "Select Attribute",
                     "choices" => [
                         "Life" => "life",
-                        "Energy" => "energy",
+                        "Ability" => "ability",
                         "None" => null
                     ],
                     "required" => false,

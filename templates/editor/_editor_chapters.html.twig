@@ -1,7 +1,7 @@
 
 <div id="editor-chapters" class="col s12 m10 offset-m1 l8 offset-l2 center-align">
     <div class="fixed-action-btn chapters-add-button">
-        <a class="btn-floating btn-large blue">
+        <a class="btn-floating btn-large green">
             <i class="large material-icons">add</i>
         </a>
         <ul>
@@ -11,7 +11,15 @@
     </div>
         <div class="row">
             <div class="col s12">
-                <h3 class="center-align">{{ story.title }} - List of chapters</h3>
+                <h3 class="center-align">{{ story.title }} - Chapters</h3>
+                <a role="button" class="btn btn-floating waves-effect waves-light yellow darken-2 tooltipped" data-position="left" data-delay="50" data-tooltip="Back to story list" href="{{ path('editor_index') }}">
+                    <i class="material-icons right">first_page</i>
+                    Back to story list
+                </a>
+                <a role="button" class="btn btn-floating waves-effect waves-light blue darken-2 tooltipped" data-position="right" data-delay="50" data-tooltip="Test the story" href="{{ path('story_test', {"slug": story.slug}) }}">
+                    <i class="material-icons right">flag</i>
+                    Run Test
+                </a>
             </div>
         </div>
         <div class="row">
@@ -68,12 +76,12 @@
                                             </div>
                                         {% endif %}
                                         {% if chapter.specialItems|length > 0 %}
-                                            <div class="chip blue white-text tooltipped" data-position="top" data-delay="50" data-tooltip="Special Items">
+                                            <div class="chip teal white-text tooltipped" data-position="top" data-delay="50" data-tooltip="Special Items">
                                                 {{ chapter.specialItems|length }}
                                             </div>
                                         {% endif %}
                                         {% if chapter.consumableItems|length > 0 %}
-                                            <div class="chip purple white-text tooltipped" data-position="top" data-delay="50" data-tooltip="Consumable Items">
+                                            <div class="chip lime white-text tooltipped" data-position="top" data-delay="50" data-tooltip="Consumable Items">
                                                 {{ chapter.consumableItems|length }}
                                             </div>
                                         {% endif %}

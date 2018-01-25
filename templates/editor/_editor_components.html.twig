@@ -3,6 +3,14 @@
         <div class="row">
             <div class="col s12 m10 offset-m1">
                 <h3>{{ story.title }} - Components</h3>
+                <a role="button" class="btn btn-floating waves-effect waves-light yellow darken-2 tooltipped" data-position="left" data-delay="50" data-tooltip="Back to story list" href="{{ path('editor_index') }}">
+                    <i class="material-icons right">first_page</i>
+                    Back to story list
+                </a>
+                <a role="button" class="btn btn-floating waves-effect waves-light blue darken-2 tooltipped" data-position="right" data-delay="50" data-tooltip="Test the story" href="{{ path('story_test', {"slug": story.slug}) }}">
+                    <i class="material-icons right">flag</i>
+                    Run Test
+                </a>
             </div>
         </div>
         <div class="row">

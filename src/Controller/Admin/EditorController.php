@@ -75,6 +75,34 @@ class EditorController extends Controller
     /**
      * @param Story $story
      * @return RedirectResponse
+     * @Route("/test-story/{slug}", name="story_test")
+     * @ParamConverter("story", options={"mapping": {"slug": "slug"}})
+     */
+    public function testStory(Story $story, Publisher $publisher) : RedirectResponse
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $errorMessages = $publisher->publishStory($story);
+        if (count($errorMessages) > 0) {
+            $this->addFlash("danger", "The story cannot be tested yet!");
+            foreach ($errorMessages as $message) {
+                $this->addFlash("warning", $message);
+            }
+
+            return $this->redirectToRoute("editor_index");
+
+        } else {
+            $intro = $em->getRepository(Chapter::class)->findOneBy(["story" => $story, "type" => "intro"]);
+            return $this->redirectToRoute("story_intro", [
+                "slug" => $story->getSlug(),
+                "idIntro" => $intro->getId()
+            ]);
+        }
+    }
+
+    /**
+     * @param Story $story
+     * @return RedirectResponse
      * @Route("/publish-{slug}", name="story_publish")
      * @ParamConverter("story", options={"mapping": {"slug": "slug"}})
      */

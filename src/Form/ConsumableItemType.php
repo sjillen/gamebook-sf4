@@ -41,7 +41,7 @@ class ConsumableItemType extends AbstractType
                     "required" => false,
                     "choices" => [
                         "Life" => "life",
-                        "Energy" => "energy",
+                        "Ability" => "ability",
                         "None" => null
                     ],
                     "expanded" => false,

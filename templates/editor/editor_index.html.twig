@@ -6,7 +6,12 @@
     <div class="container">
         <div class="row">
             <div class="col s12 m10 offset-m1">
-                <h2 class="center-align blue-text text-lighten-4">Welcome to the Gamebook Editor</h2>
+                <div class="row">
+                    <div class="col s12">
+                        <h2 class="center-align blue-text text-lighten-4">Welcome to the Gamebook Editor</h2>
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="col s12 center-align">
                         <a href="{{ path('story_add') }}" role="button" class="waves-effect waves-light btn-large blue darken-1">Create a new story
@@ -21,8 +26,8 @@
                             <div class="card-image">
                                 <img src="{{ asset('build/images/mystic_book_by_adalbertofsouza-d2xvmui.b8e02752.jpg') }}">
                                 <span class="card-title">{{ story.title }}</span>
-                                <a href="{{ path('editor_story', {'slug': story.slug}) }}" class="btn-floating halfway-fab waves-effect waves-light amber darken-1">
-                                    <i class="material-icons">add</i>
+                                <a href="{{ path('editor_story', {'slug': story.slug}) }}" class="btn-floating halfway-fab waves-effect waves-light amber darken-1 tooltipped" data-position="left" data-delay="50" data-tooltip="Edit the story">
+                                    <i class="material-icons">build</i>
                                 </a>
                             </div>
                             <div class="card-content">
@@ -33,13 +38,18 @@
                                     <p>{{ story.author }}</p>
                                 </div>
                                 <div class="publish-button-card">
+                                    <a role="button" class="btn btn-floating waves-effect waves-light blue darken-2 tooltipped" data-position="left" data-delay="50" data-tooltip="Test the story" href="{{ path('story_test', {"slug": story.slug}) }}">
+                                        <i class="material-icons right">flag</i>
+                                        Run Test
+                                    </a>
                                     {% if story.isPublished %}
-                                        <a role="button" class="btn waves-effect waves-light amber darken-3" href="{{ path('story_publish', {"slug": story.slug}) }}">
-                                            <i class="material-icons right">flag</i>
+                                        <a role="button" class="btn btn-floating waves-effect waves-light orange accent-4 tooltipped" data-position="top" data-delay="50" data-tooltip="Unpublish the story" href="{{ path('story_publish', {"slug": story.slug}) }}">
+                                            <i class="material-icons right">healing</i>
                                             Unpublish
                                         </a>
                                     {% else %}
-                                        <a role="button" class="btn waves-effect waves-light green darken-3" href="{{ path('story_publish', {"slug": story.slug}) }}">
+
+                                        <a role="button" class="btn btn-floating waves-effect waves-light green darken-2 tooltipped" data-position="top" data-delay="50" data-tooltip="Publish the story" href="{{ path('story_publish', {"slug": story.slug}) }}">
                                             <i class="material-icons right">publish</i>
                                             Publish
                                         </a>

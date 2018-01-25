@@ -27,17 +27,10 @@ class Saver
 
     public function loadHero (User $user, Story $story) : ?Hero
     {
-        $heroes = $this->em->getRepository(Hero::class)->findBy(["user" => $user, "story" => $story, "status" => Hero::ON_ADVENTURE]);
-        if (count($heroes) > 0) {
-            foreach ($heroes as $hero) {
-                $chapterSaved = $hero->getChapter();
-                if (isset($chapterSaved)) {
-                    return $hero;
-                } else {
-                    return null;
-                }
-            }
-        } else {
+        $hero = $this->em->getRepository(Hero::class)->findOneBy(["user" => $user, "story" => $story, "status" => Hero::ON_ADVENTURE]);
+        if(isset($hero)) {
+            return $hero;
+        }else {
             return null;
         }
 

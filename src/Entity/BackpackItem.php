@@ -22,7 +22,7 @@ class BackpackItem
     private $hero;
 
     /**
-     * @ORM\ManyToOne(targetEntity="ConsumableItem")
+     * @ORM\ManyToOne(targetEntity="ConsumableItem", fetch="EAGER")
      */
     private $item;
 
