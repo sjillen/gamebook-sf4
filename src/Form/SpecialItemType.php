@@ -35,13 +35,13 @@ class SpecialItemType extends AbstractType
                         "Hands" => "hands",
                         "Legs" => "legs",
                         "Feet" => "feet",
-                        "Other" => null
+                        "Other" => ""
                     ],
                     "placeholder" => "Choose a slot",
                     "multiple" => false,
                     "expanded" => false,
                     "required" => false,
-                    "empty_data" => null
+                    "empty_data" => ""
                 ])
             ->add("starter",
                 CheckboxType::class, [
@@ -55,12 +55,12 @@ class SpecialItemType extends AbstractType
                     "choices" => [
                         "Life" => "life",
                         "Ability" => "ability",
-                        "None" => null
+                        "None" => ""
                     ],
                     "required" => false,
                     "expanded" => false,
                     "multiple" => false,
-                    "empty_data" => null
+                    "empty_data" => ""
                 ])
             ->add("bonusGiven",
                 IntegerType::class, [
