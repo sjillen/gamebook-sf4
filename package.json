@@ -5,8 +5,6 @@
     "jquery": "^3.2.1",
     "node-sass": "^4.7.2",
     "postcss-loader": "^2.0.9",
-    "prop-types": "^15.6.0",
-    "react-dom": "^16.2.0",
     "sass-loader": "^6.0.6",
     "webpack-notifier": "^1.5.0"
   },
@@ -16,9 +14,6 @@
   ],
   "dependencies": {
     "animate.css": "^3.5.2",
-    "bootstrap": "4.0.0-beta.3",
-    "materialize-css": "^1.0.0-alpha.3",
-    "popper.js": "^1.12.9",
-    "youtube-api-search": "0.0.5"
+    "materialize-css": "^1.0.0-alpha.3"
   }
 }
