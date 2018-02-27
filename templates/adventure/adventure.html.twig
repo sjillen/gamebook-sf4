@@ -157,7 +157,7 @@
                                                 </span>
                                             </a>
                                         {% elseif choice.skillRequired %}
-                                            <a class="btn btn-large waves-effect waves-light purple lighten-1 skillRequired tooltipped {% if choice.randomized %}randomized{% endif %}" data-position="top" data-delay="50" data-tooltip="{{ choice.description }}" data-choice-skill="{{ choice.skillRequired.name }}" role="button" href="{{ path('adventure', {"slug": story.slug, "idHero": hero.id, "id": choice.targetChapter.id}) }}">
+                                            <a class="btn btn-large waves-effect waves-light purple lighten-1 skillRequired tooltipped {% if choice.randomized %}randomized{% endif %}" data-position="top" data-delay="50" data-tooltip="{{ choice.description }}" data-choice-skill="{{ choice.skillRequired.name }}" role="button" href="{{ path('adventure_trade', {"slug": story.slug, "idHero": hero.id, "idChoice": choice.id}) }}">
                                                 <span>
                                                     {{ choice.description|truncate(40) }}
                                                     <i class="material-icons left">flash_on</i>
@@ -167,11 +167,11 @@
                                             <a class="btn btn-large waves-effect waves-light red lighten-1 damages tooltipped {% if choice.randomized %}randomized{% endif %}" data-position="top" data-delay="50" data-tooltip="{{ choice.description }}" role="button" href="{{ path('adventure_trade', {"slug": story.slug, "idHero": hero.id, "idChoice": choice.id}) }}">
                                                 <span>
                                                     {{ choice.description|truncate(40) }}
-                                                    <i class="material-icons left">flash_on</i>
+                                                    <i class="material-icons left">opacity</i>
                                                 </span>
                                             </a>
                                         {% else %}
-                                            <a class="btn btn-large waves-effect waves-light blue lighten-1 tooltipped {% if choice.randomized %}randomized{% endif %}" data-position="top" data-delay="50" data-tooltip="{{ choice.description }}" role="button" href="{{ path('adventure', {"slug": story.slug, "idHero": hero.id, "id": choice.targetChapter.id}) }}">
+                                            <a class="btn btn-large waves-effect waves-light blue lighten-1 tooltipped {% if choice.randomized %}randomized{% endif %}" data-position="top" data-delay="50" data-tooltip="{{ choice.description }}" role="button" href="{{ path('adventure_trade', {"slug": story.slug, "idHero": hero.id, "idChoice": choice.id}) }}">
                                                 {{ choice.description|truncate(40) }}
                                             </a>
                                         {% endif %}

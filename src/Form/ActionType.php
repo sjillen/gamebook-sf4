@@ -8,6 +8,7 @@ use App\Entity\Skill;
 use App\Entity\SpecialItem;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -31,6 +32,23 @@ class ActionType extends AbstractType
                         "expanded" => false,
                         "multiple" => false,                    
                     ])
+            ->add('backpackLost',
+                    CheckboxType::class, [
+                        "label" => "The hero will loose all items in his backpack",
+                        "required" => false
+                ])
+            ->add("weaponLost",
+                    ChoiceType::class, [
+                        "label" => "Weapons that the hero will loose",
+                        "empty_data" => 0,
+                        "expanded" => false,
+                        "multiple" => false,
+                        "choices" => [
+                            "None" => 0,
+                            "One Weapon" => 1,
+                            "All Weapons" => 2
+                        ]
+                ])
             ->add("randomized",
                     CheckboxType::class, [
                         "label" => "Make this choice randomly chosen among other random choices ?",

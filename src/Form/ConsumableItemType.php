@@ -42,11 +42,11 @@ class ConsumableItemType extends AbstractType
                     "choices" => [
                         "Life" => "life",
                         "Ability" => "ability",
-                        "None" => null
+                        "None" => ""
                     ],
                     "expanded" => false,
                     "multiple" => false,
-                    "empty_data" => null
+                    "empty_data" => ""
                 ])
             ->add("removable",
                 CheckboxType::class,[

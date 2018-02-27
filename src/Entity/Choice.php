@@ -12,6 +12,9 @@ use App\Entity\Item;
  */
 class Choice
 {
+    const NO_LOSS = 0;
+    const WEAPON_LOSS = 1;
+    const ALLWEAPONS_LOSS = 2;
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -81,6 +84,26 @@ class Choice
     private $damages;
 
     /**
+     * @var boolean Hero looses his backpack or not
+     *
+     * @ORM\Column(type="boolean")
+     */
+    private $backpackLost;
+
+    /**
+     * @var int, Weapons that the hero will loose
+     *  0 = no loss
+     *  1 = 1 weapon lost
+     *  2 = all weapons are lost
+     * @ORM\Column(type="integer")
+     */
+    private $weaponLost;
+
+    /**
+     * @var
+     */
+
+    /**
      * Choice constructor.
      */
      public function __construct()
@@ -89,6 +112,8 @@ class Choice
          $this->randomized = false;
          $this->goldRequired = 0;
          $this->damages = 0;
+         $this->backpackLost = false;
+         $this->weaponLost = 0;
      }
 
      /* Setters and Getters */
@@ -189,6 +214,26 @@ class Choice
     public function setDamages(int $damages) : void
     {
         $this->damages = $damages;
+    }
+
+    public function isBackpackLost() : bool
+    {
+        return $this->backpackLost;
+    }
+
+    public function setBackpackLost(bool $lost) : void
+    {
+        $this->backpackLost = $lost;
+    }
+
+    public function getWeaponLost() : int
+    {
+        return $this->weaponLost;
+    }
+
+    public function setWeaponLost(int $lost) : void
+    {
+        $this->weaponLost = $lost;
     }
     
 }

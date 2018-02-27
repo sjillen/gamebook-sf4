@@ -333,8 +333,39 @@ class AdventureController extends AbstractController
      * @ParamConverter("choice", options={"mapping": {"idChoice": "id"}})
      * @ParamConverter("hero", options={"mapping": {"idHero": "id"}})
      */
-    public function tradeChoice(Story $story, Choice $choice, Hero $hero) : RedirectResponse
+    public function tradeChoice(Story $story, Choice $choice, Hero $hero, ChoiceInteraction $remover) : RedirectResponse
     {
+        $em = $this->getDoctrine()->getManager();
+
+        $weaponLoss = $remover->removeWeapon($hero, $choice);
+        if (isset($weaponLoss)) {
+            switch ($weaponLoss) {
+                case ChoiceInteraction::WEAPON_LOSS:
+                    $this->addFlash("warning", "You lost your weapon!");
+                    if ($hero->getWeapons()->isEmpty()) {
+                        $hero->setAbility($hero->getAbility() - 4);
+                        $this->addFlash("danger", "No weapon carried - Penalty: -4 ability");
+                    }
+                    break;
+                case ChoiceInteraction::ALLWEAPONS_LOSS:
+                    $this->addFlash("warning", "You lost all your weapons!");
+                    $hero->setAbility($hero->getAbility() - 4);
+                    $this->addFlash("danger", "No weapon carried - Penalty: -4 ability");
+                    break;
+            }
+        }
+
+
+        $backpackLoss = ChoiceInteraction::removeBackpack($hero, $choice);
+        if (isset($backpackLoss)) {
+            $backpackItems = $em->getRepository(BackpackItem::class)->findBy(["hero" => $hero]);
+            foreach ($backpackItems as $item) {
+                $em->remove($item);
+            }
+
+            $this->addFlash("danger", "You lost your backpack!");
+        }
+
         $trades = ChoiceInteraction::trade($hero, $choice);
         if (isset($trades)) {
             foreach ($trades as $trade) {
@@ -350,10 +381,9 @@ class AdventureController extends AbstractController
                         break;
                 }
             }
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($hero);
-            $em->flush();
         }
+        $em->persist($hero);
+        $em->flush();
 
         return $this->redirectToRoute("adventure", [
             "slug" => $story->getSlug(),
@@ -618,12 +648,14 @@ class AdventureController extends AbstractController
      * @param Weapon $weapon
      * @return RedirectResponse
      * @Route("/{idChapter}/{idHero}/weapon-remove/{idWeapon}", name="weapon_remove")
+     * @ParamConverter("chapter", options={"mapping": { "idChapter": "id"}})
+     * @ParamConverter("hero", options={"mapping": { "idHero": "id"}})
+     * @ParamConverter("weapon", options={"mapping": {"idWeapon": "id"}})
      */
-    public function removeWeapon($idChapter, $idHero, $idWeapon) : RedirectResponse
+    public function removeWeapon(Chapter $chapter, Hero $hero, Weapon $weapon) : RedirectResponse
     {
         $em = $this->getDoctrine()->getManager();
-        $hero = $em->getRepository(Hero::class)->find($idHero);
-        $weapon = $em->getRepository(Weapon::class)->find($idWeapon);
+
         //remove weapon
         $hero->removeWeapon($weapon);
         $this->addFlash("info", "You dropped " . $weapon->getName());
@@ -645,7 +677,7 @@ class AdventureController extends AbstractController
         return $this->redirectToRoute("adventure", [
             "slug" => $hero->getStory()->getSlug(),
             "idHero" => $hero->getId(),
-            "id" => $idChapter
+            "id" => $chapter->getId()
         ]);
     }
 }

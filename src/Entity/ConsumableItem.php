@@ -18,8 +18,6 @@ class ConsumableItem extends ItemBase
      */
     private $id;
 
-
-
     /**
      * @ORM\Column(type="boolean")
      */

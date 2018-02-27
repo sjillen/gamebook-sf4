@@ -235,6 +235,11 @@ class Hero extends CharacterBase
         $this->weapons[] = $weapon;
     }
 
+    public function clearWeapons() : void
+    {
+        $this->weapons->clear();
+    }
+
     public function removeWeapon(?Weapon $weapon) : void
     {
         $this->weapons->removeElement($weapon);
@@ -243,6 +248,16 @@ class Hero extends CharacterBase
     public function hasWeapon(?Weapon $weapon) : bool
     {
         return $this->weapons->contains($weapon);
+    }
+
+    public function setBackpackItems(?Collection $items) : void
+    {
+        $this->backpackItems = $items;
+    }
+
+    public function clearBackpackItems() : void
+    {
+        $this->backpackItems->clear();
     }
 
     public function getBackpackItems() : ?Collection
