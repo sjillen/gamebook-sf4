@@ -229,6 +229,10 @@ class AdventureController extends AbstractController
         $choicesDisplayed = ChoiceDisplay::choiceDisplayer($hero, $choices);
         $backpackStock = ItemPicker::getCurrentStock($hero);
 
+        if( $hero->getLife() <= 0) {
+            $isDeath = true;
+        }
+
 
         return $this->render("adventure/adventure.html.twig", [
             "story" => $story,
