@@ -64,7 +64,6 @@ class ChoiceDisplay
         self::goldUnlock($hero, $choice);
         self::skillUnlock($hero, $choice);
         self::itemUnlock($hero, $choice);
-        self::damagesUnlock($hero, $choice);
 
         return $choice;
     }
@@ -79,17 +78,6 @@ class ChoiceDisplay
                 : $choice->setLocked(false);
         }
 
-    }
-
-    private static function damagesUnlock(Hero $hero, Choice $choice) : void
-    {
-        $damages = $choice->getDamages();
-        $life = $hero->getLife();
-        if ($damages > 0) {
-            $damages > $life
-            ? $choice->setLocked(true)
-            : $choice->setLocked(false);
-        }
     }
 
     private static function skillUnlock(Hero $hero, Choice $choice) : void

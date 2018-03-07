@@ -405,7 +405,7 @@ function encounter () {
 
             }
             target.innerHTML = finalValue;
-            let heroDmg = Math.ceil(7 + nbNpcs - hitDamage/3);
+            let heroDmg = Math.ceil(7 + nbNpcs - hitDamage);
             updateHeroDamages(heroDmg);
             console.log("damages to hero: " + heroDmg);
         };
