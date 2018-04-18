@@ -1,22 +1,31 @@
-//add pulse to an elt
-const addPulse = function(elt) {
-    if (!elt.classList.contains("pulse")) {
-        elt.className += " pulse";
+
+const pulser = {
+    addPulse : function(elt) {
+        if (!elt.classList.contains("pulse")) {
+            elt.className += " pulse";
+        }
+    },
+
+    addIconPulse : function(elt) {
+        let icon = elt.parentNode.parentNode.querySelector('.skill-icon');
+        icon.className += " pulse-purple";
+    },
+
+    removePulse : function(elt) {
+        elt.classList.remove("pulse");
+    },
+
+    pulseTimer : function(elt) {
+        this.addPulse(elt);
+        setTimeout( () => this.removePulse(elt), 3000);
+    },
+
+    removeIconPulse : function(elt, color) {
+        //remove specific pulse to the icon of the concerned skill
+        let icon = elt.parentNode.parentNode.querySelector('.skill-icon');
+        icon.classList.remove(`pulse-${color}`);
     }
-};
-const addIconPulse = function(elt) {
-    //add specific pulse to the icon of the concerned skill
-    let icon = elt.parentNode.parentNode.querySelector('.skill-icon');
 
-    icon.className += " pulse-purple";
 };
 
-//remove pulse from elt
-const removePulse = function (elt) {
-    elt.classList.remove('pulse');
-};
-
-const pulseTimer = function(elt) {
-    addPulse(elt);
-    setTimeout(() => removePulse(elt), 3000);
-};
+export default pulser;

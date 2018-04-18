@@ -1,30 +1,4 @@
-//add pulse to an elt
-const addPulse = function(elt) {
-    if (!elt.classList.contains("pulse")) {
-        elt.className += " pulse";
-    }
-};
-const addIconPulse = function(elt, color) {
-    //add specific pulse to the icon of the concerned skill
-    let icon = elt.parentNode.parentNode.querySelector('.skill-icon');
-
-    icon.className += ` pulse-${color}`;
-};
-const removeIconPulse = function(elt, color) {
-    //remove specific pulse to the icon of the concerned skill
-    let icon = elt.parentNode.parentNode.querySelector('.skill-icon');
-    icon.classList.remove(`pulse-${color}`);
-};
-
-//remove pulse from elt
-const removePulse = function (elt) {
-    elt.classList.remove('pulse');
-};
-
-const pulseTimer = function(elt) {
-    addPulse(elt);
-    setTimeout(() => removePulse(elt), 3000);
-};
+import Pulser from "./pulser";
 
 const itemRequirements = document.querySelectorAll('.itemRequired');
 const skillRequirements = document.querySelectorAll('.skillRequired');
@@ -62,20 +36,20 @@ function displaySkillChoice () {
     });
     choices.forEach((choice) => {
         $(choice).fadeIn("slow");
-        pulseTimer(choice);
+        Pulser.pulseTimer(choice);
         //send toast message for discovering choice
         M.toast({html:`${this.innerText}: new choice discovered!`, classes: "purple-text text-lighten-3" }, 5000);
     });
     //remove the pulse from skill icon
 
-    removeIconPulse(this, "purple");
+    Pulser.removeIconPulse(this, "purple");
     //remove add listener
     this.removeEventListener("click", displaySkillChoice);
     //decrement the counter
     -- skillEventCounter;
     //if no skill has pulse, remove the pulse from skill bar button
     if (skillEventCounter === 0) {
-        removePulse(skillPulse);
+        Pulser.removePulse(skillPulse);
     }
 }
 
@@ -94,7 +68,7 @@ function displayRandomChoice () {
         container.innerHTML += randomBtn;
         let randomDisplayer = container.querySelector(".diceBtn");
         randomDisplayer.addEventListener("click", () => {
-            $(choice).fadeIn("slow", () => pulseTimer(choice), false);
+            $(choice).fadeIn("slow", () => Pulser.pulseTimer(choice), false);
             container.removeChild(randomDisplayer);
         });
     }
@@ -117,13 +91,13 @@ function displayItemChoice () {
     });
     choices.forEach((choice) => {
         $(choice).fadeIn("slow");
-        pulseTimer(choice);
+        Pulser.pulseTimer(choice);
         //send toast message for discovering choice
         M.toast({html:`${this.innerText}: new choice discovered!`, classes: "teal-text text-lighten-3" }, 5000);
     });
 
     //empty the key-icon pulse
-    removeIconPulse(this, "teal");
+    Pulser.removeIconPulse(this, "teal");
     //remove add listener
     this.removeEventListener("click", displayItemChoice);
     //decrement the counter
@@ -139,8 +113,8 @@ function choicesDisplayer () {
     heroSkillElts.forEach( (elt) => {
         if (skillsRequired.includes(elt.innerText)) {
             //add pulse to the bar skill button if it doesn't already contains it
-            addPulse(skillPulse);
-            addIconPulse(elt, "purple");
+            Pulser.addPulse(skillPulse);
+            Pulser.addIconPulse(elt, "purple");
             //bind event for each active skill :  display choice
             elt.addEventListener("click", displaySkillChoice, false);
             //increment counter for each active skill
@@ -152,7 +126,7 @@ function choicesDisplayer () {
     heroItemElts.forEach( (elt) => {
         if (itemsRequired.includes(elt.innerText)) {
             //add pulse to the bar skill button if it doesn't already contains it
-            addPulse(inventoryPulse);
+            Pulser.addPulse(inventoryPulse);
             let keyIcon = `
         <button href="#!" role="button" class="btn-flat skill-icon valign-wrapper">
             <i class="pulse material-icons circle transparent teal-text text-lighten-2">vpn_key</i>
@@ -301,11 +275,11 @@ function encounter () {
             ability += 2;
             heroAbilityElt.innerHTML = ability;
             //add pulse to ability button
-            pulseTimer(abilityPulse);
+            Pulser.pulseTimer(abilityPulse);
             //send toast message for skill bonus ability
             M.toast({html:`${this.innerText}: Ability +2!`, classes: "purple-text text-lighten-1" }, 5000);
             //remove the pulse from skill icon
-            removeIconPulse(this, "purple");
+            Pulser.removeIconPulse(this, "purple");
             //remove add listener
             this.removeEventListener("click", abilityUp);
             //decrement the counter
@@ -321,8 +295,8 @@ function encounter () {
             let weaknesses = listWeaknesses();
             if (weaknesses.includes(elt.innerText)) {
                 //add pulse to the bar skill button if it doesn't already contains it
-                addPulse(skillListBtn);
-                addIconPulse(elt, "purple");
+                Pulser.addPulse(skillListBtn);
+                Pulser.addIconPulse(elt, "purple");
                 //bind event for each active skill :  increment ability
                 elt.addEventListener("click", abilityUp, false);
                 //increment counter for each active skill
