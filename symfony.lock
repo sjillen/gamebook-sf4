@@ -59,6 +59,9 @@
     "doctrine/orm": {
         "version": "v2.5.13"
     },
+    "easycorp/easy-deploy-bundle": {
+        "version": "v1.0.2"
+    },
     "egulias/email-validator": {
         "version": "2.1.3"
     },

@@ -27,6 +27,7 @@
         "twig/extensions": "^1.5"
     },
     "require-dev": {
+        "easycorp/easy-deploy-bundle": "^1.0",
         "symfony/dotenv": "^4.0",
         "symfony/profiler-pack": "^1.0"
     },

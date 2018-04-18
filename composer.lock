@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "25dec98506062b879ca0469ca7601a0c",
+    "content-hash": "8af278f8d7d3d18fec68724220cca685",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -4895,6 +4895,64 @@
         }
     ],
     "packages-dev": [
+        {
+            "name": "easycorp/easy-deploy-bundle",
+            "version": "v1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/EasyCorp/easy-deploy-bundle.git",
+                "reference": "ec75cf03addced566114809750bdc4e536fc0701"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/EasyCorp/easy-deploy-bundle/zipball/ec75cf03addced566114809750bdc4e536fc0701",
+                "reference": "ec75cf03addced566114809750bdc4e536fc0701",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0",
+                "symfony/console": "~2.3|~3.0|~4.0",
+                "symfony/dependency-injection": "~2.3|~3.0|~4.0",
+                "symfony/expression-language": "~2.4|~3.0|~4.0",
+                "symfony/filesystem": "~2.3|~3.0|~4.0",
+                "symfony/http-foundation": "~2.3|~3.0|~4.0",
+                "symfony/http-kernel": "~2.3|~3.0|~4.0",
+                "symfony/polyfill-mbstring": "^1.3",
+                "symfony/process": "~2.3|~3.0|~4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.1"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "EasyCorp\\Bundle\\EasyDeployBundle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Javier Eguiluz",
+                    "email": "javiereguiluz@gmail.com"
+                }
+            ],
+            "description": "The easiest way to deploy Symfony applications",
+            "homepage": "https://github.com/EasyCorp/easy-deploy-bundle",
+            "keywords": [
+                "deploy",
+                "deployer",
+                "deployment"
+            ],
+            "time": "2017-05-29T18:33:44+00:00"
+        },
         {
             "name": "symfony/dotenv",
             "version": "v4.0.4",

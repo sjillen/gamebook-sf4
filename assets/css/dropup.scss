@@ -18,6 +18,18 @@
     .name-header {
       border-top-left-radius: 10px;
     }
+    .life-header {
+      @media #{$small-and-down} {
+        // styles for small screens and down
+        border-top-left-radius: 10px;
+      }
+      .dropup-trigger {
+        @media #{$small-and-down} {
+          // styles for small screens and down
+          border-top-left-radius: 10px;
+        }
+      }
+    }
     .gold-header {
       border-top-right-radius: 10px;
       .dropup-trigger {
